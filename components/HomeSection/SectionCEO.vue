@@ -7,7 +7,7 @@
                     <div class="space-y-8 lg:sticky lg:top-24">
                         <div>
                             <h1 class="text-4xl font-extrabold leading-[1.1] tracking-tight lg:text-5xl">인사말</h1>
-                            <p class="mt-2 text-xl font-semibold text-gray-800 lg:text-2xl">대표이사 우대식</p>
+                            <p class="mt-2 text-xl font-semibold text-gray-800 lg:text-2xl">대표이사 </p>
                         </div>
                     </div>
                 </aside>
@@ -16,7 +16,7 @@
                 <article class="min-w-0 lg:col-span-8">
                     <!-- 모바일·태블릿 전용 헤더 -->
                     <div class="mb-6 block lg:hidden">
-                        <p class="text-lg font-semibold text-gray-800">대표이사 우대식</p>
+                        <p class="text-lg font-semibold text-gray-800">대표이사 </p>
                     </div>
 
                     <!-- 제목 영역 -->

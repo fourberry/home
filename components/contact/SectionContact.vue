@@ -474,11 +474,11 @@ const handleSubmit = async () => {
         };
 
         // 5. API 호출
-        await $fetch('https://briskly0714.cafe24.com/lime-v2/external-api/v1/messages/send', {
+        await $fetch('http://59.15.89.190:8061/api/v1/messages/send', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
-                'x-api-key': 'msg_fourberry_clipsight_d7288f6917991ca3c414f15c86535a09'
+                'X-API-Key': 'lm_homepage_1777e3a5eb73523e410a3dc275f150045d127fd9bbe30c61'
             },
             body: requestBody,
         });

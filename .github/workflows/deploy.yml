@@ -37,6 +37,10 @@ jobs:
             - name: Install Dependencies
               run: npm install
             - name: Static HTML export with Nuxt
+              # 문의 폼이 호출할 프록시 엔드포인트를 빌드에 주입합니다.
+              # (카페24 서버의 Node 프록시 → 발송 API. 정적 배포라 /api/contact 는 404 이므로 반드시 지정)
+              env:
+                  NUXT_PUBLIC_CONTACT_ENDPOINT: https://briskly0714.cafe24.com/fb-contact/
               run: npm run generate # Nuxt SSG 빌드 명령어
             - name: Upload artifact
               uses: actions/upload-pages-artifact@v3

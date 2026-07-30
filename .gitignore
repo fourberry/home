@@ -18,6 +18,9 @@ logs
 .fleet
 .idea
 
+# Editor local history (VSCode Local History 확장)
+.history
+
 # Local env files
 .env
 .env.*

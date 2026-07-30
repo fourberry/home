@@ -1,0 +1,382 @@
+/* ============================================================
+   FOURBERRY — 2026 redesign design system
+   Signal 방향 단일 테마 / 포인트 컬러 = 로고 네이비·블루
+   tailwind.css 뒤에 로드되어야 합니다 (nuxt.config.ts css 배열 순서 참고)
+   ============================================================ */
+:root{
+  --font-sans:"Pretendard Variable",Pretendard,system-ui,-apple-system,sans-serif;
+  --font-disp:"Space Grotesk","Pretendard Variable",sans-serif;
+  --font-mono:"JetBrains Mono","Pretendard Variable",monospace;
+
+  --bg:#f7f7f8; --bg-2:#ffffff; --surface:#ffffff;
+  --ink:#14181d; --ink-2:#5c646e; --ink-3:#8b929b;
+  --line:rgba(20,24,29,.10); --line-2:rgba(20,24,29,.06);
+
+  /* 로고 블루 */
+  --accent:#003da5; --accent-2:rgba(0,61,165,.12); --accent-lite:#0084d5;
+  --on-accent:#ffffff;
+
+  /* 반전(다크) 섹션 — 로고 다크블루 기반 */
+  --ink-bg:#071a2e; --ink-fg:#eef3f8; --ink-fg2:#93a7bd;
+  --ink-line:rgba(255,255,255,.14); --ink-surface:#0d2740;
+  --ink-accent:#5ea8ea;
+
+  --radius:10px; --radius-s:7px; --radius-l:16px;
+  --shadow:0 1px 2px rgba(15,20,28,.05),0 8px 30px -18px rgba(15,20,28,.22);
+  --shadow-lg:0 2px 4px rgba(15,20,28,.05),0 30px 70px -40px rgba(15,20,28,.40);
+
+  --container:1180px;
+  --section-y:clamp(72px,9vw,132px);
+}
+
+/* ---------- base ---------- */
+body{font-family:var(--font-sans);background:var(--bg);color:var(--ink);line-height:1.55;letter-spacing:-.01em;-webkit-font-smoothing:antialiased;text-rendering:optimizeLegibility;overflow-x:hidden}
+h1,h2,h3,h4{margin:0;font-weight:600;letter-spacing:-.025em;line-height:1.12;text-wrap:balance}
+p{margin:0;text-wrap:pretty}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--accent)}
+.section--ink a:hover,.site-footer a:hover{color:var(--ink-accent)}
+img{max-width:100%;display:block}
+::selection{background:var(--accent);color:var(--on-accent)}
+
+.container{width:100%;max-width:var(--container);margin:0 auto;padding:0 24px}
+
+.eyebrow{font-family:var(--font-mono);font-size:12px;font-weight:500;letter-spacing:.18em;text-transform:uppercase;color:var(--accent);display:inline-flex;align-items:center;gap:9px}
+.eyebrow::before{content:"";width:22px;height:1px;background:currentColor;opacity:.8}
+.section--ink .eyebrow{color:var(--ink-accent)}
+
+.section{padding:var(--section-y) 0;position:relative}
+.section--ink{background:var(--ink-bg);color:var(--ink-fg)}
+.section--alt{background:var(--bg-2)}
+.section-head{max-width:760px}
+.section-head h2{font-size:clamp(28px,4.2vw,50px);margin-top:18px}
+.section-head .lead{margin-top:20px;font-size:clamp(16px,1.5vw,19px);color:var(--ink-2);max-width:620px}
+.section--ink .lead{color:var(--ink-fg2)}
+
+/* ---------- buttons ---------- */
+.btn{font-family:var(--font-sans);font-size:15px;font-weight:600;letter-spacing:-.01em;padding:13px 24px;border-radius:var(--radius-s);border:1px solid transparent;display:inline-flex;align-items:center;gap:9px;cursor:pointer;transition:transform .18s ease,background .2s ease,border-color .2s,color .2s;white-space:nowrap}
+.btn:active{transform:translateY(1px)}
+.btn-primary{background:var(--accent);color:var(--on-accent)}
+.btn-primary:hover{background:#00347f;color:var(--on-accent);transform:translateY(-1px)}
+.btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
+.btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
+.section--ink .btn-ghost{color:var(--ink-fg);border-color:var(--ink-line)}
+.section--ink .btn-ghost:hover{border-color:var(--ink-fg);color:var(--ink-fg)}
+.btn .arw{transition:transform .2s ease}
+.btn:hover .arw{transform:translateX(3px)}
+
+/* ---------- media helpers ---------- */
+.slot-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
+.ph{position:relative;background:var(--bg-2);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden;display:grid;place-items:center;color:var(--ink-3);isolation:isolate}
+.ph::before{content:"";position:absolute;inset:0;background-image:repeating-linear-gradient(-45deg,var(--line-2) 0 1px,transparent 1px 11px);z-index:-1}
+.ph span{font-family:var(--font-mono);font-size:11px;letter-spacing:.06em;text-transform:uppercase;padding:6px 10px;background:var(--surface);border:1px solid var(--line);border-radius:100px}
+
+/* 로고 심볼 — public/images/logo.png 스프라이트 크롭 */
+/* 투명 배경 마크(72x110)를 그대로 씁니다.
+   이전에는 흰 배경의 logo.png 를 background-position/size 로 잘라 쓰느라
+   1110/781/274/179 같은 매직넘버가 필요했는데, 그 계산이 전부 사라졌습니다. */
+.fb-mark{--mh:24px;display:inline-block;flex:none;height:var(--mh);width:calc(var(--mh)*72/110);background-image:url('/images/logo-mark.png');background-repeat:no-repeat;background-size:contain;background-position:center}
+.footer-brand .fb-chip{display:inline-grid;place-items:center;width:38px;height:38px;border-radius:9px;background:#fff;flex:none}
+.footer-brand .fb-chip .fb-mark{--mh:26px}
+
+/* ---------- header ---------- */
+.site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
+.site-header.scrolled{border-bottom-color:var(--line)}
+.nav{height:70px;display:flex;align-items:center;justify-content:space-between}
+.brand{font-family:var(--font-disp);font-weight:700;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
+.brand:hover{color:var(--ink)}
+.nav-links{display:flex;align-items:center;gap:30px}
+.nav-links a{font-size:14.5px;font-weight:500;color:var(--ink-2);position:relative;padding:4px 0;transition:color .2s}
+.nav-links a:hover{color:var(--ink)}
+.nav-links a::after{content:"";position:absolute;left:0;right:100%;bottom:-2px;height:1.5px;background:var(--accent);transition:right .25s ease}
+.nav-links a:hover::after{right:0}
+.nav-cta{display:flex;align-items:center;gap:14px}
+.nav-toggle{display:none;width:42px;height:42px;flex:none;border:1px solid var(--line);border-radius:var(--radius-s);background:transparent;cursor:pointer;flex-direction:column;align-items:center;justify-content:center;gap:5px}
+.nav-toggle span{width:18px;height:2px;background:var(--ink);border-radius:2px;transition:transform .25s ease,opacity .2s ease}
+.nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+.nav-toggle.open span:nth-child(2){opacity:0}
+.nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+.mobile-menu{display:none;position:fixed;left:0;right:0;top:70px;z-index:48;flex-direction:column;gap:2px;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 24px 22px;box-shadow:var(--shadow-lg);transform:translateY(-14px);opacity:0;pointer-events:none;transition:transform .26s cubic-bezier(.2,.7,.2,1),opacity .2s ease}
+.mobile-menu.open{transform:none;opacity:1;pointer-events:auto}
+.mobile-menu a{padding:15px 4px;font-size:16px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--line-2)}
+.mobile-menu a:last-child{border-bottom:0}
+.mobile-menu .btn{margin-top:16px;justify-content:center}
+
+/* ---------- hero ---------- */
+.hero{padding:clamp(56px,8vw,104px) 0 clamp(48px,6vw,84px);position:relative}
+.hero-grid{display:grid;grid-template-columns:1.15fr .85fr;gap:clamp(28px,5vw,64px);align-items:center}
+.hero h1{font-size:clamp(34px,5.6vw,72px);line-height:1.06;letter-spacing:-.035em}
+.hero h1 .accentword{color:var(--accent)}
+.hero .tagline{font-family:var(--font-disp);font-size:clamp(15px,1.6vw,19px);color:var(--ink-2);margin-top:26px;font-weight:500;letter-spacing:0}
+.hero .sub{margin-top:14px;font-size:clamp(15px,1.5vw,17px);color:var(--ink-2);max-width:480px}
+.hero-actions{margin-top:36px;display:flex;gap:12px;flex-wrap:wrap}
+.hero-stats{margin-top:48px;display:flex;gap:clamp(20px,4vw,44px);border-top:1px solid var(--line);padding-top:26px}
+.hero-stats .stat .num{font-family:var(--font-disp);font-size:clamp(24px,3vw,34px);font-weight:700;letter-spacing:-.03em;color:var(--ink)}
+.hero-stats .stat .lbl{font-size:12.5px;color:var(--ink-3);margin-top:4px}
+.hero-visual{position:relative;aspect-ratio:4/5;border-radius:var(--radius-l);overflow:hidden}
+.hero-badge{position:absolute;z-index:2;bottom:18px;left:18px;right:18px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius);padding:16px 18px;box-shadow:var(--shadow);display:flex;align-items:center;gap:14px}
+.hero-badge .hb-mark{width:40px;height:40px;flex:none;border-radius:var(--radius-s);background:var(--accent-2);color:var(--accent);display:grid;place-items:center;font-family:var(--font-mono);font-weight:600;font-size:13px}
+.hero-badge .hb-t{font-size:14px;font-weight:600}
+.hero-badge .hb-s{font-size:12.5px;color:var(--ink-3)}
+
+/* ---------- partners marquee ---------- */
+.marquee-wrap{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:22px 0;overflow:hidden;-webkit-mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent);mask-image:linear-gradient(90deg,transparent,#000 8%,#000 92%,transparent)}
+.marquee-label{font-family:var(--font-mono);font-size:11px;letter-spacing:.14em;text-transform:uppercase;color:var(--ink-3);margin-bottom:16px;text-align:center}
+.marquee{display:flex;gap:56px;width:max-content;animation:fb-scroll-x 32s linear infinite}
+.marquee span{font-family:var(--font-disp);font-weight:600;font-size:clamp(18px,2vw,24px);color:var(--ink-3);letter-spacing:-.01em;white-space:nowrap;transition:color .2s}
+.marquee:hover span{color:var(--ink-2)}
+@keyframes fb-scroll-x{to{transform:translateX(-50%)}}
+
+/* ---------- about ---------- */
+.about-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(32px,6vw,80px);align-items:center}
+.about-visual{aspect-ratio:5/4;border-radius:var(--radius-l);position:relative;overflow:hidden;border:1px solid var(--line);background:var(--bg-2)}
+.about-visual::after{content:"";position:absolute;left:0;right:0;bottom:0;height:34%;background:linear-gradient(to top,rgba(7,26,46,.66),transparent);z-index:1}
+.about-visual .ab-caption{position:absolute;z-index:2;left:24px;right:24px;bottom:24px;font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:rgba(255,255,255,.88)}
+/* 핵심 기술 5영역 칩. 라벨이 한글이라 mono 대신 sans 를 씁니다
+   (JetBrains Mono 는 한글 글리프가 없어 폴백되면서 자폭이 어긋납니다) */
+.core-areas{display:flex;flex-wrap:wrap;gap:8px;margin-top:28px}
+.core-areas span{font-family:var(--font-sans);font-size:13px;font-weight:500;padding:7px 13px;border:1px solid var(--line);border-radius:100px;color:var(--ink-2);white-space:nowrap}
+.about-stats{display:grid;grid-template-columns:repeat(4,1fr);margin-top:clamp(48px,6vw,72px);border:1px solid var(--line);border-radius:var(--radius);overflow:hidden}
+.about-stats .as{padding:28px 24px;border-right:1px solid var(--line)}
+.about-stats .as:last-child{border-right:0}
+.about-stats .as .num{font-family:var(--font-disp);font-size:clamp(28px,3.4vw,40px);font-weight:700;letter-spacing:-.03em}
+.about-stats .as .num em{color:var(--accent);font-style:normal}
+.about-stats .as .lbl{font-size:13px;color:var(--ink-2);margin-top:6px}
+
+/* ---------- services ---------- */
+.svc-grid{margin-top:clamp(40px,5vw,60px);display:grid;grid-template-columns:repeat(2,1fr);gap:1px;background:var(--ink-line);border:1px solid var(--ink-line);border-radius:var(--radius);overflow:hidden}
+.svc{background:var(--ink-bg);padding:clamp(28px,3.2vw,44px);display:flex;flex-direction:column;min-height:240px;transition:background .25s ease;position:relative}
+.svc:hover{background:var(--ink-surface)}
+.svc .idx{font-family:var(--font-mono);font-size:13px;font-weight:500;color:var(--ink-accent);margin-bottom:auto}
+.svc h3{font-size:clamp(20px,2.1vw,26px);margin-top:28px}
+.svc .en{font-family:var(--font-disp);font-size:13px;color:var(--ink-fg2);margin-top:8px;letter-spacing:-.01em}
+.svc p{margin-top:14px;font-size:15px;color:var(--ink-fg2)}
+
+/* ---------- solutions ---------- */
+.sol{margin-top:clamp(40px,5vw,60px);display:grid;gap:28px}
+/* minmax(0,·) 필수: 1fr 의 최소값은 min-content 라서, 미디어가 폭을 독차지하고
+   본문 칼럼이 짜부라져 세로로 길어지다 overflow:hidden 에 잘립니다. */
+.sol-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-l);overflow:hidden;box-shadow:var(--shadow)}
+.sol-card.reverse .sol-media{order:2}
+.sol-body{padding:clamp(30px,3.6vw,52px);display:flex;flex-direction:column;justify-content:center}
+/* 서브제목+제목을 한 그룹으로 묶고 CTA 를 그 옆 상단에 우측 정렬합니다.
+   align-items:flex-start 라서 CTA 윗변이 서브제목 줄과 같은 높이에 놓입니다.
+   (CTA 를 본문 아래에서 올려 카드 높이를 미디어의 3:2 에 맞추기 위함) */
+.sol-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
+.sol-head-text{min-width:0}
+.sol-tag{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
+.sol-body h3{font-size:clamp(24px,2.8vw,34px);margin-top:14px}
+.sol-body h3 .ko{color:var(--ink-3);font-size:.62em;font-weight:500;margin-left:8px;letter-spacing:-.02em}
+.sol-body>p{margin-top:16px;font-size:15px;color:var(--ink-2)}
+.sol-feats{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px 22px}
+.sol-feats .f{padding-left:18px;position:relative}
+.sol-feats .f::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
+.sol-feats .f b{display:block;font-size:14px;font-weight:600}
+.sol-feats .f span{font-size:13px;color:var(--ink-2);line-height:1.45}
+/* 미디어 높이는 행(=본문) 높이를 따릅니다. aspect-ratio 로 고정하면 본문이 더 길 때
+   미디어가 늘어나지 않아 카드에 빈 공간이 생기거나 본문이 잘립니다.
+   CTA 를 타이틀 줄로 옮겨 본문 높이가 이미 3:2 에 근접하므로 cover 로도 잘림이 거의 없습니다. */
+.sol-media{position:relative;min-height:320px;background:var(--bg)}
+.sol-cta{flex:none;margin-top:0}
+
+/* ---------- work ---------- */
+.work-grid{margin-top:clamp(40px,5vw,60px);display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.work-card{background:var(--ink-surface);border:1px solid var(--ink-line);border-radius:var(--radius);overflow:hidden;display:flex;flex-direction:column;transition:transform .2s ease,border-color .2s;text-align:left;cursor:pointer}
+.work-card:hover{transform:translateY(-4px);border-color:var(--ink-accent)}
+.work-thumb{aspect-ratio:16/10;position:relative;background:var(--ink-bg)}
+.work-meta{padding:20px 22px;display:flex;flex-direction:column;gap:8px}
+.work-meta .yr{font-family:var(--font-mono);font-size:12px;color:var(--ink-accent);letter-spacing:.04em}
+.work-meta h4{font-family:var(--font-disp);font-size:18px;color:var(--ink-fg);letter-spacing:-.01em}
+.work-meta p{font-size:13.5px;color:var(--ink-fg2)}
+.work-more{margin-top:auto;padding:0 22px 20px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-accent)}
+
+/* ---------- project modal ---------- */
+.fb-modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(4,12,22,.72);backdrop-filter:blur(6px);display:grid;place-items:center;padding:24px}
+.fb-modal{width:100%;max-width:920px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:var(--radius-l);box-shadow:var(--shadow-lg);position:relative}
+.fb-modal-close{position:sticky;top:0;float:right;margin:14px 14px 0;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:18px;line-height:1;color:var(--ink-2);z-index:3}
+.fb-modal-close:hover{border-color:var(--ink);color:var(--ink)}
+.fb-modal-hero{position:relative;aspect-ratio:16/7;background:var(--bg)}
+.fb-modal-body{padding:clamp(24px,3vw,40px)}
+.fb-modal-body .yr{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--accent)}
+.fb-modal-body h3{font-size:clamp(22px,2.6vw,32px);margin-top:12px}
+.fb-modal-body .client{margin-top:8px;font-size:14px;color:var(--ink-3)}
+.fb-modal-body .overview{margin-top:20px;font-size:15px;color:var(--ink-2);white-space:pre-line}
+.fb-modal-shots{margin-top:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
+.fb-modal-shots img{width:100%;border-radius:var(--radius);border:1px solid var(--line)}
+
+/* ---------- values ---------- */
+.val-grid{margin-top:clamp(40px,5vw,60px);display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.val{padding:28px 24px 30px;border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2)}
+.val .vicon{width:48px;height:48px;border-radius:var(--radius-s);overflow:hidden;background:var(--accent-2);display:grid;place-items:center;margin-bottom:4px}
+.val .vicon img{width:100%;height:100%;object-fit:cover}
+.val .vn{font-family:var(--font-mono);font-size:12px;color:var(--accent);margin-top:14px}
+.val h4{font-size:19px;margin-top:10px}
+.val .en{font-size:12.5px;color:var(--ink-3);margin-top:5px;font-family:var(--font-disp)}
+.val p{font-size:14px;color:var(--ink-2);margin-top:12px}
+
+/* ---------- CEO quote + culture ---------- */
+.quote-block{max-width:860px;margin:0 auto clamp(56px,7vw,96px);text-align:center}
+.quote-block blockquote{margin:0;font-size:clamp(26px,3.6vw,44px);font-weight:600;line-height:1.25;letter-spacing:-.02em}
+.quote-block blockquote .accentword{color:var(--accent)}
+.quote-block .qsub{margin-top:22px;color:var(--ink-2);font-size:15px;max-width:620px;margin-left:auto;margin-right:auto}
+.quote-block .qby{margin-top:22px;font-family:var(--font-mono);font-size:13px;color:var(--ink-3)}
+.quote-block .qby b{color:var(--ink);font-weight:600}
+.culture-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}
+.cul{border:1px solid var(--line);border-radius:var(--radius);background:var(--bg-2);overflow:hidden;transition:transform .2s ease}
+.cul:hover{transform:translateY(-3px)}
+.cul-img{aspect-ratio:16/10;position:relative;background:var(--bg)}
+.cul-body{padding:20px 22px 24px}
+.cul-body h4{font-size:17px}
+.cul-body p{font-size:13.5px;color:var(--ink-2);margin-top:8px}
+
+/* ---------- FAQ ---------- */
+.faq-grid{display:grid;grid-template-columns:.8fr 1.2fr;gap:clamp(32px,5vw,64px);align-items:start}
+.faq-list{border-top:1px solid var(--line)}
+.faq-item{border-bottom:1px solid var(--line)}
+.faq-q{width:100%;background:none;border:0;cursor:pointer;display:flex;align-items:center;justify-content:space-between;gap:20px;padding:24px 4px;text-align:left;font-family:var(--font-sans);font-size:clamp(16px,1.7vw,18px);font-weight:600;color:var(--ink)}
+.faq-q .pm{flex:none;width:22px;height:22px;position:relative}
+.faq-q .pm::before,.faq-q .pm::after{content:"";position:absolute;background:var(--accent);transition:transform .25s ease,opacity .25s}
+.faq-q .pm::before{top:50%;left:2px;right:2px;height:2px;transform:translateY(-50%)}
+.faq-q .pm::after{left:50%;top:2px;bottom:2px;width:2px;transform:translateX(-50%)}
+.faq-item.open .pm::after{opacity:0;transform:translateX(-50%) rotate(90deg)}
+.faq-a{overflow:hidden;transition:max-height .3s ease}
+.faq-a p{padding:0 4px 24px;color:var(--ink-2);font-size:15px;max-width:620px}
+
+/* ---------- contact ---------- */
+.contact-grid{display:grid;grid-template-columns:1fr 1fr;gap:clamp(28px,4vw,48px);align-items:start}
+.contact-head h2{font-size:clamp(30px,4.4vw,54px)}
+.contact-info{margin-top:38px;display:grid;gap:1px;background:var(--ink-line);border:1px solid var(--ink-line);border-radius:var(--radius);overflow:hidden}
+.contact-info .ci-row{background:var(--ink-bg);padding:18px 22px;display:flex;gap:18px;align-items:baseline}
+.contact-info .ci-k{font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-fg2);width:84px;flex:none}
+.contact-info .ci-v{font-size:14.5px;color:var(--ink-fg);min-width:0;overflow-wrap:anywhere}
+.fb-map{margin-top:18px;height:280px;width:100%;border:1px solid var(--ink-line);border-radius:var(--radius);overflow:hidden}
+.form-card{background:var(--surface);color:var(--ink);border-radius:var(--radius-l);padding:clamp(26px,3vw,40px);box-shadow:var(--shadow-lg)}
+.form-card h3{font-size:21px}
+.form-card .fc-sub{font-size:14px;color:var(--ink-2);margin-top:8px;margin-bottom:24px}
+.field{margin-bottom:16px}
+.field label{display:block;font-size:13px;font-weight:600;margin-bottom:7px}
+.field label .req{color:var(--accent)}
+.field input,.field textarea,.field select{width:100%;font-family:var(--font-sans);font-size:14.5px;padding:12px 14px;border:1px solid var(--line);border-radius:var(--radius-s);background:var(--bg);color:var(--ink);transition:border-color .2s,box-shadow .2s}
+.field textarea{resize:vertical;min-height:96px}
+.field input:focus,.field textarea:focus,.field select:focus{outline:none;border-color:var(--accent);box-shadow:0 0 0 3px var(--accent-2)}
+.chips{display:flex;flex-wrap:wrap;gap:8px}
+.chips .chip{font-size:13px;padding:8px 14px;border:1px solid var(--line);border-radius:100px;cursor:pointer;transition:all .18s ease;color:var(--ink-2);user-select:none;background:transparent}
+.chips .chip:hover{border-color:var(--ink-2)}
+.chips .chip.on{background:var(--accent);color:var(--on-accent);border-color:var(--accent)}
+.form-row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form-submit{margin-top:8px;width:100%;justify-content:center}
+.form-note{font-size:12px;color:var(--ink-3);margin-top:12px;text-align:center}
+.field .opt{font-family:var(--font-mono);font-size:10.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--ink-3);font-weight:500;margin-left:6px}
+.field-count{margin-top:6px;text-align:right;font-family:var(--font-mono);font-size:11px;color:var(--ink-3)}
+.field.agree{display:flex;align-items:center;gap:9px;margin-top:22px}
+.field.agree input{width:16px;height:16px;flex:none;accent-color:var(--accent);margin:0;padding:0}
+.field.agree label{margin:0;font-size:13.5px;font-weight:500;color:var(--ink-2)}
+.field.agree label a{color:var(--accent);text-decoration:underline;text-underline-offset:2px}
+.form-submit:disabled{opacity:.6;cursor:default}
+
+/* 안내/약관 다이얼로그 */
+.fb-dialog-backdrop{position:fixed;inset:0;z-index:110;background:rgba(4,12,22,.66);backdrop-filter:blur(4px);display:grid;place-items:center;padding:24px}
+.fb-dialog{width:100%;max-width:520px;max-height:80vh;overflow:auto;background:var(--surface);color:var(--ink);border-radius:var(--radius-l);box-shadow:var(--shadow-lg);padding:clamp(24px,3vw,32px)}
+.fb-dialog h3{font-size:19px}
+.fb-dialog-body{margin:16px 0 24px;font-size:14px;color:var(--ink-2);display:grid;gap:14px;line-height:1.6}
+.fb-dialog-body b{color:var(--ink)}
+.fb-dialog .btn{width:100%;justify-content:center}
+
+/* 기존 FormFileUpload.vue(Tailwind)를 새 디자인 톤에 맞춤 */
+/* 파일 첨부 버튼은 재사용 컴포넌트(FormFileUpload)라 Tailwind 로 flex 정렬돼 있습니다.
+   위의 `.field label{display:block}` 이 specificity 로 그걸 덮어써서 아이콘이 줄바꿈되므로
+   여기서 flex 를 되살립니다. 바깥의 "파일 첨부" 제목 label 은 for 속성이 없어 영향받지 않습니다. */
+.fb-upload label[for]{display:flex;align-items:center;justify-content:center;margin-bottom:0;font-size:15px;border-radius:var(--radius-s)!important;border-color:var(--line)!important;font-family:var(--font-sans)}
+.fb-upload label[for] svg{flex:none}
+
+/* ---------- footer ---------- */
+.site-footer{background:var(--ink-bg);color:var(--ink-fg);padding:clamp(56px,7vw,84px) 0 40px}
+.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid var(--ink-line)}
+.footer-brand{font-family:var(--font-disp);font-weight:700;font-size:22px;display:flex;align-items:center;gap:9px}
+.footer-brand-sub{margin-top:16px;font-size:14px;color:var(--ink-fg2);max-width:320px}
+.footer-col h5{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-fg2);margin:0 0 16px;font-weight:500}
+.footer-col a,.footer-col p{display:block;font-size:14px;color:var(--ink-fg);margin-bottom:10px}
+.footer-bottom{padding-top:28px;display:flex;justify-content:space-between;flex-wrap:wrap;gap:12px}
+.footer-bottom p{font-size:12.5px;color:var(--ink-fg2);line-height:1.7}
+
+/* ---------- reveal ---------- */
+.reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
+
+/* ---------- 그리드 순차 등장 ---------- */
+/* v-reveal 이 붙은 컨테이너에 fb-stagger 를 같이 주면, 컨테이너 자체 페이드는 끄고
+   자식들만 순서대로 올라옵니다(모션 중복 방지). .in 은 v-reveal 이 붙여줍니다. */
+.fb-stagger.reveal{opacity:1;transform:none;transition:none}
+.fb-stagger > *{opacity:0;transform:translateY(14px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
+.fb-stagger.in > *{opacity:1;transform:none}
+.fb-stagger.in > *:nth-child(2){transition-delay:.07s}
+.fb-stagger.in > *:nth-child(3){transition-delay:.14s}
+.fb-stagger.in > *:nth-child(4){transition-delay:.21s}
+.fb-stagger.in > *:nth-child(5){transition-delay:.28s}
+.fb-stagger.in > *:nth-child(6){transition-delay:.35s}
+.fb-stagger.in > *:nth-child(n+7){transition-delay:.42s}
+
+/* ---------- 이미지 hover 확대 ---------- */
+/* 확대분이 카드 본문 위로 넘치지 않도록 래퍼에 overflow 를 겁니다
+   (부모 카드에만 걸려 있어서 썸네일 아래쪽으로 삐져나왔습니다) */
+.sol-media,.work-thumb,.cul-img{overflow:hidden}
+.sol-media .slot-img,.work-thumb .slot-img,.cul-img .slot-img{transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.sol-card:hover .sol-media .slot-img,
+.work-card:hover .work-thumb .slot-img,
+.cul:hover .cul-img .slot-img{transform:scale(1.05)}
+.reveal.in{opacity:1;transform:none}
+@media (prefers-reduced-motion:reduce){
+  .reveal{opacity:1;transform:none;transition:none}
+  .marquee{animation:none}
+  .fb-stagger > *{opacity:1;transform:none;transition:none}
+  .sol-media .slot-img,.work-thumb .slot-img,.cul-img .slot-img{transition:none}
+  .sol-card:hover .sol-media .slot-img,
+  .work-card:hover .work-thumb .slot-img,
+  .cul:hover .cul-img .slot-img{transform:none}
+}
+
+/* ---------- responsive ---------- */
+/* 2단 구간이 좁아지면 본문은 길어지고 미디어는 좁아져 좌우가 크게 잘립니다
+   (1024px 에서 약 12%). 1150px 이하에서는 1단으로 내려 3:2 그대로 보여줍니다. */
+@media (max-width:1150px){
+    .sol-card{grid-template-columns:minmax(0,1fr)}
+    .sol-card.reverse .sol-media{order:0}
+    .sol-media{min-height:0;aspect-ratio:3/2}
+}
+
+@media (max-width:920px){
+  .nav-links{display:none}
+  .nav-toggle{display:flex}
+  .mobile-menu{display:flex}
+  .hero-grid{grid-template-columns:1fr}
+  .hero-visual{aspect-ratio:16/10;order:-1}
+  .about-grid{grid-template-columns:1fr}
+  .about-stats{grid-template-columns:1fr 1fr}
+  .about-stats .as:nth-child(2){border-right:0}
+  .about-stats .as:nth-child(-n+2){border-bottom:1px solid var(--line)}
+  .svc-grid{grid-template-columns:1fr}
+  .sol-card{grid-template-columns:1fr}
+  .sol-card.reverse .sol-media{order:0}
+  .sol-media{min-height:220px}
+  .work-grid{grid-template-columns:1fr 1fr}
+  .val-grid{grid-template-columns:1fr 1fr}
+  .culture-grid{grid-template-columns:1fr 1fr}
+  .faq-grid{grid-template-columns:1fr}
+  /* minmax(0,·): 1fr 은 최소값이 auto(min-content) 라서, 줄바꿈 불가한 이메일/주소가
+     트랙을 컨테이너보다 넓게 밀어내 좁은 화면에서 우측이 잘립니다. */
+  .contact-grid{grid-template-columns:minmax(0,1fr)}
+  .footer-top{grid-template-columns:1fr 1fr}
+  .fb-modal-shots{grid-template-columns:1fr}
+}
+@media (max-width:560px){
+  .container{padding:0 18px}
+  .nav-contact{display:none}
+  .hero-stats{flex-wrap:wrap;gap:20px 32px}
+  .work-grid,.val-grid,.culture-grid{grid-template-columns:1fr}
+  .sol-feats,.form-row{grid-template-columns:1fr}
+  .about-stats{grid-template-columns:1fr}
+  .about-stats .as{border-right:0!important;border-bottom:1px solid var(--line)}
+  .footer-top{grid-template-columns:1fr}
+  /* 좁은 폭에서는 라벨/값을 위아래로 쌓아 84px 고정 라벨이 값을 압박하지 않게 합니다. */
+  .contact-info .ci-row{flex-direction:column;gap:6px;padding:16px 18px}
+  .contact-info .ci-k{width:auto}
+}

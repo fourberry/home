@@ -1,322 +1,66 @@
 <template>
-    <header :class="headerClasses">
-        <div class="container-wide relative mx-auto flex items-center justify-between px-4 py-4 md:px-8">
-            <a
-                id="header-logo-text"
-                :href="basePath"
-                @click.prevent="handleLogoClick"
-                class="flex items-center text-2xl font-extrabold no-underline transition-opacity duration-300 ease-in-out hover:opacity-80 desktop:h-14 desktop:text-3xl"
-                aria-label="FOURBERRY"
-            >
-                <div class="flex h-8 items-center md:h-8 desktop:h-full" :class="logoImageClasses">
-                    <img src="/images/logo.png" class="h-full object-contain" />
-                </div>
-                <span class="logo-word" ref="logoEl">
-                    <span v-for="(ch, idx) in logoLetters" :key="idx" class="logo-ch">{{ ch }}</span>
-                </span>
+    <header class="site-header" :class="{ scrolled }">
+        <div class="container nav">
+            <a class="brand" href="#top" aria-label="FOURBERRY 홈" @click="close">
+                <span class="fb-mark" role="img" aria-label="FOURBERRY 로고"></span>FOURBERRY
             </a>
-
-            <div
-                :class="desktopMenuClasses"
-                class="hidden items-center gap-3 md:flex desktop:gap-5"
-            >
-                <NuxtLink to="#about" class="menu-link group relative min-w-[6rem] overflow-hidden text-center text-base font-bold no-underline desktop:text-lg">
-                    <span class="front block">ABOUT</span>
-                    <span class="back absolute inset-0 block">소개</span>
-                </NuxtLink>
-
-                <NuxtLink to="#projects" class="menu-link group relative min-w-[6rem] overflow-hidden text-center text-base font-bold no-underline desktop:text-lg">
-                    <span class="front block">SI/SM</span>
-                    <span class="back absolute inset-0 block">구축/운영</span>
-                </NuxtLink>
-
-                <NuxtLink to="#services" class="menu-link group relative min-w-[6rem] overflow-hidden text-center text-base font-bold no-underline desktop:text-lg">
-                    <span class="front block">SOLUTION</span>
-                    <span class="back absolute inset-0 block">솔루션</span>
-                </NuxtLink>
-
-                <NuxtLink to="#contact" class="menu-link group relative min-w-[6rem] overflow-hidden text-center text-base font-bold no-underline desktop:text-lg">
-                    <span class="front block">CONTACT</span>
-                    <span class="back absolute inset-0 block">연락처</span>
-                </NuxtLink>
-            </div>
-
-            <button @click="toggleMobileMenu" class="relative z-50 flex h-8 w-8 items-center justify-center md:hidden" aria-label="메뉴 토글">
-                <div class="relative h-4 w-6">
-                    <span
-                        class="absolute left-0 top-0 block h-0.5 w-full origin-center transition-all duration-300 ease-in-out"
-                        :class="[lineClasses, isMobileMenuOpen ? 'translate-y-[7px] rotate-45' : '']"
-                    ></span>
-                    <span
-                        class="absolute left-0 top-1/2 block h-0.5 w-full -translate-y-1/2 transition-all duration-300 ease-in-out"
-                        :class="[lineClasses, isMobileMenuOpen ? 'opacity-0' : '']"
-                    ></span>
-                    <span
-                        class="absolute bottom-0 left-0 block h-0.5 w-full origin-center transition-all duration-300 ease-in-out"
-                        :class="[lineClasses, isMobileMenuOpen ? '-translate-y-[7px] -rotate-45' : '']"
-                    ></span>
-                </div>
-            </button>
-        </div>
-
-        <transition name="slide-down">
-            <nav v-if="isMobileMenuOpen" class="absolute left-0 top-full flex w-full flex-col border-t border-gray-200 bg-white shadow-lg md:hidden">
-                <NuxtLink @click="isMobileMenuOpen = false" to="#about" class="px-6 py-3 font-medium text-gray-800 no-underline hover:bg-gray-50">ABOUT</NuxtLink>
-                <NuxtLink @click="isMobileMenuOpen = false" to="#projects" class="px-6 py-3 font-medium text-gray-800 no-underline hover:bg-gray-50">SI/SM</NuxtLink>
-                <NuxtLink @click="isMobileMenuOpen = false" to="#services" class="px-6 py-3 font-medium text-gray-800 no-underline hover:bg-gray-50">SOLUTION</NuxtLink>
-                <NuxtLink @click="isMobileMenuOpen = false" to="#contact" class="px-6 py-3 font-medium text-gray-800 no-underline hover:bg-gray-50">CONTACT</NuxtLink>
+            <nav class="nav-links" aria-label="주 메뉴">
+                <a v-for="item in menu" :key="item.href" :href="item.href">{{ item.label }}</a>
             </nav>
-        </transition>
+            <div class="nav-cta">
+                <a href="#contact" class="btn btn-primary nav-contact">문의하기</a>
+                <button
+                    class="nav-toggle"
+                    :class="{ open }"
+                    :aria-label="open ? '메뉴 닫기' : '메뉴 열기'"
+                    :aria-expanded="open ? 'true' : 'false'"
+                    aria-controls="mobileMenu"
+                    @click="open = !open"
+                >
+                    <span></span><span></span><span></span>
+                </button>
+            </div>
+        </div>
+        <div id="mobileMenu" class="mobile-menu" :class="{ open }">
+            <a v-for="item in menu" :key="item.href" :href="item.href" @click="close">{{ item.label }}</a>
+            <a href="#contact" class="btn btn-primary" @click="close">상담 문의하기 →</a>
+        </div>
     </header>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed, onUnmounted, watch } from 'vue'
-import { useRoute } from 'vue-router'
-import { gsap } from 'gsap'
-import { ScrollTrigger } from 'gsap/ScrollTrigger'
-import { useHeaderTheme } from '~/composables/useHeaderTheme'
+import { ref, onMounted, onUnmounted } from 'vue'
 
-// ✅ [수정] basePath를 ref로 변경하고 기본값 '/'로 설정
-const basePath = ref('/')
+const menu = [
+    { href: '#about', label: '회사소개' },
+    { href: '#services', label: '서비스' },
+    { href: '#solutions', label: '솔루션' },
+    { href: '#work', label: '실적' },
+    { href: '#culture', label: '컬처' },
+    { href: '#faq', label: 'FAQ' },
+]
 
-gsap.registerPlugin(ScrollTrigger)
+const open = ref(false)
+const scrolled = ref(false)
+const close = () => (open.value = false)
 
-const handleLogoClick = () => {
-    // 1. 현재 페이지의 경로(pathname)가 basePath와 정확히 일치하고,
-    // 2. 해시(#)가 없는 경우
-    //    (즉, .../home/ 이고 .../home/#about이 아닌 경우)
-    if (window.location.pathname === basePath.value && !window.location.hash) {
-        // 이미 루트이므로, 강제 새로고침
-        window.location.reload()
-    } else {
-        // 해시가 있거나 다른 페이지에 있다면, 루트 경로로 이동
-        // (브라우저가 페이지를 새로 불러옵니다)
-        window.location.href = basePath.value
-    }
+const onScroll = () => (scrolled.value = window.scrollY > 8)
+const onResize = () => {
+    if (window.innerWidth > 920) close()
 }
-
-const route = useRoute()
-const isHomePage = computed(() => route.path === basePath.value)
-
-const { theme, setHeaderTheme } = useHeaderTheme()
-
-const isMobileMenuOpen = ref(false)
-const toggleMobileMenu = () => {
-    isMobileMenuOpen.value = !isMobileMenuOpen.value
-}
-
-const logoImageClasses = computed(() => {
-    // 홈이면서, 'light' 테마(스크롤 전)이고, 모바일 메뉴가 열리지 않았을 때
-    if ((isHomePage.value && theme.value === 'light' && !isMobileMenuOpen.value) || theme.value === 'transparent') {
-        return 'opacity-0 duration-300 ease-in-out' // 이미지를 숨김
-    }
-    // 그 외 모든 경우 (스크롤 후, 다른 페이지, 모바일 메뉴 열림)
-    // 헤더의 transition과 동일하게 맞추기 위해 transition 속성 추가
-    return 'opacity-100 transition-opacity duration-300 ease-in-out'
-})
-
-const lineClasses = computed(() => [isMobileMenuOpen.value || theme.value === 'dark' ? 'bg-gray-800' : 'bg-white'])
-
-const headerClasses = computed(() => {
-    const baseClasses = 'top-0 left-0 w-full z-50 transition-all duration-300 ease-in-out'
-    if (isMobileMenuOpen.value) {
-        return [baseClasses, 'fixed bg-white text-gray-800 shadow-sm']
-    }
-    if (!isHomePage.value) {
-        return [baseClasses, 'fixed bg-white text-gray-800 shadow-sm']
-    }
-    switch (theme.value) {
-        case 'transparent':
-            return [baseClasses, 'fixed bg-transparent text-transparent']
-        case 'dark':
-            return [baseClasses, 'fixed bg-white/60 backdrop-blur-md shadow-sm text-gray-800']
-        case 'light':
-        default:
-            return [baseClasses, 'absolute bg-transparent text-transparent']
-    }
-})
-
-const desktopMenuClasses = computed(() => {
-    const baseTransition = 'transition-opacity duration-300 ease-in-out'
-
-    // 홈 페이지이고, 모바일 메뉴가 닫혀있고, 테마가 'light' 또는 'transparent' (즉, 상단 투명 상태)일 때
-    if (isHomePage.value && !isMobileMenuOpen.value && (theme.value === 'light' || theme.value === 'transparent')) {
-        // 메뉴를 숨기고 마우스 이벤트를 비활성화
-        return [baseTransition, 'opacity-0', 'pointer-events-none']
-    }
-
-    // 그 외 모든 경우 (스크롤 내렸을 때, 다른 페이지일 때, 모바일 메뉴가 열렸을 때)
-    // 메뉴를 보이고 마우스 이벤트를 활성화
-    return [baseTransition, 'opacity-100', 'pointer-events-auto']
-})
-
-/* ---------- [로고 애니메이션 추가] ---------- */
-const logoText = 'FOURBERRY'
-const logoLetters = logoText.split('')
-const logoEl = ref<HTMLElement | null>(null)
-let logoTl: gsap.core.Timeline | null = null
-
-const buildLogoTimeline = () => {
-    if (!logoEl.value) {
-        console.warn('로고 요소를 찾을 수 없습니다.')
-        return
-    }
-
-    const mq = window.matchMedia('(prefers-reduced-motion: reduce)')
-    if (mq.matches) return
-
-    const letters = logoEl.value.querySelectorAll<HTMLElement>('.logo-ch')
-
-    // 기존 타임라인 정리
-    logoTl?.kill()
-
-    // 전체 사이클 끝나고 5초 대기 후 반복
-    logoTl = gsap.timeline({
-        repeat: -1,
-        repeatDelay: 5,
-    })
-
-    // 초기 상태
-    gsap.set(letters, { y: 0 })
-
-    // ✨ 핵심: 한 글자(올라감→내려옴)를 'keyframes'로 묶고, stagger로 겹치게 시작
-    logoTl.to(
-        letters,
-        {
-            keyframes: [
-                { y: -12, duration: 0.22, ease: 'power2.out' }, // 위로 콕
-                { y: 0, duration: 0.28, ease: 'power2.inOut' }, // 자연스럽게 복귀
-            ],
-            // 다음 글자가 살짝 먼저 시작하게 하여 "연쇄"처럼 보이게 함
-            stagger: 0.06, // 더 촘촘: 0.04 ~ 0.05 / 더 느긋: 0.08 ~ 0.1
-        },
-        0
-    )
+const onKey = (e: KeyboardEvent) => {
+    if (e.key === 'Escape') close()
 }
 
 onMounted(() => {
-    const isProduction = process.env.NODE_ENV === 'production'
-    const hostname = window.location.hostname
-    if (isProduction && hostname === 'fourberry.github.io') {
-        basePath.value = '/home'
-    } else {
-        basePath.value = '/'
-    }
-
-    // ✅ [수정] 스크롤 트리거 생성 로직을 제거하고,
-    // 홈 페이지일 경우 'light' 테마를 설정하는 로직만 남깁니다.
-    if (isHomePage.value) {
-        // 인트로 애니메이션이 실행 중이므로 헤더를 숨기기 위해 'light'로 설정
-        console.log('light')
-        setHeaderTheme('light')
-    } else {
-        setHeaderTheme('dark')
-    }
-
-    // 로고 애니메이션 초기화
-    buildLogoTimeline()
-
-    // 라우트 전환 시: 메뉴 정리 + 헤더 테마 처리 + (홈일 때만) 로고 타임라인 재구성
-    watch(
-        () => route.path,
-        newPath => {
-            isMobileMenuOpen.value = false
-
-            // ✅ [수정] setupScrollTrigger() 호출 제거
-            if (isHomePage.value) {
-                // 페이지가 전환되었으므로 스크롤이 0임. 'light'로 설정
-                setHeaderTheme('light')
-                buildLogoTimeline()
-            } else {
-                setHeaderTheme('dark')
-                logoTl?.pause(0)
-            }
-        }
-    )
-
-    // 모바일 메뉴가 열린 동안에는 사용자가 메뉴에 집중할 수 있게 애니메이션 일시정지
-    watch(isMobileMenuOpen, open => {
-        if (open) {
-            logoTl?.pause()
-        } else {
-            logoTl?.resume()
-        }
-    })
+    onScroll()
+    window.addEventListener('scroll', onScroll, { passive: true })
+    window.addEventListener('resize', onResize)
+    document.addEventListener('keydown', onKey)
 })
-
 onUnmounted(() => {
-    logoTl?.kill()
+    window.removeEventListener('scroll', onScroll)
+    window.removeEventListener('resize', onResize)
+    document.removeEventListener('keydown', onKey)
 })
-/* ---------- [로고 애니메이션 추가 끝] ---------- */
-
-defineExpose({})
 </script>
-
-<style scoped>
-/* 로고 글자 단위 애니메이션을 위한 설정 */
-.logo-word {
-    display: inline-flex;
-    gap: 0.02em;
-}
-
-.logo-ch {
-    display: inline-block;
-    will-change: transform;
-    transform: translateZ(0);
-}
-
-/* 아래 기존 스타일 그대로 유지 */
-.menu-link .front {
-    transform: translateY(0);
-    opacity: 1;
-    transition: none;
-}
-.menu-link .back {
-    transform: translateY(100%);
-    opacity: 0;
-    transition: none;
-}
-@media (any-hover: hover) and (any-pointer: fine) {
-    .menu-link .front,
-    .menu-link .back {
-        transition:
-            transform 0.3s ease-in-out,
-            opacity 0.3s ease-in-out;
-    }
-    .menu-link .front {
-        transform: translateY(0);
-        opacity: 1;
-    }
-    .menu-link .back {
-        transform: translateY(100%);
-        opacity: 0;
-    }
-    .menu-link:hover .front {
-        transform: translateY(-100%);
-        opacity: 0;
-    }
-    .menu-link:hover .back {
-        transform: translateY(0);
-        opacity: 1;
-        color: rgb(37 99 235);
-    }
-}
-@media (hover: none) and (pointer: coarse) {
-    .menu-link .front,
-    .menu-link .back {
-        transition: none;
-    }
-}
-.slide-down-enter-active,
-.slide-down-leave-active {
-    transition:
-        transform 0.3s ease-in-out,
-        opacity 0.3s ease-in-out;
-}
-.slide-down-enter-from,
-.slide-down-leave-to {
-    transform: translateY(-20px);
-    opacity: 0;
-}
-</style>

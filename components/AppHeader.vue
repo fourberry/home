@@ -1,5 +1,5 @@
 <template>
-    <header class="site-header" :class="{ scrolled }">
+    <header class="site-header" :class="{ scrolled, 'menu-open': open }">
         <div class="container nav">
             <a class="brand" href="#top" aria-label="FOURBERRY 홈" @click="close">
                 <span class="fb-mark" role="img" aria-label="FOURBERRY 로고"></span>FOURBERRY

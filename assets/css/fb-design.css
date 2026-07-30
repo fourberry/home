@@ -82,6 +82,9 @@ img{max-width:100%;display:block}
 /* ---------- header ---------- */
 .site-header{position:sticky;top:0;z-index:50;background:color-mix(in srgb,var(--bg) 78%,transparent);backdrop-filter:saturate(180%) blur(14px);border-bottom:1px solid transparent;transition:border-color .3s,background .3s}
 .site-header.scrolled{border-bottom-color:var(--line)}
+/* 모바일 메뉴가 열리면 헤더 뒤 배경이 비쳐 메뉴(불투명)와 톤이 어긋납니다.
+   열린 동안에는 헤더도 불투명 처리하고 하단 경계선을 살립니다. */
+.site-header.menu-open{background:var(--bg);border-bottom-color:var(--line)}
 .nav{height:70px;display:flex;align-items:center;justify-content:space-between}
 .brand{font-family:var(--font-disp);font-weight:700;font-size:20px;letter-spacing:-.02em;display:flex;align-items:center;gap:9px}
 .brand:hover{color:var(--ink)}
@@ -98,8 +101,9 @@ img{max-width:100%;display:block}
 .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 .mobile-menu{display:none;position:fixed;left:0;right:0;top:70px;z-index:48;flex-direction:column;gap:2px;background:var(--bg);border-bottom:1px solid var(--line);padding:10px 24px 22px;box-shadow:var(--shadow-lg);transform:translateY(-14px);opacity:0;pointer-events:none;transition:transform .26s cubic-bezier(.2,.7,.2,1),opacity .2s ease}
 .mobile-menu.open{transform:none;opacity:1;pointer-events:auto}
-.mobile-menu a{padding:15px 4px;font-size:16px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--line-2)}
-.mobile-menu a:last-child{border-bottom:0}
+/* 일반 메뉴 링크에만 적용 — .btn 은 제외해야 버튼 자체 색/패딩/보더를 덮지 않습니다 */
+.mobile-menu a:not(.btn){padding:15px 4px;font-size:16px;font-weight:600;color:var(--ink);border-bottom:1px solid var(--line-2)}
+.mobile-menu a:not(.btn):last-of-type{border-bottom:0}
 .mobile-menu .btn{margin-top:16px;justify-content:center}
 
 /* ---------- hero ---------- */
@@ -302,6 +306,13 @@ img{max-width:100%;display:block}
 /* ---------- reveal ---------- */
 .reveal{opacity:0;transform:translateY(22px);transition:opacity .7s cubic-bezier(.2,.7,.2,1),transform .7s cubic-bezier(.2,.7,.2,1)}
 
+/* ---------- 맨 위로 버튼 (모바일 전용) ---------- */
+/* 데스크톱에는 숨기고, 모바일에서 일정 이상 스크롤되면(.show) 나타납니다. */
+.scroll-top{display:none;position:fixed;right:16px;bottom:calc(16px + env(safe-area-inset-bottom));z-index:47;width:46px;height:46px;border-radius:50%;border:1px solid var(--line);background:var(--surface);box-shadow:var(--shadow-lg);cursor:pointer;place-items:center;opacity:0;transform:translateY(10px);pointer-events:none;transition:opacity .25s ease,transform .25s cubic-bezier(.2,.7,.2,1)}
+.scroll-top.show{opacity:1;transform:none;pointer-events:auto}
+.scroll-top .st-arrow{width:11px;height:11px;border-top:2px solid var(--accent);border-right:2px solid var(--accent);transform:rotate(-45deg);margin-top:3px}
+@media (prefers-reduced-motion:reduce){.scroll-top{transition:none}}
+
 /* ---------- 그리드 순차 등장 ---------- */
 /* v-reveal 이 붙은 컨테이너에 fb-stagger 를 같이 주면, 컨테이너 자체 페이드는 끄고
    자식들만 순서대로 올라옵니다(모션 중복 방지). .in 은 v-reveal 이 붙여줍니다. */
@@ -347,8 +358,16 @@ img{max-width:100%;display:block}
   .nav-links{display:none}
   .nav-toggle{display:flex}
   .mobile-menu{display:flex}
+  .scroll-top{display:grid}
+  /* 모바일에서 스티키 헤더 바로 아래 여백이 과해 보여 상단 패딩을 줄입니다 */
+  .hero{padding-top:clamp(20px,5vw,32px)}
   .hero-grid{grid-template-columns:1fr}
   .hero-visual{aspect-ratio:16/10;order:-1}
+  /* 모바일에서는 배지가 이미지를 가리지 않도록 이미지 아래 정상 흐름으로 내립니다.
+     hero-visual 은 이미지만 담아 비율/클리핑을 유지하고, 배지는 그 밖으로 뺍니다. */
+  .hero-visual{aspect-ratio:auto;overflow:visible;background:none}
+  .hero-visual .slot-img{position:relative;aspect-ratio:16/10;height:auto;border-radius:var(--radius-l)}
+  .hero-badge{position:static;margin-top:14px;left:auto;right:auto;bottom:auto}
   .about-grid{grid-template-columns:1fr}
   .about-stats{grid-template-columns:1fr 1fr}
   .about-stats .as:nth-child(2){border-right:0}

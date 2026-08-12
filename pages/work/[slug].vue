@@ -12,7 +12,7 @@
 
         <section class="section section--ink">
             <div class="container">
-                <img class="fb-shot slot-img" :src="project.thumb" :alt="`${project.client} ${project.title} 화면`" />
+                <img class="fb-shot" :src="project.thumb" :alt="`${project.client} ${project.title} 화면`" />
             </div>
         </section>
 

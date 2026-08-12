@@ -40,7 +40,7 @@
                         <span>{{ f.d }}</span>
                     </div>
                 </div>
-                <img class="fb-shot slot-img" :src="solution.image" :alt="`${solution.name} ${solution.ko} 화면`" loading="lazy" />
+                <img class="fb-shot" :src="solution.image" :alt="`${solution.name} ${solution.ko} 화면`" loading="lazy" />
             </div>
         </section>
 

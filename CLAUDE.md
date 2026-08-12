@@ -58,6 +58,25 @@ npx prettier --write .   # 포맷팅
 fb 컴포넌트는 Tailwind 유틸리티보다 **`fb-design.css`의 클래스와 CSS 변수를 우선 사용**합니다.
 색상·간격을 하드코딩하지 말고 기존 CSS 변수를 쓰세요. 순서가 바뀌면 리디자인 스타일이 덮여 깨집니다.
 
+#### 클래스 두 개는 짝이 있습니다 — 빼먹으면 화면이 조용히 깨집니다
+
+빌드도 통과하고 HTML에도 내용이 다 들어가는데 **화면에서만 망가지는** 조합입니다.
+실제로 이 두 가지 때문에 하위 페이지가 운영 중에 깨진 적이 있습니다.
+
+| 클래스 | 반드시 함께 필요한 것 | 빼먹으면 |
+|---|---|---|
+| `fb-stagger` | 컨테이너에 **`v-reveal`** | 자식이 `opacity:0` 인 채로 남아 **영역이 통째로 비어 보임** |
+| `slot-img` | 부모에 **`position:relative`** | 이미지가 부모를 뚫고 페이지 폭으로 퍼져 **아래 내용을 덮음** |
+
+`slot-img` 는 `position:absolute; inset:0` 이라 부모를 기준으로 꽉 채우는 용도입니다.
+`.sol-media` · `.work-thumb` · `.cul-img` · `.fb-card-media` 처럼 **비율을 가진 래퍼 안**에서만 쓰세요.
+섹션에 그냥 흐르는 이미지(`.fb-shot`)에는 붙이면 안 됩니다.
+
+`fb-stagger` 의 숨김 규칙은 `.fb-stagger.reveal > *` 로 좁혀 두었습니다.
+`reveal` 은 JS(`v-reveal`)만 붙이므로, **JS가 실패하면 콘텐츠가 그냥 보입니다.**
+이 방어를 `.fb-stagger > *` 로 되돌리지 마세요 — [plugins/reveal.ts](plugins/reveal.ts)가
+SSR에서 클래스를 심지 않는 것과 같은 이유입니다.
+
 ### 커스텀 디렉티브는 반드시 유니버설 플러그인
 
 [plugins/reveal.ts](plugins/reveal.ts)(`v-reveal`, 스크롤 페이드업)와

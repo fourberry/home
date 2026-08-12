@@ -4,11 +4,12 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
+import { fbCompany } from '~/data/company'
 
 // 서울 영등포구 양평로 22길 21 코오롱디지털타워 (선유도 인근)
-// ※ 정확한 핀 위치는 아래 좌표만 바꿔주면 됩니다.
-const LAT = 37.5372
-const LNG = 126.8933
+// ※ 좌표는 data/company.ts 가 단일 출처입니다. 구조화 데이터(GeoCoordinates)도 같은 값을 씁니다.
+const LAT = fbCompany.geo.lat
+const LNG = fbCompany.geo.lng
 
 const mapEl = ref<HTMLDivElement | null>(null)
 const { $kakao } = useNuxtApp()

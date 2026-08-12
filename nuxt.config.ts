@@ -1,5 +1,8 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config'
+import { SITE_URL, SITE_TITLE_SUFFIX, SITE_OG_IMAGE } from './data/company'
+import { fbSolutions } from './data/solutions'
+import { fbProjects } from './data/projects'
 
 // GA4 측정 ID.
 //  - 브라우저에 노출되는 공개값이라 저장소에 그대로 두어도 됩니다(.env 불필요).
@@ -40,7 +43,7 @@ export default defineNuxtConfig({
     },
 
     site: {
-        url: 'https://www.fourberry.co.kr',
+        url: SITE_URL,
     },
 
     // ✅ 문의 전송 설정
@@ -74,10 +77,26 @@ export default defineNuxtConfig({
         '/api/**': { prerender: false },
     },
 
+    // ✅ 동적 라우트(/solutions/[slug], /work/[slug])는 크롤러가 링크를 따라가야 발견됩니다.
+    //    허브 페이지의 링크가 하나라도 빠지면 그 페이지는 조용히 생성되지 않으므로
+    //    데이터에서 경로를 직접 뽑아 명시합니다. 실적·솔루션을 추가하면 자동으로 따라옵니다.
+    nitro: {
+        prerender: {
+            crawlLinks: true,
+            routes: [
+                '/solutions',
+                '/work',
+                '/services/si-sm',
+                ...fbSolutions.map(s => `/solutions/${s.slug}`),
+                ...fbProjects.map(p => `/work/${p.id}`),
+            ],
+        },
+    },
+
     app: {
         baseURL: '/',
         head: {
-            titleTemplate: '%s | AI 솔루션 & SI 전문 기업 (주)포베리',
+            titleTemplate: `%s | ${SITE_TITLE_SUFFIX}`,
             title: '홈',
             meta: [
                 { name: 'theme-color', content: '#003da5' },
@@ -94,15 +113,21 @@ export default defineNuxtConfig({
                 },
                 { name: 'naver-site-verification', content: 'dbb8fecd579367cf06f6d9c76589b36d6f59738a' },
                 { name: 'google-site-verification', content: '7cGSanoPk5RmyIUaeIFy6yyajvN1-BA8QccITOXgtyY' },
+                // ⚠️ og:title / og:description / og:url 은 여기서는 "기본값"일 뿐입니다.
+                //    각 페이지가 useFbSeo() 로 같은 property 를 다시 선언하면 그 값이 이깁니다.
+                //    (unhead 는 name/property 가 같은 meta 를 뒤에 선언된 것으로 덮어씁니다)
                 { property: 'og:type', content: 'website' },
                 { property: 'og:site_name', content: '(주)포베리' },
-                { property: 'og:title', content: 'AI 솔루션 & SI 전문 기업 (주)포베리' },
+                { property: 'og:title', content: SITE_TITLE_SUFFIX },
                 { property: 'og:description', content: '혁신적인 AI 기술과 안정적인 IT 서비스로 비즈니스의 성공을 돕습니다.' },
-                { property: 'og:image', content: 'https://www.fourberry.co.kr/og/cover.jpg' },
-                { property: 'og:url', content: 'https://www.fourberry.co.kr' },
+                { property: 'og:image', content: SITE_URL + SITE_OG_IMAGE },
+                { property: 'og:url', content: SITE_URL },
             ],
             link: [
-                { rel: 'canonical', href: 'https://www.fourberry.co.kr' },
+                // ⚠️ canonical 을 여기(전역)에 두면 안 됩니다.
+                //    모든 하위 페이지가 "내 정규 주소는 홈이다"라고 선언하게 되어
+                //    구글이 하위 페이지를 전부 색인에서 제외합니다.
+                //    canonical 은 페이지마다 composables/useFbSeo.ts 가 설정합니다.
                 { rel: 'icon', type: 'image/png', sizes: '64x64', href: '/favicon-64x64.png' },
                 { rel: 'apple-touch-icon', sizes: '180x180', href: '/favicon-180x180.png' },
                 {

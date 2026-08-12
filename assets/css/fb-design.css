@@ -190,23 +190,9 @@ img{max-width:100%;display:block}
 .work-thumb{aspect-ratio:16/10;position:relative;background:var(--ink-bg)}
 .work-meta{padding:20px 22px;display:flex;flex-direction:column;gap:8px}
 .work-meta .yr{font-family:var(--font-mono);font-size:12px;color:var(--ink-accent);letter-spacing:.04em}
-.work-meta h4{font-family:var(--font-disp);font-size:18px;color:var(--ink-fg);letter-spacing:-.01em}
+.work-meta h2,.work-meta h3,.work-meta h4{font-family:var(--font-disp);font-size:18px;color:var(--ink-fg);letter-spacing:-.01em}
 .work-meta p{font-size:13.5px;color:var(--ink-fg2)}
 .work-more{margin-top:auto;padding:0 22px 20px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--ink-accent)}
-
-/* ---------- project modal ---------- */
-.fb-modal-backdrop{position:fixed;inset:0;z-index:100;background:rgba(4,12,22,.72);backdrop-filter:blur(6px);display:grid;place-items:center;padding:24px}
-.fb-modal{width:100%;max-width:920px;max-height:88vh;overflow:auto;background:var(--surface);border-radius:var(--radius-l);box-shadow:var(--shadow-lg);position:relative}
-.fb-modal-close{position:sticky;top:0;float:right;margin:14px 14px 0;width:36px;height:36px;border-radius:50%;border:1px solid var(--line);background:var(--surface);display:grid;place-items:center;font-size:18px;line-height:1;color:var(--ink-2);z-index:3}
-.fb-modal-close:hover{border-color:var(--ink);color:var(--ink)}
-.fb-modal-hero{position:relative;aspect-ratio:16/7;background:var(--bg)}
-.fb-modal-body{padding:clamp(24px,3vw,40px)}
-.fb-modal-body .yr{font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--accent)}
-.fb-modal-body h3{font-size:clamp(22px,2.6vw,32px);margin-top:12px}
-.fb-modal-body .client{margin-top:8px;font-size:14px;color:var(--ink-3)}
-.fb-modal-body .overview{margin-top:20px;font-size:15px;color:var(--ink-2);white-space:pre-line}
-.fb-modal-shots{margin-top:28px;display:grid;grid-template-columns:repeat(2,1fr);gap:12px}
-.fb-modal-shots img{width:100%;border-radius:var(--radius);border:1px solid var(--line)}
 
 /* ---------- values ---------- */
 .val-grid{margin-top:clamp(40px,5vw,60px);display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
@@ -295,7 +281,7 @@ img{max-width:100%;display:block}
 
 /* ---------- footer ---------- */
 .site-footer{background:var(--ink-bg);color:var(--ink-fg);padding:clamp(56px,7vw,84px) 0 40px}
-.footer-top{display:grid;grid-template-columns:1.4fr 1fr 1fr;gap:40px;padding-bottom:48px;border-bottom:1px solid var(--ink-line)}
+.footer-top{display:grid;grid-template-columns:1.4fr repeat(4,1fr);gap:40px 28px;padding-bottom:48px;border-bottom:1px solid var(--ink-line)}
 .footer-brand{font-family:var(--font-disp);font-weight:700;font-size:22px;display:flex;align-items:center;gap:9px}
 .footer-brand-sub{margin-top:16px;font-size:14px;color:var(--ink-fg2);max-width:320px}
 .footer-col h5{font-family:var(--font-mono);font-size:11px;letter-spacing:.12em;text-transform:uppercase;color:var(--ink-fg2);margin:0 0 16px;font-weight:500}
@@ -384,7 +370,6 @@ img{max-width:100%;display:block}
      트랙을 컨테이너보다 넓게 밀어내 좁은 화면에서 우측이 잘립니다. */
   .contact-grid{grid-template-columns:minmax(0,1fr)}
   .footer-top{grid-template-columns:1fr 1fr}
-  .fb-modal-shots{grid-template-columns:1fr}
 }
 @media (max-width:560px){
   .container{padding:0 18px}
@@ -398,4 +383,119 @@ img{max-width:100%;display:block}
   /* 좁은 폭에서는 라벨/값을 위아래로 쌓아 84px 고정 라벨이 값을 압박하지 않게 합니다. */
   .contact-info .ci-row{flex-direction:column;gap:6px;padding:16px 18px}
   .contact-info .ci-k{width:auto}
+}
+
+/* ==========================================================================
+   하위 페이지 (/solutions, /work, /services) 전용
+   - 색상·간격은 모두 :root 변수를 씁니다. 값을 직접 박아 넣지 마세요.
+   - 원페이지의 .section / .container / .btn / .eyebrow 를 그대로 재사용합니다.
+   ========================================================================== */
+
+/* ---------- 빵부스러기(현재 위치) ---------- */
+.fb-crumb{margin-bottom:26px}
+.fb-crumb ol{display:flex;flex-wrap:wrap;align-items:center;gap:8px;list-style:none;margin:0;padding:0}
+.fb-crumb li{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.06em;color:var(--ink-3)}
+.fb-crumb li+li::before{content:"/";margin-right:8px;opacity:.5}
+.fb-crumb a:hover{color:var(--accent)}
+.section--ink .fb-crumb li{color:var(--ink-fg2)}
+
+/* ---------- 페이지 머리 ---------- */
+.fb-page-head{padding-bottom:clamp(40px,5vw,64px)}
+.fb-page-head h1{font-size:clamp(30px,4.6vw,58px);margin-top:18px;letter-spacing:-.03em;max-width:900px}
+.fb-page-head .lead{margin-top:22px;font-size:clamp(16px,1.5vw,19px);color:var(--ink-2);max-width:660px}
+.fb-headline{white-space:pre-line}
+.fb-pre{white-space:pre-line}
+.fb-client{margin-top:14px;font-family:var(--font-mono);font-size:13px;letter-spacing:.04em;color:var(--accent)}
+.fb-page-actions{margin-top:32px;display:flex;flex-wrap:wrap;gap:12px}
+
+/* ---------- 좌: 제목 / 우: 내용 2단 배치 ---------- */
+.fb-split{display:grid;grid-template-columns:minmax(0,.85fr) minmax(0,1.15fr);gap:clamp(32px,5vw,72px);align-items:start}
+.fb-split-side h2{font-size:clamp(24px,3.2vw,38px);margin-top:16px}
+
+/* ---------- 문제 상황 목록 ---------- */
+.fb-problems{list-style:none;margin:0;padding:0;display:grid;gap:14px}
+.fb-problems li{position:relative;padding:16px 18px 16px 44px;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-s);font-size:15.5px;color:var(--ink-2)}
+.fb-problems li::before{content:"";position:absolute;left:20px;top:24px;width:8px;height:8px;border-radius:50%;background:var(--accent);opacity:.55}
+
+/* ---------- 수행 범위 (번호 목록) ---------- */
+.fb-scope{list-style:none;margin:0;padding:0;counter-reset:scope}
+.fb-scope li{counter-increment:scope;position:relative;padding:20px 0 20px 52px;border-bottom:1px solid var(--line);font-size:16px}
+.fb-scope li:first-child{padding-top:0}
+.fb-scope li:first-child::before{top:0}
+.fb-scope li::before{content:counter(scope,decimal-leading-zero);position:absolute;left:0;top:20px;font-family:var(--font-mono);font-size:12px;letter-spacing:.06em;color:var(--accent)}
+
+/* ---------- 기술 칩 ---------- */
+.fb-chips{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:10px}
+.fb-chips li{padding:9px 16px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-family:var(--font-mono);font-size:12.5px;color:var(--ink-2)}
+
+/* ---------- 본문 ---------- */
+.fb-prose{display:grid;gap:clamp(28px,3.5vw,44px)}
+.fb-prose--narrow{max-width:760px}
+.fb-prose h2{font-size:clamp(21px,2.4vw,28px)}
+.fb-prose h2+p{margin-top:14px}
+.fb-prose p{font-size:16px;color:var(--ink-2);line-height:1.78;max-width:760px}
+.fb-prose p+p{margin-top:16px}
+.fb-prose--narrow h2{margin-top:16px}
+.section--ink .fb-prose p{color:var(--ink-fg2)}
+
+/* ---------- 핵심 기능 ---------- */
+.fb-feat-grid{margin-top:clamp(36px,4.5vw,54px);display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.fb-feat{padding:24px 22px;border:1px solid var(--ink-line);border-radius:var(--radius);background:var(--ink-surface)}
+.fb-feat b{display:block;font-size:16px;font-weight:600;color:var(--ink-fg)}
+.fb-feat span{display:block;margin-top:9px;font-size:14px;color:var(--ink-fg2);line-height:1.6}
+
+/* ---------- 대표 이미지 ---------- */
+.fb-shot{margin-top:clamp(36px,4.5vw,54px);width:100%;border-radius:var(--radius-l);border:1px solid var(--ink-line);background:var(--ink-surface)}
+
+/* ---------- 카드 목록 (솔루션 / 실적 요약) ---------- */
+.fb-card-grid{margin-top:clamp(36px,4.5vw,54px);display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
+.fb-card{display:flex;flex-direction:column;background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-l);overflow:hidden;box-shadow:var(--shadow);transition:transform .2s ease,border-color .2s}
+.fb-card:hover{transform:translateY(-4px);border-color:var(--accent)}
+.fb-card:hover .fb-card-media .slot-img{transform:scale(1.04)}
+.fb-card-media{aspect-ratio:16/10;background:var(--bg);overflow:hidden}
+.fb-card-media .slot-img{width:100%;height:100%;object-fit:cover;transition:transform .5s cubic-bezier(.2,.7,.2,1)}
+.fb-card-body{padding:24px 24px 18px;display:flex;flex-direction:column;gap:10px}
+.fb-card-body h2,.fb-card-body h3{font-size:20px;font-family:var(--font-disp)}
+.fb-card-body h2 .ko,.fb-card-body h3 .ko{font-family:var(--font-sans);font-size:14px;font-weight:500;color:var(--ink-3);margin-left:6px}
+.fb-card-body p{font-size:14.5px;color:var(--ink-2);line-height:1.65}
+.fb-card-more{margin-top:auto;padding:0 24px 22px;font-family:var(--font-mono);font-size:11px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.fb-card-grid--sm .fb-card-body h3{font-size:17px}
+.fb-card-grid--sm .fb-card-body p{font-size:13.5px}
+
+/* ---------- 진행 단계 ---------- */
+.fb-step-grid{margin-top:clamp(36px,4.5vw,54px);display:grid;grid-template-columns:repeat(4,1fr);gap:20px}
+.fb-step{padding:26px 22px;border:1px solid var(--ink-line);border-radius:var(--radius);background:var(--ink-surface)}
+.fb-step .idx{font-family:var(--font-mono);font-size:12px;letter-spacing:.08em;color:var(--ink-accent)}
+.fb-step h3{margin-top:14px;font-size:17px;color:var(--ink-fg)}
+.fb-step p{margin-top:10px;font-size:14px;color:var(--ink-fg2);line-height:1.65}
+
+/* ---------- FAQ (하위 페이지는 접지 않고 항상 펼쳐 둡니다) ---------- */
+.fb-faq{margin:0}
+.fb-faq dt{padding-top:24px;font-size:clamp(16px,1.7vw,18px);font-weight:600;color:var(--ink)}
+.fb-faq dd{margin:12px 0 0;padding-bottom:24px;border-bottom:1px solid var(--line);font-size:15px;color:var(--ink-2);line-height:1.75}
+.fb-faq dt:first-child{padding-top:0}
+
+/* ---------- 하단 문의 밴드 ---------- */
+.fb-cta-inner{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,.7fr);gap:clamp(28px,4vw,56px);align-items:center}
+.fb-cta-inner h2{font-size:clamp(24px,3.2vw,40px);margin-top:16px}
+.fb-cta-inner .lead{margin-top:16px;font-size:16px;color:var(--ink-fg2);max-width:560px}
+.fb-cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
+
+/* ---------- 원페이지에서 하위 페이지로 가는 링크 ---------- */
+.sol-detail{margin-top:22px;display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent-2);padding-bottom:4px}
+.sol-detail:hover{border-bottom-color:var(--accent)}
+.sol-detail .arw{transition:transform .2s ease}
+.sol-detail:hover .arw{transform:translateX(3px)}
+.work-foot{margin-top:clamp(32px,4vw,48px);display:flex;justify-content:center}
+
+@media (max-width:920px){
+  .fb-split{grid-template-columns:1fr}
+  .fb-feat-grid,.fb-step-grid{grid-template-columns:1fr 1fr}
+  .fb-card-grid{grid-template-columns:1fr 1fr}
+  .fb-cta-inner{grid-template-columns:1fr}
+  .fb-cta-actions{justify-content:flex-start}
+}
+@media (max-width:560px){
+  .fb-feat-grid,.fb-step-grid,.fb-card-grid{grid-template-columns:1fr}
+  .fb-page-actions .btn,.fb-cta-actions .btn{width:100%;justify-content:center}
 }

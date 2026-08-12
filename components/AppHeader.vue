@@ -1,14 +1,14 @@
 <template>
     <header class="site-header" :class="{ scrolled, 'menu-open': open }">
         <div class="container nav">
-            <a class="brand" href="#top" aria-label="FOURBERRY 홈" @click="close">
+            <NuxtLink class="brand" to="/" aria-label="FOURBERRY 홈" @click="close">
                 <span class="fb-mark" role="img" aria-label="FOURBERRY 로고"></span>FOURBERRY
-            </a>
+            </NuxtLink>
             <nav class="nav-links" aria-label="주 메뉴">
-                <a v-for="item in menu" :key="item.href" :href="item.href">{{ item.label }}</a>
+                <NuxtLink v-for="item in menu" :key="item.to" :to="item.to">{{ item.label }}</NuxtLink>
             </nav>
             <div class="nav-cta">
-                <a href="#contact" class="btn btn-primary nav-contact">문의하기</a>
+                <NuxtLink to="/#contact" class="btn btn-primary nav-contact">문의하기</NuxtLink>
                 <button
                     class="nav-toggle"
                     :class="{ open }"
@@ -22,8 +22,8 @@
             </div>
         </div>
         <div id="mobileMenu" class="mobile-menu" :class="{ open }">
-            <a v-for="item in menu" :key="item.href" :href="item.href" @click="close">{{ item.label }}</a>
-            <a href="#contact" class="btn btn-primary" @click="close">상담 문의하기 →</a>
+            <NuxtLink v-for="item in menu" :key="item.to" :to="item.to" @click="close">{{ item.label }}</NuxtLink>
+            <NuxtLink to="/#contact" class="btn btn-primary" @click="close">상담 문의하기 →</NuxtLink>
         </div>
     </header>
 </template>
@@ -31,13 +31,16 @@
 <script setup lang="ts">
 import { ref, onMounted, onUnmounted } from 'vue'
 
+// ⚠️ 앵커는 반드시 '/#...' 형태여야 합니다.
+// '#about' 로 두면 /solutions/coconut 같은 하위 페이지에는 그런 요소가 없어 메뉴가 먹통이 됩니다.
+// NuxtLink 를 쓰므로 홈에서 눌러도 새로고침 없이 해당 섹션으로 이동합니다.
 const menu = [
-    { href: '#about', label: '회사소개' },
-    { href: '#services', label: '서비스' },
-    { href: '#solutions', label: '솔루션' },
-    { href: '#work', label: '실적' },
-    { href: '#culture', label: '컬처' },
-    { href: '#faq', label: 'FAQ' },
+    { to: '/#about', label: '회사소개' },
+    { to: '/#services', label: '서비스' },
+    { to: '/#solutions', label: '솔루션' },
+    { to: '/#work', label: '실적' },
+    { to: '/#culture', label: '컬처' },
+    { to: '/#faq', label: 'FAQ' },
 ]
 
 const open = ref(false)

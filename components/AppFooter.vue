@@ -10,25 +10,40 @@
                         한 발 앞선 IT 서비스로 고객의 경험과 가치를 우선합니다. making sweet and sour software.
                     </p>
                 </div>
+                <!-- 푸터의 내부 링크는 사람에게도 쓸모가 있지만, 검색엔진이 하위 페이지를
+                     발견하는 경로이기도 합니다. 새 페이지를 만들면 여기에도 추가하세요. -->
                 <div class="footer-col">
-                    <h5>Sitemap</h5>
-                    <a href="#about">회사소개</a>
-                    <a href="#services">서비스</a>
-                    <a href="#solutions">솔루션</a>
-                    <a href="#work">실적</a>
-                    <a href="#culture">컬처</a>
+                    <h5>Company</h5>
+                    <NuxtLink to="/#about">회사소개</NuxtLink>
+                    <NuxtLink to="/#services">서비스</NuxtLink>
+                    <NuxtLink to="/#culture">컬처</NuxtLink>
+                    <NuxtLink to="/#faq">FAQ</NuxtLink>
+                </div>
+                <div class="footer-col">
+                    <h5>Solution</h5>
+                    <NuxtLink to="/solutions">자체 솔루션</NuxtLink>
+                    <NuxtLink v-for="s in fbSolutions" :key="s.slug" :to="`/solutions/${s.slug}`">
+                        {{ s.name }} {{ s.ko }}
+                    </NuxtLink>
+                </div>
+                <div class="footer-col">
+                    <h5>Work</h5>
+                    <NuxtLink to="/services/si-sm">SI 구축 · SM 운영</NuxtLink>
+                    <NuxtLink to="/work">수행 실적</NuxtLink>
                 </div>
                 <div class="footer-col">
                     <h5>Contact</h5>
-                    <a href="tel:01027550650" @click="trackContactChannel('tel')">010-2755-0650</a>
-                    <a href="mailto:fourberry@fourberry.co.kr" @click="trackContactChannel('email')">fourberry@fourberry.co.kr</a>
+                    <a :href="fbCompany.telHref" @click="trackContactChannel('tel')">{{ fbCompany.tel }}</a>
+                    <a :href="`mailto:${fbCompany.email}`" @click="trackContactChannel('email')">{{ fbCompany.email }}</a>
                     <p>서울 영등포구 양평로 22길 21<br />코오롱디지털타워 1409호</p>
                 </div>
             </div>
             <div class="footer-bottom">
                 <p>
-                    (주)포베리 · 대표이사 우대식 &nbsp;|&nbsp; 사업자등록번호 562-88-02654<br />
-                    (07205) 서울특별시 영등포구 양평로 22길 21 1409호
+                    {{ fbCompany.legalName }} · 대표이사 {{ fbCompany.ceo }} &nbsp;|&nbsp; 사업자등록번호
+                    {{ fbCompany.bizNo }}<br />
+                    ({{ fbCompany.address.postalCode }}) {{ fbCompany.address.region }}
+                    {{ fbCompany.address.locality }} 양평로 22길 21 1409호
                 </p>
                 <p>© {{ year }} FOURBERRY. All rights reserved.</p>
             </div>
@@ -37,6 +52,9 @@
 </template>
 
 <script setup lang="ts">
+import { fbCompany } from '~/data/company'
+import { fbSolutions } from '~/data/solutions'
+
 const year = new Date().getFullYear()
 
 // 문의 섹션(FbContact.vue)과 같은 이벤트를 쓰되 link_location 으로 위치를 구분합니다.

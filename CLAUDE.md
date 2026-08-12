@@ -5,7 +5,8 @@ This file provides guidance to Claude Code (claude.ai/code) when working with co
 ## 프로젝트 개요
 
 (주)포베리 회사 소개 홈페이지. Nuxt 4 기반이며 **정적 사이트(SSG)로 빌드되어 GitHub Pages에 배포**됩니다.
-페이지는 사실상 `/` 하나뿐인 원페이지 사이트입니다.
+`/`는 모든 내용을 담은 원페이지이고, 그 아래에 **검색 노출용 하위 페이지 12개**가 함께 있습니다
+(솔루션 3 + 실적 6 + 허브 2 + 서비스 1). 총 색인 대상 URL은 13개입니다.
 
 ## 명령어
 
@@ -23,11 +24,27 @@ npx prettier --write .   # 포맷팅
 
 ## 아키텍처
 
-### 원페이지 구조
+### 원페이지 + 하위 페이지 구조
 
-[pages/index.vue](pages/index.vue)가 `components/fb/` 아래 섹션 컴포넌트를 순서대로 나열하는 것이
-사이트의 전부입니다. 헤더·푸터·맨위로 버튼은 [layouts/default.vue](layouts/default.vue)에 있습니다.
+[pages/index.vue](pages/index.vue)가 `components/fb/` 아래 섹션 컴포넌트를 순서대로 나열합니다.
+헤더·푸터·맨위로 버튼은 [layouts/default.vue](layouts/default.vue)에 있습니다.
 "어떤 섹션을 고쳐야 하나"는 `index.vue`의 나열 순서를 보면 바로 찾을 수 있습니다.
+
+하위 페이지는 아래 구조이며, 내용은 전부 `data/` 의 배열에서 나옵니다.
+
+| 경로 | 파일 | 데이터 |
+|---|---|---|
+| `/solutions`, `/solutions/{slug}` | `pages/solutions/` | [data/solutions.ts](data/solutions.ts) |
+| `/work`, `/work/{id}` | `pages/work/` | [data/projects.ts](data/projects.ts) |
+| `/services/si-sm` | [pages/services/si-sm.vue](pages/services/si-sm.vue) | 페이지 안에 인라인 |
+
+**솔루션·실적을 추가하면 하위 페이지가 자동으로 생깁니다.**
+[nuxt.config.ts](nuxt.config.ts)의 `nitro.prerender.routes`가 두 데이터 배열에서 경로를 뽑아내기
+때문입니다. 그래서 이 두 파일에는 **Nuxt 전용 API를 쓰면 안 됩니다**(nuxt.config가 import 하므로 순수 데이터만).
+
+⚠️ 상세 페이지는 본문이 얇으면 구글이 색인조차 하지 않습니다. 항목을 추가할 때
+`problems` / `sections` / `background` / `domainBody` 같은 본문 필드를 반드시 채우세요
+(페이지당 한국어 800자 이상이 기준).
 
 ### CSS 3층 구조 — 로드 순서가 중요
 
@@ -72,6 +89,32 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 
 프록시가 존재하는 이유는 두 가지입니다: 발송 API가 http라 브라우저 mixed content에 걸리는 것을 우회하고,
 `X-API-Key`와 수신자 주소를 클라이언트 번들 밖에 두기 위함입니다. 이 값들을 프론트로 옮기지 마세요.
+
+### 검색 노출(SEO) — 건드리면 조용히 망가지는 것들
+
+**⚠️ canonical 을 [nuxt.config.ts](nuxt.config.ts)의 전역 `app.head` 에 넣지 마세요.**
+전역에 두면 하위 페이지 12개가 전부 "내 정규 주소는 홈이다"라고 선언하게 되어
+구글이 하위 페이지를 통째로 색인에서 제외합니다. 화면상으로는 아무 문제가 없어 보여서
+몇 주 뒤 검색에 안 나온다는 사실로만 드러납니다. 같은 이유로 `og:url` 도 전역값은 기본값일 뿐입니다.
+
+페이지 메타는 **[composables/useFbSeo.ts](composables/useFbSeo.ts) 하나로만** 설정합니다.
+`title` / `description` / `path` 를 주면 canonical · og · twitter 태그가 함께 만들어집니다.
+
+구조화 데이터(JSON-LD)는 [composables/useFbJsonLd.ts](composables/useFbJsonLd.ts)에 모여 있습니다.
+`Organization` 은 [layouts/default.vue](layouts/default.vue)에서 전 페이지 공통으로 심고,
+나머지(`WebSite`·`FAQPage`·`SoftwareApplication`·`Service`·`BreadcrumbList`)는 각 페이지가 심습니다.
+회사 정보는 [data/company.ts](data/company.ts)가 단일 출처이며 푸터·지도·JSON-LD가 모두 이 파일을 씁니다.
+
+**FAQ 구조화 데이터는 화면에 실제로 보이는 질문·답변과 반드시 같아야 합니다**(다르면 스팸 판정).
+그래서 [data/faq.ts](data/faq.ts) 한 곳만 고치면 `FbFaq.vue` 와 JSON-LD가 함께 바뀝니다.
+
+**목록 카드는 `<button>` 이 아니라 `<NuxtLink>` 여야 합니다.** 크롤러는 버튼을 따라가지 못합니다.
+(실적 카드가 원래 모달을 띄우는 버튼이었고, 그래서 상세 내용이 색인되지 않았습니다)
+
+**헤더·푸터의 앵커는 `/#about` 형태여야 합니다.** `#about` 으로 두면 하위 페이지에는 그런 요소가
+없어 메뉴가 먹통이 됩니다. 하위 페이지에서 홈 앵커로 넘어갈 때의 스크롤 보정은
+[plugins/hashScroll.client.ts](plugins/hashScroll.client.ts)가 담당합니다 — 이게 없으면
+페이지는 이동하지만 맨 위에 그대로 멈춥니다.
 
 ### Google Analytics (nuxt-gtag)
 

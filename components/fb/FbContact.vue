@@ -17,11 +17,11 @@
                         </div>
                         <div class="ci-row">
                             <div class="ci-k">Tel</div>
-                            <div class="ci-v"><a href="tel:01027550650">010-2755-0650</a></div>
+                            <div class="ci-v"><a href="tel:01027550650" @click="trackContactChannel('tel')">010-2755-0650</a></div>
                         </div>
                         <div class="ci-row">
                             <div class="ci-k">Email</div>
-                            <div class="ci-v"><a href="mailto:fourberry@fourberry.co.kr">fourberry@fourberry.co.kr</a></div>
+                            <div class="ci-v"><a href="mailto:fourberry@fourberry.co.kr" @click="trackContactChannel('email')">fourberry@fourberry.co.kr</a></div>
                         </div>
                     </div>
                     <ClientOnly><FbMap /></ClientOnly>
@@ -303,6 +303,12 @@ const clientInfo = ref({ company: '', name: '', tel: '', email: '' })
 // 문의 전송 엔드포인트 — nuxt.config.ts runtimeConfig.public.contactEndpoint
 // 기본값 '/api/contact' (Nitro 서버 라우트). 정적 배포에서는 Worker 주소로 교체.
 const contactEndpoint = (useRuntimeConfig().public.contactEndpoint as string) || '/api/contact'
+
+// 폼 대신 전화·이메일로 직접 연락하는 방문자 규모를 파악하기 위한 GA4 이벤트.
+// tel:·mailto: 는 GA 의 이탈 클릭(자동 수집) 대상이 아니라 직접 심어야 합니다.
+const trackContactChannel = (channel: 'tel' | 'email') => {
+    useTrackEvent('contact_channel_click', { channel, link_location: 'contact_section' })
+}
 
 const showModal = ref(false)
 const showPrivacy = ref(false)

@@ -20,8 +20,8 @@
                 </div>
                 <div class="footer-col">
                     <h5>Contact</h5>
-                    <a href="tel:01027550650">010-2755-0650</a>
-                    <a href="mailto:fourberry@fourberry.co.kr">fourberry@fourberry.co.kr</a>
+                    <a href="tel:01027550650" @click="trackContactChannel('tel')">010-2755-0650</a>
+                    <a href="mailto:fourberry@fourberry.co.kr" @click="trackContactChannel('email')">fourberry@fourberry.co.kr</a>
                     <p>서울 영등포구 양평로 22길 21<br />코오롱디지털타워 1409호</p>
                 </div>
             </div>
@@ -38,4 +38,9 @@
 
 <script setup lang="ts">
 const year = new Date().getFullYear()
+
+// 문의 섹션(FbContact.vue)과 같은 이벤트를 쓰되 link_location 으로 위치를 구분합니다.
+const trackContactChannel = (channel: 'tel' | 'email') => {
+    useTrackEvent('contact_channel_click', { channel, link_location: 'footer' })
+}
 </script>

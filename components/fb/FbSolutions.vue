@@ -23,7 +23,7 @@
                                 <span class="sol-tag">{{ s.tag }}</span>
                                 <h3>{{ s.name }} <span class="ko">{{ s.ko }}</span></h3>
                             </div>
-                            <a href="#contact" class="btn btn-ghost sol-cta">도입 문의 <span class="arw">→</span></a>
+                            <a href="#contact" class="btn btn-ghost sol-cta" @click="trackSolutionInquiry(s.name)">도입 문의 <span class="arw">→</span></a>
                         </div>
                         <p>{{ s.desc }}</p>
                         <div class="sol-feats">
@@ -39,6 +39,12 @@
 </template>
 
 <script setup lang="ts">
+// 어느 솔루션에 관심이 쏠리는지 파악하기 위한 GA4 이벤트.
+// 앵커 이동(#contact)은 페이지 전환이 아니라 GA 가 자동으로 잡지 못합니다.
+const trackSolutionInquiry = (solution: string) => {
+    useTrackEvent('solution_inquiry_click', { solution })
+}
+
 const solutions = [
     {
         name: 'COCONUT',

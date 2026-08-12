@@ -89,6 +89,14 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 - `generate_lead` — 문의 전송 성공 (GA4 권장 이벤트명, 전환으로 등록해 사용)
 - `contact_submit_failed` — 전송 실패. 프록시 장애를 통계로 감지하는 용도
 
+추가로 직접 심은 클릭 이벤트가 둘 있습니다. 내부 앵커 이동과 `tel:`·`mailto:`는 GA의
+자동 수집(향상된 측정) 대상이 아니라 직접 심어야 합니다.
+
+- `solution_inquiry_click` — [FbSolutions.vue](components/fb/FbSolutions.vue)의 `도입 문의`.
+  `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분
+- `contact_channel_click` — 전화·이메일 링크. [FbContact.vue](components/fb/FbContact.vue)와
+  [AppFooter.vue](components/AppFooter.vue) 양쪽에 있으며 `link_location`으로 위치를 구분
+
 **이벤트에 이름·연락처·이메일 등 개인 식별 정보를 넣지 마세요.** GA 정책 위반입니다.
 현재는 상담 유형·관심 서비스·예산·일정 같은 선택 항목만 보냅니다.
 

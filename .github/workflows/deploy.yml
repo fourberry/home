@@ -28,9 +28,9 @@ jobs:
         runs-on: ubuntu-latest
         steps:
             - name: Checkout
-              uses: actions/checkout@v4
+              uses: actions/checkout@v7
             - name: Setup Node
-              uses: actions/setup-node@v4
+              uses: actions/setup-node@v7
               with:
                   node-version: '20' # package.json에 명시된 Node 버전 사용 권장
                   cache: 'npm'
@@ -43,7 +43,7 @@ jobs:
                   NUXT_PUBLIC_CONTACT_ENDPOINT: https://briskly0714.cafe24.com/fb-contact/
               run: npm run generate # Nuxt SSG 빌드 명령어
             - name: Upload artifact
-              uses: actions/upload-pages-artifact@v3
+              uses: actions/upload-pages-artifact@v5
               with:
                   # .output/public 폴더의 내용을 업로드 (Nuxt 3 generate 기본 출력 경로)
                   path: ./.output/public
@@ -58,4 +58,4 @@ jobs:
         steps:
             - name: Deploy to GitHub Pages
               id: deployment
-              uses: actions/deploy-pages@v4
+              uses: actions/deploy-pages@v5

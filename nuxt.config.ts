@@ -4,10 +4,13 @@ import { defineNuxtConfig } from 'nuxt/config'
 // GA4 측정 ID.
 //  - 브라우저에 노출되는 공개값이라 저장소에 그대로 두어도 됩니다(.env 불필요).
 //  - 정적 배포라 이 값은 빌드 시점에 번들로 들어갑니다. 바꾸면 재배포가 필요합니다.
-//  - 빈 문자열이면 아래 gtag.enabled 가 false 가 되어 GA 스크립트를 아예 넣지 않습니다.
-//    (로컬 개발 중 실제 통계가 오염되는 것을 막아줍니다. 로컬 확인이 필요하면
-//     NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev 로 일시적으로 켜세요.)
-const GTAG_ID = process.env.NUXT_PUBLIC_GTAG_ID || ''
+const GTAG_ID = process.env.NUXT_PUBLIC_GTAG_ID || 'G-5WNYBB6NQY'
+
+// 로컬 개발 서버(npm run dev)에서는 GA 를 끕니다.
+// 개발 중 새로고침이 실제 통계에 방문자로 섞이는 것을 막기 위함입니다.
+// 로컬에서 GA 동작을 확인해야 하면 NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev 로 실행하세요
+// (환경변수를 직접 지정한 경우에는 dev 에서도 켜집니다).
+const GTAG_ENABLED = Boolean(GTAG_ID) && (process.env.NODE_ENV === 'production' || Boolean(process.env.NUXT_PUBLIC_GTAG_ID))
 
 export default defineNuxtConfig({
     ssr: true,
@@ -33,7 +36,7 @@ export default defineNuxtConfig({
     //    이벤트 발생 지점은 components/fb/FbContact.vue 의 handleSubmit 입니다.
     gtag: {
         id: GTAG_ID,
-        enabled: Boolean(GTAG_ID),
+        enabled: GTAG_ENABLED,
     },
 
     site: {

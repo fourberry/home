@@ -75,10 +75,13 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 
 ### Google Analytics (nuxt-gtag)
 
-측정 ID는 [nuxt.config.ts](nuxt.config.ts) 상단의 `GTAG_ID` 상수 **한 곳**에만 있습니다.
-공개값이라 `.env`나 워크플로 주입이 필요 없고, 비어 있으면 `gtag.enabled`가 false가 되어
-GA 스크립트를 아예 넣지 않습니다(로컬 개발 시 통계 오염 방지). 로컬에서 GA를 켜보려면
-`NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev`로 실행하세요.
+측정 ID(`G-5WNYBB6NQY`)는 [nuxt.config.ts](nuxt.config.ts) 상단의 `GTAG_ID` 상수 **한 곳**에만
+있습니다. 공개값이라 `.env`나 워크플로 주입이 필요 없습니다.
+
+바로 아래 `GTAG_ENABLED`가 **로컬 `npm run dev`에서는 GA를 끕니다**(개발 중 새로고침이 실제
+통계에 방문자로 섞이지 않도록). 로컬에서 GA 동작을 확인해야 하면
+`NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev`로 실행하세요 — 환경변수를 직접 준 경우에는 dev에서도
+켜집니다. **ID를 하드코딩할 때 이 가드를 함께 걷어내지 마세요.**
 
 원페이지 사이트라 페이지뷰는 방문자 수와 거의 같습니다. 실질적인 지표는
 [FbContact.vue](components/fb/FbContact.vue)의 `handleSubmit`에서 발생하는 두 이벤트입니다.

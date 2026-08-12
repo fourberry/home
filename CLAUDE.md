@@ -82,7 +82,7 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 
 수행 실적은 [data/projects.ts](data/projects.ts)의 `fbProjects` 배열이 단일 출처이며,
 `FbWork`(목록)와 `FbProjectModal`(상세)이 함께 사용합니다. 실적을 추가·수정할 때는 이 파일만 고치면 됩니다.
-(`types/project.ts`의 `Project` 인터페이스는 리디자인 이전 잔재로, 현재 아무 데서도 참조하지 않습니다.)
+타입 정의도 같은 파일 안의 `FbProject` 인터페이스이며, 별도의 `types/` 디렉터리는 없습니다.
 
 ## 작업 규칙
 

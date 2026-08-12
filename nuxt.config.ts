@@ -1,6 +1,14 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config'
 
+// GA4 측정 ID.
+//  - 브라우저에 노출되는 공개값이라 저장소에 그대로 두어도 됩니다(.env 불필요).
+//  - 정적 배포라 이 값은 빌드 시점에 번들로 들어갑니다. 바꾸면 재배포가 필요합니다.
+//  - 빈 문자열이면 아래 gtag.enabled 가 false 가 되어 GA 스크립트를 아예 넣지 않습니다.
+//    (로컬 개발 중 실제 통계가 오염되는 것을 막아줍니다. 로컬 확인이 필요하면
+//     NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev 로 일시적으로 켜세요.)
+const GTAG_ID = process.env.NUXT_PUBLIC_GTAG_ID || ''
+
 export default defineNuxtConfig({
     ssr: true,
     compatibilityDate: '2025-07-15',
@@ -17,7 +25,16 @@ export default defineNuxtConfig({
         'unplugin-icons/nuxt',
         '@vueuse/motion/nuxt',
         '@nuxtjs/sitemap',
+        'nuxt-gtag',
     ],
+
+    // ✅ Google Analytics 4 (nuxt-gtag)
+    //  - 원페이지 사이트라 페이지뷰보다 문의 폼 전환(generate_lead)이 핵심 지표입니다.
+    //    이벤트 발생 지점은 components/fb/FbContact.vue 의 handleSubmit 입니다.
+    gtag: {
+        id: GTAG_ID,
+        enabled: Boolean(GTAG_ID),
+    },
 
     site: {
         url: 'https://www.fourberry.co.kr',

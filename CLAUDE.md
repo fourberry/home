@@ -73,6 +73,22 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 프록시가 존재하는 이유는 두 가지입니다: 발송 API가 http라 브라우저 mixed content에 걸리는 것을 우회하고,
 `X-API-Key`와 수신자 주소를 클라이언트 번들 밖에 두기 위함입니다. 이 값들을 프론트로 옮기지 마세요.
 
+### Google Analytics (nuxt-gtag)
+
+측정 ID는 [nuxt.config.ts](nuxt.config.ts) 상단의 `GTAG_ID` 상수 **한 곳**에만 있습니다.
+공개값이라 `.env`나 워크플로 주입이 필요 없고, 비어 있으면 `gtag.enabled`가 false가 되어
+GA 스크립트를 아예 넣지 않습니다(로컬 개발 시 통계 오염 방지). 로컬에서 GA를 켜보려면
+`NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev`로 실행하세요.
+
+원페이지 사이트라 페이지뷰는 방문자 수와 거의 같습니다. 실질적인 지표는
+[FbContact.vue](components/fb/FbContact.vue)의 `handleSubmit`에서 발생하는 두 이벤트입니다.
+
+- `generate_lead` — 문의 전송 성공 (GA4 권장 이벤트명, 전환으로 등록해 사용)
+- `contact_submit_failed` — 전송 실패. 프록시 장애를 통계로 감지하는 용도
+
+**이벤트에 이름·연락처·이메일 등 개인 식별 정보를 넣지 마세요.** GA 정책 위반입니다.
+현재는 상담 유형·관심 서비스·예산·일정 같은 선택 항목만 보냅니다.
+
 ### 배포
 
 `main`에 push하면 [.github/workflows/deploy.yml](.github/workflows/deploy.yml)이 `npm run generate` 후

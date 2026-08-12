@@ -52,7 +52,10 @@
             </div>
         </section>
 
-        <section class="section section--alt">
+        <!-- 배경색을 번갈아 주기 위한 조건부 클래스.
+             바로 위 "사용 기술" 섹션은 stack 이 비면 통째로 빠지므로,
+             그때는 이 섹션이 앞의 밝은 배경(--alt)을 그대로 이어받지 않도록 합니다. -->
+        <section class="section" :class="{ 'section--alt': project.stack?.length }">
             <div class="fb-prose fb-prose--narrow container">
                 <span class="eyebrow">Note · 용어 풀이</span>
                 <h2>{{ project.domainTitle }}</h2>

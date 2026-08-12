@@ -53,7 +53,20 @@
             </div>
         </section>
 
-        <section v-if="related.length" class="section section--alt">
+        <section v-if="solution.stack?.length" class="section section--alt">
+            <div class="fb-split container">
+                <div class="fb-split-side">
+                    <span class="eyebrow">Stack · 구현 기술</span>
+                    <h2>무엇으로 만들었나.</h2>
+                    <p class="lead">도입 환경에 붙일 수 있는지 판단하실 수 있도록 구성 기술을 공개합니다.</p>
+                </div>
+                <ul class="fb-chips">
+                    <li v-for="t in solution.stack" :key="t">{{ t }}</li>
+                </ul>
+            </div>
+        </section>
+
+        <section v-if="related.length" class="section">
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">Work · 관련 분야 실적</span>
@@ -76,7 +89,10 @@
             </div>
         </section>
 
-        <section class="section">
+        <!-- 배경색을 번갈아 주기 위한 조건부 클래스.
+             바로 위 "관련 분야 실적" 섹션은 relatedProjects 가 없으면 통째로 빠지므로,
+             그때는 FAQ 가 밝은 배경(--alt)을 이어받지 않도록 합니다. -->
+        <section class="section" :class="{ 'section--alt': related.length > 0 }">
             <div class="fb-split container">
                 <div class="fb-split-side">
                     <span class="eyebrow">FAQ · 자주 묻는 질문</span>

@@ -46,6 +46,12 @@ export interface FbSolution {
     sections: FbSolutionSection[]
     faq: FbFaqItem[]
     /**
+     * 구현 기술. 도입 검토 시 "우리 환경에 붙일 수 있나"(필요한 DB·런타임)를 판단하는 근거가 됩니다.
+     * 자사 제품이라 실적(data/projects.ts)과 달리 버전 노출 제약은 없지만,
+     * 표기를 통일하기 위해 기술명 위주로 적습니다. 비워 두면 섹션이 렌더링되지 않습니다.
+     */
+    stack?: string[]
+    /**
      * 같은 분야의 수행 실적(data/projects.ts 의 id).
      * "이 솔루션을 그 프로젝트에 납품했다"는 뜻이 아니라 "관련 분야 실적"으로 표기합니다.
      */
@@ -108,6 +114,8 @@ export const fbSolutions: FbSolution[] = [
                 a: '네. 자체 솔루션은 단독 도입이 가능하며 기존 서비스 구조에 맞춰 연동합니다. 도입 규모와 환경에 따라 맞춤 구성을 안내드립니다.',
             },
         ],
+        // 출처: C:\project\coconut (oidc-provider 기반 인가 서버, Prisma + MySQL)
+        stack: ['Node.js', 'Express', 'oidc-provider', 'Prisma ORM', 'MySQL', 'bcrypt', 'Swagger (OpenAPI)'],
         relatedProjects: ['withfresh'],
     },
     {
@@ -166,6 +174,21 @@ export const fbSolutions: FbSolution[] = [
                 a: '네. 단독 도입이 가능하며 기존 서비스에서 API를 호출하는 방식으로 연동합니다. 도입 규모와 사용할 채널에 따라 구성을 안내드립니다.',
             },
         ],
+        // 출처: C:\project\lime (BullMQ + Redis 큐, Knex/Objection + MariaDB, 발송 채널별 어댑터)
+        //       및 C:\project\lime\admin-ui (Vue 3 + Element Plus 관리 콘솔)
+        stack: [
+            'Node.js',
+            'Express',
+            'BullMQ · Redis (큐)',
+            'Knex · Objection.js',
+            'MySQL · MariaDB',
+            'Firebase Cloud Messaging',
+            'Nodemailer',
+            'Handlebars',
+            'JWT',
+            'Vue.js · Element Plus',
+            'Docker',
+        ],
     },
     {
         slug: 'muscat',
@@ -222,6 +245,9 @@ export const fbSolutions: FbSolution[] = [
                 a: '네. OMS·SCM 등 사내 시스템으로 넘기는 데이터 파이프라인 구성까지 함께 진행합니다. 대상 시스템의 연동 방식을 확인한 뒤 범위를 제안드립니다.',
             },
         ],
+        // 출처: C:\project\fb-scraper (Playwright 엔진 + WebSocket 실시간 제어)
+        //       및 C:\project\fb-scraper-manager (Electron + Vue 데스크톱 관리 앱 = "FB매니저")
+        stack: ['Node.js', 'Playwright', 'WebSocket', 'Electron (관리 앱)', 'Vue.js', 'SheetJS (xlsx)', 'Winston', 'esbuild'],
         relatedProjects: ['cuckoo'],
     },
 ]

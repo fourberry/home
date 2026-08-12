@@ -8,12 +8,22 @@
 //
 // ────────────────────────────────────────────────────────────────
 // 📌 확인·보완이 필요한 항목 (담당자 검토용)
-//    아래 내용은 기존 overview 와 일반적인 도메인 지식만으로 작성했습니다.
-//    실제 사실을 알 수 있는 다음 항목은 비워 두었으니 채워 주세요.
-//      1) stack — 각 프로젝트에서 실제로 쓴 기술 스택
-//      2) scope — 수행 범위 중 빠지거나 사실과 다른 항목
-//      3) outcome — 정량 성과(처리량, 응답시간, 절감 효과 등)가 있다면 추가
+//    background / domainBody 는 기존 overview 와 일반적인 도메인 지식만으로 작성했습니다.
+//      1) scope — 수행 범위 중 빠지거나 사실과 다른 항목
+//      2) outcome — 정량 성과(처리량, 응답시간, 절감 효과 등)가 있다면 추가
 //    고객사에 공개 동의를 받지 않은 수치는 올리지 마세요.
+//
+// 📌 stack 은 C:\project 아래 실제 소스를 확인해 채웠습니다 (2026-08-12).
+//      cuckoo    → C:\project\cuckoo\koms\oms, cuckoo\cuckooSales
+//      withfresh → C:\project\ydpmall, ydpmall_app, fbsso
+//      kobc      → C:\project\campaign
+//    아래 3건은 로컬에 소스가 없어 비워 두었습니다. 확인되면 채워 주세요.
+//      autocrypt / donghang / knsu
+//    stack 이 비어 있으면 상세 페이지의 "사용 기술" 섹션 자체가 렌더링되지 않습니다.
+//    (pages/work/[slug].vue 의 v-if="project.stack?.length")
+//
+//    ⚠️ 내부 호스트명·IP·계정 등 운영 정보는 절대 넣지 마세요.
+//       공개 포트폴리오 수준(언어·프레임워크·DB·주요 연동)까지만 적습니다.
 // ────────────────────────────────────────────────────────────────
 
 export interface FbProject {
@@ -40,7 +50,10 @@ export interface FbProject {
     /** 도메인 해설 제목 — 발주처가 검색하는 용어를 풀어줍니다 */
     domainTitle: string
     domainBody: string
-    /** 실제 사용 기술. 확인되면 채워 주세요 */
+    /**
+     * 실제 사용 기술. 비워 두면 "사용 기술" 섹션이 렌더링되지 않습니다.
+     * 언어·프레임워크·DB·주요 연동까지만. 내부 운영 정보는 넣지 마세요.
+     */
     stack?: string[]
 }
 
@@ -58,6 +71,9 @@ export const fbProjects: FbProject[] = [
         background:
             '주문관리(OMS)를 중심축으로 영업 프로세스 전반을 재설계하고, 그 위에 차세대 영업관리 시스템을 새로 올리는 프로젝트였습니다. 기존 시스템에 기능을 덧붙이는 방식이 아니라 주문이라는 축을 먼저 정리한 뒤 그 흐름에 맞춰 영업 기능을 다시 배치했습니다. 구축으로 끝나지 않고 2021년부터 현재까지 운영(SM)을 맡아, 실제 사용 과정에서 나온 요구를 반영하며 고도화를 이어가고 있습니다.',
         scope: ['영업 프로세스 분석 및 재설계', '주문관리(OMS) 시스템 구축', '차세대 영업관리 시스템 구축', '구축 이후 운영(SM) 및 기능 고도화'],
+        // 출처: C:\project\cuckoo\koms\oms (Gradle 멀티모듈, Java 11 / Spring Boot 2.5.6,
+        //       Oracle 메인 + MySQL 보조) 및 C:\project\cuckoo\cuckooSales (Spring Batch)
+        stack: ['Java', 'Spring Boot', 'Spring Security', 'Spring Batch', 'MyBatis', 'Oracle', 'MySQL', 'Thymeleaf', 'Apache POI'],
         domainTitle: 'OMS(주문관리 시스템)란?',
         domainBody:
             'OMS(Order Management System)는 주문이 들어온 순간부터 출고와 정산까지의 상태를 한 곳에서 관리하는 시스템입니다. 주문 정보가 영업·물류·회계 시스템에 흩어져 있으면 같은 주문을 두고 부서마다 다른 숫자를 보게 됩니다. OMS는 주문을 단일 기준으로 삼아 이 흐름을 하나로 묶고, 재고·출고·정산 시스템이 같은 데이터를 바라보게 만듭니다. 차세대 영업관리 시스템을 구축할 때 OMS를 먼저 정리하는 이유가 여기에 있습니다.',
@@ -76,6 +92,10 @@ export const fbProjects: FbProject[] = [
         background:
             '영등포농협의 자체 브랜드몰 WITHFRESH를 새로 만드는 프로젝트였습니다. 쇼핑몰 화면 하나를 만드는 일이 아니라 하이브리드 모바일 앱, 온라인 쇼핑몰, 관리자 사이트를 함께 구현했습니다. 여기에 더해 기존에 운영 중이던 2개의 관리 사이트와 신규 브랜드몰의 회원을 하나로 묶는 통합 인증(SSO)을 구축해, 이용자가 계정 하나로 세 곳을 오갈 수 있게 했습니다. 오픈 이후에도 운영 단계에서 기능 고도화를 이어가고 있습니다.',
         scope: ['브랜드몰 WITHFRESH 온라인 쇼핑몰 구축', '하이브리드 모바일 앱 구현', '관리자 사이트 구축', '기존 관리 사이트 2곳 + 신규 브랜드몰 회원 통합 SSO 구축', '오픈 이후 운영 및 기능 고도화'],
+        // 출처: C:\project\ydpmall (Java 21 / Spring Boot 3.2, Vue 3 + Vite),
+        //       C:\project\ydpmall_app (Flutter 하이브리드 앱),
+        //       C:\project\fbsso (Node.js + Express OAuth2 인증 서버, NICE 본인인증)
+        stack: ['Java', 'Spring Boot', 'Spring Security', 'MyBatis', 'MySQL', 'Vue.js · Vite', 'Flutter', 'Node.js · Express', 'OAuth2 인증 서버', 'NICE 본인인증'],
         domainTitle: '신규 서비스에 SSO를 함께 구축하는 이유',
         domainBody:
             'SSO(Single Sign-On, 통합 인증)는 계정 하나로 여러 서비스에 로그인하는 방식입니다. 사이트를 새로 열 때마다 회원 체계를 따로 만들면 같은 이용자가 사이트 수만큼 계정을 갖게 되고, 운영 쪽에서는 어느 계정이 같은 고객인지 집계하기 어려워집니다. 기존 사이트가 이미 운영 중인 상태에서 신규 서비스를 붙일 때 통합 인증을 먼저 세워두면, 이후 서비스가 늘어나도 인증은 한 번만 만들면 됩니다. 포베리는 이 영역을 자체 솔루션 COCONUT으로도 제공하고 있습니다.',
@@ -127,6 +147,8 @@ export const fbProjects: FbProject[] = [
         background:
             '참여형 게이미피케이션 요소를 접목한 캠페인 사이트를 구축했습니다. 캠페인 사이트는 정해진 기간에 방문이 몰리고 참여 그 자체가 목적이라는 점에서 일반 서비스와 성격이 다릅니다. PC와 모바일 어느 쪽으로 들어와도 같은 흐름으로 끝까지 참여할 수 있도록 동시 대응으로 구현했습니다.',
         scope: ['캠페인 요건 분석 및 화면 설계', '게이미피케이션 참여 기능 구현', 'PC · 모바일 동시 대응 구축'],
+        // 출처: C:\project\campaign (Gradle 멀티모듈 core/api/backoffice + Vue 3 프론트)
+        stack: ['Java', 'Spring Boot', 'MyBatis', 'MySQL', 'Thymeleaf', 'Vue.js · Vite', 'Pinia'],
         domainTitle: '게이미피케이션이란?',
         domainBody:
             '게이미피케이션(Gamification)은 게임이 아닌 곳에 게임의 장치를 가져다 쓰는 방식입니다. 점수, 단계, 보상, 순위 같은 요소를 넣어 사람들이 중간에 그만두지 않고 끝까지 참여하게 만듭니다. 읽고 지나가기 쉬운 공공기관 캠페인 콘텐츠에 특히 효과가 있습니다. 다만 참여 절차가 길어질수록 이탈이 늘기 때문에, 어떤 장치를 넣느냐보다 몇 번의 조작으로 참여가 끝나는지를 설계하는 쪽이 결과를 좌우합니다.',

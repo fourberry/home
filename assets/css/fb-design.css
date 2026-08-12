@@ -301,10 +301,15 @@ img{max-width:100%;display:block}
 
 /* ---------- 그리드 순차 등장 ---------- */
 /* v-reveal 이 붙은 컨테이너에 fb-stagger 를 같이 주면, 컨테이너 자체 페이드는 끄고
-   자식들만 순서대로 올라옵니다(모션 중복 방지). .in 은 v-reveal 이 붙여줍니다. */
+   자식들만 순서대로 올라옵니다(모션 중복 방지). .reveal / .in 은 v-reveal 이 붙여줍니다.
+
+   ⚠️ 자식을 숨기는 규칙은 반드시 `.reveal` 이 함께 있을 때만 걸어야 합니다.
+      `.fb-stagger > *` 로 두면 v-reveal 을 깜빡한 컨테이너나 JS 가 실패한 브라우저에서
+      자식이 영구히 opacity:0 이 되어 화면이 통째로 비어 보입니다.
+      (plugins/reveal.ts 가 SSR 에서 아무 클래스도 심지 않는 것과 같은 이유) */
 .fb-stagger.reveal{opacity:1;transform:none;transition:none}
-.fb-stagger > *{opacity:0;transform:translateY(14px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
-.fb-stagger.in > *{opacity:1;transform:none}
+.fb-stagger.reveal > *{opacity:0;transform:translateY(14px);transition:opacity .55s cubic-bezier(.2,.7,.2,1),transform .55s cubic-bezier(.2,.7,.2,1)}
+.fb-stagger.reveal.in > *{opacity:1;transform:none}
 .fb-stagger.in > *:nth-child(2){transition-delay:.07s}
 .fb-stagger.in > *:nth-child(3){transition-delay:.14s}
 .fb-stagger.in > *:nth-child(4){transition-delay:.21s}

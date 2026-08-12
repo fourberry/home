@@ -69,7 +69,7 @@
                     <span class="eyebrow">Work · 다른 실적</span>
                     <h2>다른 프로젝트도 보시겠어요?</h2>
                 </div>
-                <div class="work-grid fb-stagger">
+                <div v-reveal class="work-grid fb-stagger">
                     <NuxtLink v-for="p in others" :key="p.id" class="work-card" :to="`/work/${p.id}/`">
                         <div class="work-thumb">
                             <img class="slot-img" :src="p.thumb" :alt="`${p.client} — ${p.title}`" loading="lazy" />

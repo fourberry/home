@@ -66,7 +66,7 @@
                     <h2>어떻게 진행되나요.</h2>
                     <p class="lead">요구사항이 정리되지 않은 상태에서 문의 주셔도 됩니다. 어떤 것부터 정해야 하는지부터 함께 짚습니다.</p>
                 </div>
-                <div class="fb-step-grid fb-stagger">
+                <div v-reveal class="fb-step-grid fb-stagger">
                     <div v-for="s in steps" :key="s.idx" class="fb-step">
                         <div class="idx">{{ s.idx }}</div>
                         <h3>{{ s.t }}</h3>

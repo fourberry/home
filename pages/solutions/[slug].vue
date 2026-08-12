@@ -34,7 +34,7 @@
                     <span class="eyebrow">Feature · 핵심 기능</span>
                     <h2>{{ solution.name }}이(가) 하는 일.</h2>
                 </div>
-                <div class="fb-feat-grid fb-stagger">
+                <div v-reveal class="fb-feat-grid fb-stagger">
                     <div v-for="f in solution.feats" :key="f.t" class="fb-feat">
                         <b>{{ f.t }}</b>
                         <span>{{ f.d }}</span>

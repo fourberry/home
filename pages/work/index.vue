@@ -18,7 +18,7 @@
 
         <section class="section section--ink">
             <div class="container">
-                <div class="work-grid fb-stagger">
+                <div v-reveal class="work-grid fb-stagger">
                     <NuxtLink v-for="p in fbProjects" :key="p.id" class="work-card" :to="`/work/${p.id}/`">
                         <div class="work-thumb">
                             <img class="slot-img" :src="p.thumb" :alt="`${p.client} — ${p.title}`" loading="lazy" />

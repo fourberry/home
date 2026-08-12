@@ -18,7 +18,7 @@
 
         <section class="section section--alt">
             <div class="container">
-                <div class="fb-card-grid fb-stagger">
+                <div v-reveal class="fb-card-grid fb-stagger">
                     <NuxtLink v-for="s in fbSolutions" :key="s.slug" class="fb-card" :to="`/solutions/${s.slug}/`">
                         <div class="fb-card-media">
                             <img class="slot-img" :src="s.image" :alt="`${s.name} ${s.ko} — ${s.tag}`" loading="lazy" />

@@ -11,7 +11,7 @@
                         도입 문의
                         <span class="arw">→</span>
                     </NuxtLink>
-                    <NuxtLink to="/solutions" class="btn btn-ghost">다른 솔루션 보기</NuxtLink>
+                    <NuxtLink to="/solutions/" class="btn btn-ghost">다른 솔루션 보기</NuxtLink>
                 </div>
             </div>
         </section>
@@ -61,7 +61,7 @@
                     <p class="lead">해당 솔루션을 그대로 납품한 사례가 아니라, 같은 영역을 다룬 수행 실적입니다.</p>
                 </div>
                 <div class="fb-card-grid fb-card-grid--sm">
-                    <NuxtLink v-for="p in related" :key="p.id" class="fb-card" :to="`/work/${p.id}`">
+                    <NuxtLink v-for="p in related" :key="p.id" class="fb-card" :to="`/work/${p.id}/`">
                         <div class="fb-card-media">
                             <img class="slot-img" :src="p.thumb" :alt="`${p.client} — ${p.title}`" loading="lazy" />
                         </div>

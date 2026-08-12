@@ -11,7 +11,7 @@
             <!-- ⚠️ 카드는 반드시 링크(NuxtLink)여야 합니다.
                  <button> 으로 모달을 띄우면 검색엔진 크롤러가 상세 내용을 따라가지 못합니다. -->
             <div v-reveal class="work-grid fb-stagger">
-                <NuxtLink v-for="p in fbProjects" :key="p.id" class="work-card" :to="`/work/${p.id}`">
+                <NuxtLink v-for="p in fbProjects" :key="p.id" class="work-card" :to="`/work/${p.id}/`">
                     <div class="work-thumb">
                         <img class="slot-img" :src="p.thumb" :alt="`${p.client} — ${p.title}`" loading="lazy" />
                     </div>
@@ -24,7 +24,7 @@
                 </NuxtLink>
             </div>
             <div v-reveal class="work-foot">
-                <NuxtLink to="/work" class="btn btn-ghost">수행 실적 전체 보기 <span class="arw">→</span></NuxtLink>
+                <NuxtLink to="/work/" class="btn btn-ghost">수행 실적 전체 보기 <span class="arw">→</span></NuxtLink>
             </div>
         </div>
     </section>

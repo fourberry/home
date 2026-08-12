@@ -17,7 +17,7 @@
                         발주 상담 문의
                         <span class="arw">→</span>
                     </NuxtLink>
-                    <NuxtLink to="/work" class="btn btn-ghost">수행 실적 보기</NuxtLink>
+                    <NuxtLink to="/work/" class="btn btn-ghost">수행 실적 보기</NuxtLink>
                 </div>
             </div>
         </section>
@@ -84,7 +84,7 @@
                     <p class="lead">제조·유통, 금융, 공공, 교육 분야에서 수행한 구축·운영 프로젝트입니다.</p>
                 </div>
                 <div class="fb-card-grid fb-card-grid--sm">
-                    <NuxtLink v-for="p in fbProjects" :key="p.id" class="fb-card" :to="`/work/${p.id}`">
+                    <NuxtLink v-for="p in fbProjects" :key="p.id" class="fb-card" :to="`/work/${p.id}/`">
                         <div class="fb-card-media">
                             <img class="slot-img" :src="p.thumb" :alt="`${p.client} — ${p.title}`" loading="lazy" />
                         </div>

@@ -32,7 +32,7 @@
                             </div>
                         </div>
                         <!-- 상세 페이지로 가는 링크. 크롤러가 솔루션 페이지를 발견하는 경로입니다. -->
-                        <NuxtLink :to="`/solutions/${s.slug}`" class="sol-detail">
+                        <NuxtLink :to="`/solutions/${s.slug}/`" class="sol-detail">
                             {{ s.name }} 자세히 보기 <span class="arw">→</span>
                         </NuxtLink>
                     </div>

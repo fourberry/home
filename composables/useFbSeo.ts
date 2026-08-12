@@ -1,4 +1,4 @@
-import { SITE_NAME, SITE_OG_IMAGE, SITE_TITLE_SUFFIX, SITE_URL } from '~/data/company'
+import { SITE_NAME, SITE_OG_IMAGE, SITE_TITLE_SUFFIX, SITE_URL, withSlash } from '~/data/company'
 
 export interface FbSeoOptions {
     /** <title> 앞부분. 뒤에 SITE_TITLE_SUFFIX 가 자동으로 붙습니다. 25~35자 권장 */
@@ -19,9 +19,9 @@ export interface FbSeoOptions {
  * 모든 페이지가 홈을 가리켜 하위 페이지가 색인에서 통째로 빠집니다.
  */
 export const useFbSeo = (opts: FbSeoOptions) => {
-    // path 는 항상 '/' 로 시작합니다. sitemap 이 내보내는 주소와 형태를 맞춰야
-    // 같은 페이지가 두 주소로 인식되는 일이 없습니다(홈은 '/' 로 끝남).
-    const url = SITE_URL + opts.path
+    // GitHub Pages 가 실제로 200 을 주는 주소(끝에 슬래시)로 맞춥니다.
+    // 슬래시를 빼면 canonical 이 301 되는 주소를 가리키게 되어 신호가 충돌합니다.
+    const url = SITE_URL + withSlash(opts.path)
     const image = SITE_URL + (opts.image || SITE_OG_IMAGE)
     const fullTitle = `${opts.title} | ${SITE_TITLE_SUFFIX}`
 

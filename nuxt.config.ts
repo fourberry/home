@@ -44,6 +44,10 @@ export default defineNuxtConfig({
 
     site: {
         url: SITE_URL,
+        // GitHub Pages 는 하위 페이지를 `.../index.html` 로 서빙해서
+        // 슬래시 없는 주소를 301 리다이렉트합니다. sitemap 이 리다이렉트되는 주소를
+        // 내보내지 않도록 슬래시로 끝나는 형태로 맞춥니다(canonical 과 동일).
+        trailingSlash: true,
     },
 
     // ✅ 문의 전송 설정
@@ -83,12 +87,14 @@ export default defineNuxtConfig({
     nitro: {
         prerender: {
             crawlLinks: true,
+            // 끝의 슬래시는 canonical·sitemap·내부 링크와 같은 형태입니다.
+            // 빼면 같은 페이지를 두 주소로 두 번 프리렌더하게 됩니다.
             routes: [
-                '/solutions',
-                '/work',
-                '/services/si-sm',
-                ...fbSolutions.map(s => `/solutions/${s.slug}`),
-                ...fbProjects.map(p => `/work/${p.id}`),
+                '/solutions/',
+                '/work/',
+                '/services/si-sm/',
+                ...fbSolutions.map(s => `/solutions/${s.slug}/`),
+                ...fbProjects.map(p => `/work/${p.id}/`),
             ],
         },
     },

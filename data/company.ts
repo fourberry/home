@@ -15,6 +15,17 @@ export const SITE_TITLE_SUFFIX = 'AI 솔루션 & SI 전문 기업 (주)포베리
 /** OG 이미지 기본값 */
 export const SITE_OG_IMAGE = '/og/cover.jpg'
 
+/**
+ * 경로 끝에 슬래시를 붙입니다.
+ *
+ * GitHub Pages 는 하위 페이지를 `solutions/coconut/index.html` 로 서빙하기 때문에
+ * `/solutions/coconut` 요청을 `/solutions/coconut/` 로 **301 리다이렉트**합니다.
+ * canonical·sitemap·내부 링크를 슬래시 없는 형태로 두면
+ * "정규 주소라고 선언한 URL 이 다른 곳으로 리다이렉트되는" 신호 충돌이 생깁니다.
+ * 그래서 주소를 만들 때는 반드시 이 함수를 거칩니다.
+ */
+export const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)
+
 export const fbCompany = {
     legalName: '(주)포베리',
     brandName: 'FOURBERRY',

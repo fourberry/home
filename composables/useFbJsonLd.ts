@@ -1,8 +1,11 @@
-import { SITE_NAME, SITE_URL, fbCompany } from '~/data/company'
+import { SITE_NAME, SITE_URL, fbCompany, withSlash } from '~/data/company'
 import type { FbFaqItem } from '~/data/faq'
 import type { FbSolution } from '~/data/solutions'
 
 type JsonLdNode = Record<string, unknown>
+
+/** 구조화 데이터에 넣는 절대 주소. 실제로 200 을 주는 형태(끝에 슬래시)로 통일합니다. */
+const abs = (path: string) => SITE_URL + withSlash(path)
 
 /**
  * JSON-LD(검색엔진이 읽는 기계용 요약 데이터. 사람 눈에는 보이지 않습니다)를
@@ -29,7 +32,7 @@ export const orgJsonLd = (): JsonLdNode => ({
     '@id': `${SITE_URL}/#organization`,
     name: SITE_NAME,
     alternateName: fbCompany.brandName,
-    url: SITE_URL,
+    url: abs('/'),
     logo: `${SITE_URL}/images/logo.png`,
     image: `${SITE_URL}/og/cover.jpg`,
     email: fbCompany.email,
@@ -67,7 +70,7 @@ export const webSiteJsonLd = (): JsonLdNode => ({
     '@type': 'WebSite',
     '@id': `${SITE_URL}/#website`,
     name: SITE_NAME,
-    url: SITE_URL,
+    url: abs('/'),
     inLanguage: 'ko-KR',
     publisher: { '@id': `${SITE_URL}/#organization` },
 })
@@ -98,7 +101,7 @@ export const breadcrumbJsonLd = (items: { name: string; path: string }[]): JsonL
         '@type': 'ListItem',
         position: i + 1,
         name: item.name,
-        item: item.path === '/' ? SITE_URL : SITE_URL + item.path,
+        item: abs(item.path),
     })),
 })
 
@@ -111,7 +114,7 @@ export const solutionJsonLd = (s: FbSolution): JsonLdNode => ({
     applicationCategory: s.category,
     operatingSystem: 'Web',
     description: s.seoDescription,
-    url: `${SITE_URL}/solutions/${s.slug}`,
+    url: abs(`/solutions/${s.slug}`),
     image: SITE_URL + s.image,
     featureList: s.feats.map(f => `${f.t}: ${f.d}`),
     provider: { '@id': `${SITE_URL}/#organization` },
@@ -125,7 +128,7 @@ export const serviceJsonLd = (opts: { name: string; description: string; path: s
     name: opts.name,
     description: opts.description,
     serviceType: opts.serviceType,
-    url: SITE_URL + opts.path,
+    url: abs(opts.path),
     areaServed: { '@type': 'Country', name: '대한민국' },
     provider: { '@id': `${SITE_URL}/#organization` },
 })

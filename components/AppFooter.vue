@@ -21,15 +21,15 @@
                 </div>
                 <div class="footer-col">
                     <h5>Solution</h5>
-                    <NuxtLink to="/solutions">자체 솔루션</NuxtLink>
-                    <NuxtLink v-for="s in fbSolutions" :key="s.slug" :to="`/solutions/${s.slug}`">
+                    <NuxtLink to="/solutions/">자체 솔루션</NuxtLink>
+                    <NuxtLink v-for="s in fbSolutions" :key="s.slug" :to="`/solutions/${s.slug}/`">
                         {{ s.name }} {{ s.ko }}
                     </NuxtLink>
                 </div>
                 <div class="footer-col">
                     <h5>Work</h5>
-                    <NuxtLink to="/services/si-sm">SI 구축 · SM 운영</NuxtLink>
-                    <NuxtLink to="/work">수행 실적</NuxtLink>
+                    <NuxtLink to="/services/si-sm/">SI 구축 · SM 운영</NuxtLink>
+                    <NuxtLink to="/work/">수행 실적</NuxtLink>
                 </div>
                 <div class="footer-col">
                     <h5>Contact</h5>

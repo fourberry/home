@@ -10,7 +10,7 @@
  * 3) Settings → Variables and Secrets 에 추가 (Secret 으로)
  *      MESSAGE_API_BASE   = http://59.15.89.190:8061
  *      MESSAGE_API_KEY    = lm_homepage_...(기존 키)
- *      CONTACT_RECIPIENTS = briskly0415@fourberry.co.kr,won567567@fourberry.co.kr,lsj8376@fourberry.co.kr
+ *      CONTACT_RECIPIENTS = briskly0415@fourberry.co.kr,won567567@fourberry.co.kr,lsj8376@fourberry.co.kr,damon@fourberry.co.kr
  *      ALLOWED_ORIGIN     = https://www.fourberry.co.kr
  * 4) 발급된 주소(예: https://fb-contact.<계정>.workers.dev)를
  *    nuxt.config.ts 의 runtimeConfig.public.contactEndpoint 에 넣으세요.

@@ -392,12 +392,14 @@ const readFileAsBase64 = (file: File): Promise<string> => {
     })
 }
 
-const escapeHTML = (str: string) =>
-    str.replace(
-        /[&<>"']/g,
-        match =>
-            ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' })[match]!
-    )
+/**
+ * 라임에 등록된 문의 메일 템플릿 ID.
+ *
+ * 메일의 문구·디자인은 라임 [템플릿 관리] 에 있고, 여기서는 **값만** 보냅니다.
+ * 값의 HTML 이스케이프도 라임이 합니다 — 여기서 미리 escape 하면 이중 이스케이프가 돼
+ * 메일에 `&amp;lt;` 같은 문자가 그대로 보입니다.
+ */
+const CONTACT_TEMPLATE_ID = 'HOMEPAGE_CONTACT'
 
 const handleSubmit = async () => {
     if (isLoading.value) return
@@ -423,39 +425,23 @@ const handleSubmit = async () => {
         const budgetLabel = budgetOptions.find(b => b.value === selectedBudget.value)?.label || 'N/A'
         const scheduleLabel = scheduleOptions.find(s => s.value === selectedSchedule.value)?.label || 'N/A'
 
-        const htmlContent = `
-            <h1>[포베리] 신규 문의가 접수되었습니다.</h1>
-            <p><strong>${escapeHTML(clientInfo.value.company || clientInfo.value.name)}</strong>님으로부터 새로운 문의가 접수되었습니다.</p>
-            <hr>
-            <h2>문의자 정보</h2>
-            <ul>
-                <li><strong>회사/단체명:</strong> ${escapeHTML(clientInfo.value.company) || 'N/A'}</li>
-                <li><strong>담당자명:</strong> ${escapeHTML(clientInfo.value.name)}</li>
-                <li><strong>연락처:</strong> ${escapeHTML(clientInfo.value.tel)}</li>
-                <li><strong>이메일:</strong> ${escapeHTML(clientInfo.value.email)}</li>
-            </ul>
-            <hr>
-            <h2>문의 내용</h2>
-            <ul>
-                <li><strong>상담 유형:</strong> ${escapeHTML(typeLabel)}</li>
-                <li><strong>관심 서비스:</strong> ${escapeHTML(serviceLabels)}</li>
-                <li><strong>예산:</strong> ${escapeHTML(budgetLabel)}</li>
-                <li><strong>일정:</strong> ${escapeHTML(scheduleLabel)}</li>
-            </ul>
-            <hr>
-            <h3>추가 전달 내용</h3>
-            <pre style="white-space: pre-wrap; word-wrap: break-word; background-color: #f4f4f4; padding: 10px; border-radius: 5px;">${escapeHTML(textareaContent.value) || 'N/A'}</pre>
-            <hr>
-            <p>첨부파일: ${attachments.length > 0 ? escapeHTML(attachments.map(a => a.filename).join(', ')) : '없음'}</p>
-        `
-
+        // 메일 본문·제목은 라임 템플릿(HOMEPAGE_CONTACT)에 있습니다. 여기서는 값만 넘깁니다.
+        // 값을 미리 escape 하지 마세요 — 라임이 Handlebars 로 치환하면서 이스케이프합니다.
         const requestBody = {
-            subject: `[포베리 문의] ${clientInfo.value.company || clientInfo.value.name} 님 - ${typeLabel}`,
-            content: htmlContent,
+            templateId: CONTACT_TEMPLATE_ID,
             data: {
+                // 제목·인사말에 쓰는 표시용 이름. 회사명이 없으면 담당자명으로 대체합니다.
+                clientLabel: clientInfo.value.company || clientInfo.value.name,
+                clientCompany: clientInfo.value.company || 'N/A',
                 clientName: clientInfo.value.name,
-                clientCompany: clientInfo.value.company,
+                clientTel: clientInfo.value.tel,
+                clientEmail: clientInfo.value.email,
                 inquiryType: typeLabel,
+                services: serviceLabels,
+                budget: budgetLabel,
+                schedule: scheduleLabel,
+                message: textareaContent.value || 'N/A',
+                attachmentNames: attachments.length > 0 ? attachments.map(a => a.filename).join(', ') : '없음',
             },
             attachments,
         }

@@ -64,8 +64,13 @@ async function handleContact(req, res) {
     }
 
     const body = req.body || {}
-    if (!body.subject || !body.content) {
-        return res.status(400).json({ ok: false, message: 'subject, content는 필수입니다.' })
+
+    // 템플릿 방식(templateId + data)과 구버전 직접 방식(subject + content)을 모두 받는다.
+    // 구버전을 남기는 이유: 정적 사이트라 배포 후에도 브라우저에 옛 JS 가 캐시돼 있을 수
+    // 있고, 그때 400 을 내면 그 문의가 유실된다.
+    const useTemplate = Boolean(body.templateId)
+    if (!useTemplate && (!body.subject || !body.content)) {
+        return res.status(400).json({ ok: false, message: 'templateId 또는 subject+content 가 필요합니다.' })
     }
 
     const attachments = Array.isArray(body.attachments) ? body.attachments : []
@@ -98,9 +103,7 @@ async function handleContact(req, res) {
             body: JSON.stringify({
                 channel: 'email',
                 to: CONTACT_RECIPIENTS,
-                subject: body.subject,
-                content: body.content,
-                data: body.data ?? {},
+                ...(useTemplate ? { templateId: body.templateId, data: body.data ?? {} } : { subject: body.subject, content: body.content, data: body.data ?? {} }),
                 attachments,
             }),
         })

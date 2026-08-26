@@ -21,9 +21,13 @@ interface Attachment {
 }
 
 interface ContactPayload {
-    subject: string
-    content: string
+    /** 라임 템플릿 ID. 있으면 템플릿 경로로 보낸다 (제목·본문은 라임에 있음). */
+    templateId?: string
+    /** 템플릿 변수. templateId 와 짝으로 쓴다. */
     data?: Record<string, unknown>
+    /** 구버전 경로: 폼이 HTML 을 직접 만들어 보내던 방식 */
+    subject?: string
+    content?: string
     attachments?: Attachment[]
 }
 
@@ -36,8 +40,19 @@ export default defineEventHandler(async event => {
     const body = await readBody<ContactPayload>(event)
 
     // --- 기본 검증 ---
-    if (!body?.subject || !body?.content) {
-        throw createError({ statusCode: 400, statusMessage: 'subject, content는 필수입니다.' })
+    //
+    // 두 가지 요청 형태를 모두 받는다.
+    //  - 템플릿 방식(현재): templateId + data → 제목·본문·레이아웃은 라임이 만든다
+    //  - 직접 방식(구버전): subject + content
+    //
+    // 구버전을 남겨 두는 이유: 정적 사이트라 배포 후에도 브라우저에 옛 JS 가 캐시돼 있을 수
+    // 있다. 그때 400 을 내면 그 문의는 그대로 유실된다.
+    const useTemplate = Boolean(body?.templateId)
+    if (!useTemplate && (!body?.subject || !body?.content)) {
+        throw createError({
+            statusCode: 400,
+            statusMessage: 'templateId 또는 subject+content 가 필요합니다.',
+        })
     }
 
     const attachments = Array.isArray(body.attachments) ? body.attachments : []
@@ -72,9 +87,7 @@ export default defineEventHandler(async event => {
             body: {
                 channel: 'email',
                 to: config.contactRecipients, // 서버에서 고정
-                subject: body.subject,
-                content: body.content,
-                data: body.data ?? {},
+                ...(useTemplate ? { templateId: body.templateId, data: body.data ?? {} } : { subject: body.subject, content: body.content, data: body.data ?? {} }),
                 attachments,
             },
             timeout: 30_000,

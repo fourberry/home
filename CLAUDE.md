@@ -102,9 +102,32 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 [deploy.yml:43](.github/workflows/deploy.yml:43)에서 빌드 시 `NUXT_PUBLIC_CONTACT_ENDPOINT`를 주입합니다.
 엔드포인트를 바꾸려면 이 워크플로 파일을 고쳐야 합니다.
 
-두 구현(`server/api/contact.post.ts`와 `deploy/contact-proxy-node/server.js`)은 **동일한 계약**을 지킵니다.
-요청 `{ subject, content, data, attachments: [{filename, mimeType, content(base64)}] }`,
-제한 첨부 5개 · 개당 10MB · 합계 25MB. 한쪽 검증 규칙을 바꾸면 다른 쪽도 함께 고치세요.
+프록시 구현은 **세 개**이고 모두 **동일한 계약**을 지킵니다. 하나만 고치면 운영 중인 경로가
+그대로 남으므로 반드시 함께 고치세요.
+
+| 파일 | 쓰이는 곳 |
+|---|---|
+| [server/api/contact.post.ts](server/api/contact.post.ts) | 로컬 `npm run dev` |
+| [deploy/contact-proxy-node/server.js](deploy/contact-proxy-node/server.js) | **현재 운영** — 카페24 리눅스 서버 |
+| [deploy/contact-proxy.worker.js](deploy/contact-proxy.worker.js) | 미사용(대안) — Cloudflare Worker |
+
+요청 본문은 두 가지를 받습니다.
+
+- **템플릿 방식(현재)** `{ templateId, data, attachments }`
+  제목·본문·머리말·꼬리말은 전부 라임에 있습니다. 폼은 값만 보냅니다.
+- **직접 방식(구버전)** `{ subject, content, data, attachments }`
+  정적 사이트라 배포 후에도 브라우저에 옛 JS 가 캐시돼 있을 수 있어 남겨 둡니다.
+  400 을 내면 그 문의가 그대로 유실됩니다.
+
+첨부 제한은 5개 · 개당 10MB · 합계 25MB이고 `attachments: [{filename, mimeType, content(base64)}]` 형식입니다.
+
+**메일 문구·디자인은 이 저장소에 없습니다.** 라임의 `HOMEPAGE_CONTACT` 템플릿(홈페이지 프로젝트)과
+거기 연결된 이메일 레이아웃에 있습니다. 문구를 고치려면 라임에서 고치세요 — 여기를 배포할 필요가 없습니다.
+폼이 보내는 `data` 키(`clientLabel`·`clientName`·`message` 등)와 템플릿의 `{{변수}}` 는 짝이므로,
+키 이름을 바꾸려면 양쪽을 함께 고쳐야 합니다.
+
+⚠️ 값을 **미리 HTML escape 하지 마세요.** 라임이 Handlebars 로 치환하면서 이스케이프합니다.
+여기서 한 번 더 하면 이중 이스케이프가 돼 메일에 `&amp;lt;` 같은 문자가 그대로 보입니다.
 
 프록시가 존재하는 이유는 두 가지입니다: 발송 API가 http라 브라우저 mixed content에 걸리는 것을 우회하고,
 `X-API-Key`와 수신자 주소를 클라이언트 번들 밖에 두기 위함입니다. 이 값들을 프론트로 옮기지 마세요.

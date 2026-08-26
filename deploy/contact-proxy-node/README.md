@@ -77,11 +77,51 @@ https://<노출된-주소>/api/contact     (또는 리버스 프록시 경로)
 
 ---
 
+---
+
+## 코드를 고쳤을 때 — 재배포 방법
+
+이 폴더는 **GitHub Pages 배포에 포함되지 않습니다.** 저장소에 커밋해도 서버에는 반영되지
+않으므로, 아래를 직접 해야 합니다.
+
+```bash
+cd ~/fb-contact          # 올려 둔 위치
+git pull                 # 또는 바뀐 server.js 만 덮어쓰기
+npm install --omit=dev   # 의존성이 바뀐 경우에만
+pm2 restart fb-contact
+pm2 logs fb-contact --lines 30   # 기동 확인
+```
+
+헬스체크로 살아있는지 확인합니다.
+
+```bash
+curl -s https://briskly0714.cafe24.com/fb-contact/ ; echo
+# → {"ok":true,"service":"contact-proxy",...}
+```
+
+> **순서 주의**: 프론트(홈페이지)보다 **프록시를 먼저** 올리세요. 프록시는 새 형식과 옛 형식을
+> 모두 받으므로 먼저 올려도 기존 폼이 그대로 동작합니다. 반대로 하면 그 사이 들어온 문의가
+> 400 으로 유실됩니다.
+
+---
+
 ## 요청/응답 형식 (참고)
-- 프론트가 보내는 JSON: `{ subject, content, data, attachments: [{filename, content(base64)}] }`
+
+프론트가 보내는 JSON 은 두 가지입니다.
+
+- **템플릿 방식(현재)** — `{ templateId, data, attachments }`
+  제목·본문은 라임의 `HOMEPAGE_CONTACT` 템플릿에 있습니다. 프록시는 그대로 전달만 합니다.
+- **직접 방식(구버전)** — `{ subject, content, data, attachments }`
+  배포 후에도 브라우저에 옛 JS 가 캐시돼 있을 수 있어 계속 받습니다.
+
+`attachments` 는 `[{filename, mimeType, content(base64)}]` 형식입니다.
+
 - 성공: `200 { "ok": true }`
 - 실패: `4xx/5xx { "ok": false, "message": "..." }`
 - 제한: 첨부 최대 5개 · 개당 10MB · 합계 25MB
+
+발송 API 로는 수신자(`CONTACT_RECIPIENTS`)와 `X-API-Key` 를 붙여 넘깁니다.
+템플릿 방식이면 `templateId`+`data` 를, 아니면 `subject`+`content` 를 싣습니다.
 
 ## 보안 메모
 발송 API 키는 그동안 정적 번들과 git 히스토리에 노출되어 있었습니다. 프록시로 옮긴 뒤에도

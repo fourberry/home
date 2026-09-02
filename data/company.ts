@@ -26,6 +26,13 @@ export const SITE_OG_IMAGE = '/og/cover.jpg'
  */
 export const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)
 
+/**
+ * 주소 조각. 화면마다 줄바꿈 위치가 달라서 도로명과 건물명을 따로 둡니다.
+ * 도로명주소 공식 표기는 `양평로22길` 로 **붙여** 씁니다 (`양평로 22길` 아님).
+ */
+const ADDR_ROAD = '양평로22길 21'
+const ADDR_BUILDING = '코오롱디지털타워 1409호'
+
 export const fbCompany = {
     legalName: '(주)포베리',
     brandName: 'FOURBERRY',
@@ -42,13 +49,21 @@ export const fbCompany = {
         postalCode: '07205',
         region: '서울특별시',
         locality: '영등포구',
-        street: '양평로 22길 21 코오롱디지털타워 1409호',
+        /** 도로명 + 건물번호 */
+        road: ADDR_ROAD,
+        /** 건물명 + 호수 */
+        building: ADDR_BUILDING,
+        street: `${ADDR_ROAD} ${ADDR_BUILDING}`,
         /**
          * Google 비즈니스 프로필에 등록할 주소와 이 문자열을 철자까지 일치시켜야
          * 구조화 데이터와 지역 검색 정보가 같은 업체로 묶입니다.
          */
-        full: '서울특별시 영등포구 양평로 22길 21 코오롱디지털타워 1409호',
+        full: `서울특별시 영등포구 ${ADDR_ROAD} ${ADDR_BUILDING}`,
     },
-    /** 사무실 좌표 (선유도 인근). 지도 핀과 구조화 데이터가 같은 값을 씁니다. */
-    geo: { lat: 37.5372, lng: 126.8933 },
+    /**
+     * 사무실 좌표 — 코오롱디지털타워(양평로22길 21) 건물 중심.
+     * 지도 핀과 구조화 데이터(GeoCoordinates)가 같은 값을 씁니다.
+     * 이전 값(37.5372, 126.8933)은 건물에서 약 300m 남서쪽이라 핀이 엉뚱한 블록에 찍혔습니다.
+     */
+    geo: { lat: 37.53982, lng: 126.89469 },
 } as const

@@ -13,7 +13,7 @@
                         </div>
                         <div class="ci-row">
                             <div class="ci-k">Address</div>
-                            <div class="ci-v">서울특별시 영등포구 양평로 22길 21<br />코오롱디지털타워 1409호 (선유도 인근)</div>
+                            <div class="ci-v">{{ fbCompany.address.region }} {{ fbCompany.address.locality }} {{ fbCompany.address.road }}<br />{{ fbCompany.address.building }} (선유도 인근)</div>
                         </div>
                         <div class="ci-row">
                             <div class="ci-k">Tel</div>
@@ -251,6 +251,7 @@
 <script setup lang="ts">
 import { ref } from 'vue'
 import FormFileUpload from '~/components/contact/FormFileUpload.vue'
+import { fbCompany } from '~/data/company'
 
 const consultationTypes = [
     { value: 'TYPE_01', label: '신규 시스템 구축' },

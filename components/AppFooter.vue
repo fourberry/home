@@ -35,7 +35,7 @@
                     <h5>Contact</h5>
                     <a :href="fbCompany.telHref" @click="trackContactChannel('tel')">{{ fbCompany.tel }}</a>
                     <a :href="`mailto:${fbCompany.email}`" @click="trackContactChannel('email')">{{ fbCompany.email }}</a>
-                    <p>서울 영등포구 양평로 22길 21<br />코오롱디지털타워 1409호</p>
+                    <p>{{ fbCompany.address.region }} {{ fbCompany.address.locality }} {{ fbCompany.address.road }}<br />{{ fbCompany.address.building }}</p>
                 </div>
             </div>
             <div class="footer-bottom">
@@ -43,7 +43,7 @@
                     {{ fbCompany.legalName }} · 대표이사 {{ fbCompany.ceo }} &nbsp;|&nbsp; 사업자등록번호
                     {{ fbCompany.bizNo }}<br />
                     ({{ fbCompany.address.postalCode }}) {{ fbCompany.address.region }}
-                    {{ fbCompany.address.locality }} 양평로 22길 21 1409호
+                    {{ fbCompany.address.locality }} {{ fbCompany.address.street }}
                 </p>
                 <p>© {{ year }} FOURBERRY. All rights reserved.</p>
             </div>

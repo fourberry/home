@@ -13,13 +13,13 @@
                         <p v-if="solution.nameOrigin" class="bp-hero-origin">{{ solution.nameOrigin }}</p>
                         <span class="eyebrow">{{ solution.tag }}</span>
                         <h1>
-                            흩어진 계정을 하나로.
+                            여러 서비스의 로그인과
                             <br />
-                            서비스는 로그인을 잊어도 됩니다.
+                            계정 관리를 한곳에서.
                         </h1>
                         <p class="lead">{{ solution.desc }}</p>
                         <div class="fb-page-actions">
-                            <NuxtLink to="/#contact" class="btn btn-primary" @click="trackInquiry('hero')">
+                            <NuxtLink :to="coconutInquiryHref" class="btn btn-primary" @click="trackInquiry('hero')">
                                 도입 문의
                                 <span class="arw">→</span>
                             </NuxtLink>
@@ -32,10 +32,42 @@
                             </div>
                         </div>
                     </div>
-                    <div class="bp-frame bp-frame--hero">
-                        <FbZoomImage :src="coconutHero.image" :full-src="coconutHero.full" :alt="coconutHero.alt" :width="coconutHero.w" :height="coconutHero.h" loading="eager" fetchpriority="high" />
+                    <div class="bp-hero-visual">
+                        <div class="bp-frame bp-frame--hero">
+                            <FbZoomImage
+                                :src="coconutHero.image"
+                                :full-src="coconutHero.full"
+                                :alt="coconutHero.alt"
+                                :width="coconutHero.w"
+                                :height="coconutHero.h"
+                                loading="eager"
+                                fetchpriority="high"
+                            />
+                        </div>
+                        <p class="bp-note">관리자 콘솔 · 예시 데이터 / 화면을 누르면 확대됩니다.</p>
                     </div>
                 </div>
+            </div>
+        </section>
+
+        <section id="fit" class="section section--alt">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">Fit · 이런 환경에</span>
+                    <h2>우리 서비스에 필요한 인증인지 먼저 확인하세요.</h2>
+                    <p class="lead">고객용 웹·앱의 공통 인증과 조직별 계정 운영을 검토할 때 시작할 수 있습니다.</p>
+                </div>
+                <div v-reveal class="bp-fit-grid fb-stagger">
+                    <article v-for="item in coconutFit" :key="item.n" class="bp-fit-card">
+                        <span class="bp-index">{{ item.n }}</span>
+                        <h3>{{ item.t }}</h3>
+                        <p>{{ item.d }}</p>
+                    </article>
+                </div>
+                <a class="bp-text-link" href="#integration">
+                    기존 인증 체계와의 연동 범위 확인
+                    <span aria-hidden="true">↗</span>
+                </a>
             </div>
         </section>
 
@@ -72,8 +104,36 @@
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">How it works · 동작 방식</span>
-                    <h2>계정과 인증은 COCONUT 이, 업무 권한은 서비스가.</h2>
-                    <p class="lead">연동 서비스는 로그인 화면을 만들지 않습니다. 표준 흐름으로 COCONUT 에 인증을 맡기고, 돌려받은 토큰만 확인하면 됩니다.</p>
+                    <h2>인증은 COCONUT이, 업무 권한은 서비스가.</h2>
+                    <p class="lead">공통 로그인 화면으로 인증 기능의 중복 개발을 줄입니다. 연동 서비스는 로그인 응답·토큰을 검증해 자체 세션과 업무 권한을 적용합니다.</p>
+                </div>
+                <div class="bp-journey">
+                    <div class="bp-journey-heading">
+                        <span class="eyebrow">SSO 이용 흐름 예시</span>
+                        <p>같은 테넌트에 연결된 서비스 A와 B를 이용하는 경우</p>
+                    </div>
+                    <div class="bp-journey-controls" role="group" aria-label="SSO 이용 단계 선택">
+                        <button v-for="(step, i) in coconutJourney" :key="step.label" type="button" :aria-pressed="journeyStep === i" aria-controls="sso-journey-panel" @click="journeyStep = i">
+                            <span class="bp-index">0{{ i + 1 }}</span>
+                            {{ step.label }}
+                        </button>
+                    </div>
+                    <div id="sso-journey-panel" class="bp-journey-panel" aria-live="polite" aria-atomic="true">
+                        <Transition name="bp-scene" mode="out-in">
+                            <div :key="journeyStep" class="bp-journey-scene">
+                                <div>
+                                    <span class="bp-journey-tag">{{ currentJourney.tag }}</span>
+                                    <h3>{{ currentJourney.title }}</h3>
+                                    <p>{{ currentJourney.body }}</p>
+                                </div>
+                                <div class="bp-journey-result">
+                                    <span aria-hidden="true">✓</span>
+                                    <p>{{ currentJourney.result }}</p>
+                                </div>
+                            </div>
+                        </Transition>
+                    </div>
+                    <p class="bp-note">이용 흐름을 설명하는 예시입니다. 실제 재인증·동의 절차는 세션 상태와 서비스 설정에 따라 달라집니다.</p>
                 </div>
                 <div class="bp-flow">
                     <div class="bp-flow-node">
@@ -91,29 +151,19 @@
                         <span>토큰을 검증하고 자기 업무 권한을 적용합니다.</span>
                     </div>
                 </div>
-                <div v-reveal class="bp-steps fb-stagger">
-                    <div v-for="(s, i) in coconutLoginSteps" :key="s.t" class="bp-step">
-                        <div class="idx">STEP {{ String(i + 1).padStart(2, '0') }}</div>
-                        <h3>{{ s.t }}</h3>
-                        <p>{{ s.d }}</p>
-                    </div>
-                </div>
-            </div>
-        </section>
-
-        <!-- 핵심 기능 -->
-        <section id="features" class="section section--ink">
-            <div class="container">
-                <div class="section-head">
-                    <span class="eyebrow">Feature · 핵심 기능</span>
-                    <h2>{{ solution.name }}이 하는 일.</h2>
-                </div>
-                <div v-reveal class="fb-feat-grid fb-stagger">
-                    <div v-for="f in solution.feats" :key="f.t" class="fb-feat">
-                        <b>{{ f.t }}</b>
-                        <span>{{ f.d }}</span>
-                    </div>
-                </div>
+                <details class="bp-detail bp-technical-flow">
+                    <summary>
+                        개발 담당자를 위한 인증 처리 순서
+                        <span class="bp-detail-icon" aria-hidden="true">+</span>
+                    </summary>
+                    <ol class="bp-steps">
+                        <li v-for="(step, i) in coconutLoginSteps" :key="step.t" class="bp-step">
+                            <span class="idx">STEP 0{{ i + 1 }}</span>
+                            <h3>{{ step.t }}</h3>
+                            <p>{{ step.d }}</p>
+                        </li>
+                    </ol>
+                </details>
             </div>
         </section>
 
@@ -123,10 +173,10 @@
                 <div class="section-head">
                     <span class="eyebrow">Console · 관리자 콘솔</span>
                     <h2>운영 담당자가 직접 다룹니다.</h2>
-                    <p class="lead">테넌트·클라이언트·사용자·정책·이력을 한 콘솔에서 관리합니다. 계정 업무가 개발 요청 없이 운영 담당자 선에서 끝납니다.</p>
+                    <p class="lead">테넌트·클라이언트·사용자·정책·이력을 한 콘솔에서 확인합니다. 관리자는 부여된 역할과 범위 안에서 계정 운영 업무를 처리합니다.</p>
                 </div>
                 <div class="bp-tour">
-                    <div v-for="(t, i) in coconutTour" :id="`console-${t.id}`" :key="t.id" class="bp-tour-row" :class="{ reverse: i % 2 === 1 }">
+                    <div v-for="(t, i) in coconutTour" v-reveal :id="`console-${t.id}`" :key="t.id" class="bp-tour-row" :class="{ reverse: i % 2 === 1 }">
                         <div class="bp-frame">
                             <FbZoomImage :src="t.image" :full-src="t.full" :alt="t.alt" :width="t.w" :height="t.h" />
                         </div>
@@ -140,17 +190,16 @@
                         </div>
                     </div>
                 </div>
-                <div class="bp-tour-mini">
-                    <figure v-for="m in coconutTourMini" :key="m.h2">
-                        <div class="bp-frame">
-                            <FbZoomImage :src="m.image" :full-src="m.full" :alt="m.alt" :width="m.w" :height="m.h" />
-                        </div>
-                        <figcaption>
-                            <b>{{ m.h2 }}</b>
-                            <span>{{ m.p }}</span>
-                        </figcaption>
-                    </figure>
-                </div>
+                <details class="bp-detail bp-terms-detail">
+                    <summary>
+                        약관과 동의 항목 관리도 확인하세요
+                        <span class="bp-detail-icon" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="bp-terms-content">
+                        <p>약관 유형을 관리하고 서비스별 약관과 필수·선택 동의를 구성합니다. 유형 등록과 실제 서비스에 적용할 약관 설정은 구분합니다.</p>
+                        <div class="bp-frame"><FbZoomImage :src="coconutTerms.image" :full-src="coconutTerms.full" :alt="coconutTerms.alt" :width="coconutTerms.w" :height="coconutTerms.h" /></div>
+                    </div>
+                </details>
                 <p class="bp-note">화면의 통계·목록은 이해를 돕기 위한 예시 데이터이며 개인정보는 가려져 있습니다.</p>
             </div>
         </section>
@@ -160,8 +209,8 @@
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">Security · 보안</span>
-                    <h2>보안 요건은 설정으로 대응합니다.</h2>
-                    <p class="lead">서비스 코드를 고치지 않고 인가 서버 쪽에서 정책을 바꿉니다. 감사 요건이 생겨도 이력은 이미 남아 있습니다.</p>
+                    <h2>인증 정책과 운영 이력을 함께 관리합니다.</h2>
+                    <p class="lead">표준 로그인 연동 후 지원하는 정책을 관리자 설정으로 변경합니다. 필요한 감사 기록과 보관 범위는 고객의 운영 기준에 맞춰 확인합니다.</p>
                 </div>
                 <div v-reveal class="bp-grid-3 fb-stagger">
                     <div v-for="s in coconutSecurity" :key="s.t" class="fb-feat">
@@ -179,7 +228,8 @@
                     <span class="eyebrow">Branding · 로그인 화면</span>
                     <h2>사용자는 자기 서비스의 로그인 화면을 봅니다.</h2>
                     <p class="bp-lead">
-                        하나의 인가 서버를 쓰더라도 서비스마다 로고·색상·문구를 따로 둡니다. 관리자 콘솔에서 미리보기로 확인하고 게시하면 로그인·회원가입·동의 화면에 바로 반영됩니다.
+                        하나의 인가 서버를 쓰더라도 서비스마다 로고·색상·문구를 따로 둡니다. 관리자 콘솔에서 미리보기와 저장·게시 기능으로 관리합니다. 로그인 템플릿 등 항목에 따라 반영 방식이
+                        다릅니다.
                     </p>
                     <ul class="bp-brand-list">
                         <li v-for="b in coconutBranding" :key="b.t">
@@ -189,6 +239,7 @@
                     </ul>
                 </div>
                 <div class="bp-login-stage" aria-hidden="true">
+                    <span class="bp-mock-label">로그인 화면 구성 예시</span>
                     <div class="bp-swatch">
                         <i style="background: var(--accent)"></i>
                         <i style="background: var(--accent-lite)"></i>
@@ -219,26 +270,53 @@
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">Integration · 연동</span>
-                    <h2>표준으로 붙고, 이벤트로 알립니다.</h2>
-                    <p class="lead">웹·모바일·서버 간 통신 어디에나 같은 방식으로 붙습니다. 계정 상태가 바뀌면 연동 서비스에 먼저 알립니다.</p>
+                    <h2>연동할 수 있는 범위부터 확인합니다.</h2>
+                    <p class="lead">사용자 로그인과 서버 간 인증을 구분해 연결합니다. 기존 사내 인증 체계나 회원 이전은 현재 환경을 확인한 뒤 적용 범위를 정합니다.</p>
                 </div>
-                <div v-reveal class="bp-grid-3 fb-stagger">
-                    <div v-for="it in coconutIntegrations" :key="it.t" class="bp-int">
-                        <div class="k">{{ it.k }}</div>
-                        <b>{{ it.t }}</b>
-                        <span>{{ it.d }}</span>
+                <div class="bp-compatibility">
+                    <article v-for="item in coconutCompatibility" :key="item.t" class="bp-compat-row">
+                        <h3>{{ item.t }}</h3>
+                        <span class="bp-status" :class="item.kind">{{ item.status }}</span>
+                        <p>{{ item.d }}</p>
+                    </article>
+                </div>
+                <p class="bp-note">기본 제공 기능도 서비스 측 연동과 검수가 필요합니다. 사전 검토 항목의 적용 범위와 일정은 환경 확인 후 안내합니다.</p>
+                <details class="bp-detail">
+                    <summary>
+                        연동 기능 자세히 보기
+                        <span class="bp-detail-icon" aria-hidden="true">+</span>
+                    </summary>
+                    <div class="bp-grid-3">
+                        <div v-for="it in coconutIntegrations" :key="it.t" class="bp-int">
+                            <div class="k">{{ it.k }}</div>
+                            <b>{{ it.t }}</b>
+                            <span>{{ it.d }}</span>
+                        </div>
                     </div>
-                </div>
+                </details>
             </div>
         </section>
 
-        <!-- 깊이 읽기 -->
-        <section class="section section--alt">
-            <div class="fb-prose container">
-                <article v-for="sec in solution.sections" :key="sec.h">
-                    <h2>{{ sec.h }}</h2>
-                    <p>{{ sec.body }}</p>
-                </article>
+        <section id="operations" class="section section--alt">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">Operations · 운영 조건</span>
+                    <h2>로그인 이후의 운영까지 함께 설계합니다.</h2>
+                    <p class="lead">계정 정지, 세션 종료, 장애가 발생했을 때 각 서비스가 어떻게 동작할지 확인합니다.</p>
+                </div>
+                <div v-reveal class="bp-fit-grid fb-stagger">
+                    <article v-for="item in coconutOperations" :key="item.t" class="bp-fit-card">
+                        <h3>{{ item.t }}</h3>
+                        <p>{{ item.d }}</p>
+                    </article>
+                </div>
+                <aside class="bp-callout">
+                    <b>외부 서비스의 즉시 차단에는 수신 처리가 필요합니다.</b>
+                    <p>
+                        코코넛의 계정 정지·세션 폐기만으로 외부 서비스의 기존 쿠키와 토큰이 자동으로 사라지지는 않습니다. 수신 서비스가 웹훅을 검증해 자체 세션을 종료하고, 이벤트 누락과 토큰 만료·갱신
+                        시 동작을 함께 확인해야 합니다.
+                    </p>
+                </aside>
             </div>
         </section>
 
@@ -247,11 +325,8 @@
             <div class="fb-split container">
                 <div class="fb-split-side">
                     <span class="eyebrow">Spec · 설치 요구사항</span>
-                    <h2>무엇이 필요하고, 무엇으로 만들었나.</h2>
-                    <p class="bp-lead">
-                        도입 환경에 붙일 수 있는지 판단하실 수 있게 설치 요구사항과 구성 기술을 공개합니다. 계정 데이터베이스는 설치한 서버의 MySQL 에 두고, 문자·이메일 발송(LIME)과 본인인증(NICE)은
-                        각 서비스로 연결됩니다.
-                    </p>
+                    <h2>설치 환경과 운영 규모를 구분해 확인합니다.</h2>
+                    <p class="bp-lead">계정 데이터는 설치 환경의 MySQL에 저장합니다. 문자·이메일과 본인인증은 외부 서비스 연결이 필요하며, 폐쇄망이나 외부 통신 제한이 있다면 먼저 알려주세요.</p>
                 </div>
                 <div>
                     <table class="bp-spec">
@@ -262,9 +337,15 @@
                             </tr>
                         </tbody>
                     </table>
-                    <ul class="fb-chips bp-chips">
-                        <li v-for="t in solution.stack" :key="t">{{ t }}</li>
-                    </ul>
+                    <details class="bp-detail">
+                        <summary>
+                            구성 기술 확인
+                            <span class="bp-detail-icon" aria-hidden="true">+</span>
+                        </summary>
+                        <ul class="fb-chips bp-chips">
+                            <li v-for="t in solution.stack" :key="t">{{ t }}</li>
+                        </ul>
+                    </details>
                 </div>
             </div>
         </section>
@@ -274,8 +355,8 @@
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">Adoption · 도입 절차</span>
-                    <h2>어떻게 진행되나요.</h2>
-                    <p class="lead">현재 회원 구조를 확인한 뒤 단계적 전환 방안을 제안드립니다. 요구사항이 정리되지 않은 상태에서 문의 주셔도 됩니다.</p>
+                    <h2>시범 연동부터 단계적으로 전환합니다.</h2>
+                    <p class="lead">기존 계정과 업무 데이터의 연결을 먼저 확인합니다. 서비스 측 개발 범위와 검수 기준, 전환·원복 조건을 함께 정합니다.</p>
                 </div>
                 <div v-reveal class="fb-step-grid bp-adopt fb-stagger">
                     <div v-for="s in coconutAdoption" :key="s.idx" class="fb-step">
@@ -283,6 +364,32 @@
                         <h3>{{ s.t }}</h3>
                         <p>{{ s.d }}</p>
                     </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="supply" class="section section--alt">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">Scope · 공급과 지원</span>
+                    <h2>비용과 일정은 적용 범위에서 시작합니다.</h2>
+                    <p class="lead">설치·연동·운영에 포함되는 항목을 구분하고, 현재 환경에 맞춰 협의합니다.</p>
+                </div>
+                <div class="bp-fit-grid">
+                    <article v-for="item in coconutSupply" :key="item.t" class="bp-fit-card">
+                        <h3>{{ item.t }}</h3>
+                        <p>{{ item.d }}</p>
+                    </article>
+                </div>
+                <div class="bp-poc">
+                    <div>
+                        <h3>도입 전 확인하고 싶은 흐름이 있나요?</h3>
+                        <p>로그인·추가 인증·계정 정지·로그아웃 등 필요한 시나리오를 알려주세요. 제공 가능한 화면 시연·시범 연동 범위와 일정을 협의합니다.</p>
+                    </div>
+                    <NuxtLink :to="coconutInquiryHref" class="btn btn-primary" @click="trackInquiry('pilot')">
+                        시연·시범 연동 문의
+                        <span aria-hidden="true">→</span>
+                    </NuxtLink>
                 </div>
             </div>
         </section>
@@ -318,12 +425,15 @@
                     <span class="eyebrow">FAQ · 자주 묻는 질문</span>
                     <h2>{{ solution.name }} 도입 전 확인.</h2>
                 </div>
-                <dl class="fb-faq">
-                    <template v-for="item in solution.faq" :key="item.q">
-                        <dt>{{ item.q }}</dt>
-                        <dd>{{ item.a }}</dd>
-                    </template>
-                </dl>
+                <div class="bp-faq">
+                    <details v-for="(item, i) in solution.faq" :key="item.q" class="bp-detail" :open="i === 0">
+                        <summary>
+                            {{ item.q }}
+                            <span class="bp-detail-icon" aria-hidden="true">+</span>
+                        </summary>
+                        <p>{{ item.a }}</p>
+                    </details>
+                </div>
             </div>
         </section>
 
@@ -340,12 +450,12 @@
             </div>
         </section>
 
-        <FbCtaBand :title="`${solution.name} 도입을 검토 중이신가요?`" desc="현재 회원 구조와 연동할 서비스를 알려주시면 전환 방안과 일정을 제안드립니다." />
+        <FbCtaBand :inquiry-to="coconutInquiryHref" :title="`${solution.name} 도입을 검토 중이신가요?`" desc="현재 회원 구조와 연동할 서비스를 알려주시면 전환 방안과 일정을 제안드립니다." />
     </div>
 </template>
 
 <script setup lang="ts">
-import { computed } from 'vue'
+import { computed, ref } from 'vue'
 import { findSolution } from '~/data/solutions'
 import { fbProjects } from '~/data/projects'
 import {
@@ -356,7 +466,13 @@ import {
     coconutFacts,
     coconutLoginSteps,
     coconutTour,
-    coconutTourMini,
+    coconutTerms,
+    coconutFit,
+    coconutJourney,
+    coconutCompatibility,
+    coconutOperations,
+    coconutSupply,
+    coconutInquiryHref,
     coconutSecurity,
     coconutBranding,
     coconutIntegrations,
@@ -375,15 +491,17 @@ definePageMeta({
     layout: 'brand',
     brand: 'coconut',
     brandNav: [
-        { to: '#how', label: '동작 방식' },
+        { to: '#fit', label: '도입 대상' },
+        { to: '#how', label: '이용 흐름' },
         { to: '#console', label: '관리자 콘솔' },
-        { to: '#security', label: '보안' },
         { to: '#integration', label: '연동' },
         { to: '#adoption', label: '도입 절차' },
         { to: '#faq', label: 'FAQ' },
     ],
 })
 
+const journeyStep = ref(0)
+const currentJourney = computed(() => coconutJourney[journeyStep.value]!)
 const solution = findSolution('coconut')!
 const related = computed(() => fbProjects.filter(p => solution.relatedProjects?.includes(p.id)))
 

@@ -7,7 +7,7 @@
                 <p class="lead">{{ desc }}</p>
             </div>
             <div class="fb-cta-actions">
-                <NuxtLink to="/#contact" class="btn btn-primary">
+                <NuxtLink :to="inquiryTo" class="btn btn-primary">
                     상담 문의하기
                     <span class="arw">→</span>
                 </NuxtLink>
@@ -22,10 +22,12 @@ import { fbCompany } from '~/data/company'
 
 withDefaults(
     defineProps<{
+        inquiryTo?: string
         title?: string
         desc?: string
     }>(),
     {
+        inquiryTo: '/#contact',
         title: '어떤 것부터 시작할지 함께 정리해 드립니다.',
         desc: '요구사항이 아직 정리되지 않아도 괜찮습니다. 상황을 알려주시면 적합한 범위와 일정을 제안드립니다.',
     }

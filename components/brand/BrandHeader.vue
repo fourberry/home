@@ -1,5 +1,5 @@
 <template>
-    <header class="site-header brand-header" :class="{ scrolled, 'menu-open': open }">
+    <header @keydown.esc="closeAndFocus" class="site-header brand-header" :class="{ scrolled, 'menu-open': open }">
         <div class="nav container">
             <a class="brand" href="#top" :aria-label="`${solution.name} 맨 위로`" @click="close">
                 <img class="brand-mark" :src="solution.brand!.mark" :alt="`${solution.name} 심볼`" width="28" height="28" />
@@ -12,8 +12,9 @@
                 <NuxtLink to="/" class="home">← 포베리 홈</NuxtLink>
             </nav>
             <div class="nav-cta">
-                <NuxtLink to="/#contact" class="btn btn-primary nav-contact" @click="trackInquiry">도입 문의</NuxtLink>
+                <NuxtLink :to="inquiryTo" class="btn btn-primary nav-contact" @click="trackInquiry">도입 문의</NuxtLink>
                 <button
+                    ref="menuToggle"
                     class="nav-toggle"
                     :class="{ open }"
                     :aria-label="open ? '메뉴 닫기' : '메뉴 열기'"
@@ -27,10 +28,10 @@
                 </button>
             </div>
         </div>
-        <div id="brandMobileMenu" class="mobile-menu" :class="{ open }">
+        <div id="brandMobileMenu" class="mobile-menu" :class="{ open }" :inert="!open">
             <a v-for="item in nav" :key="item.to" :href="item.to" @click="close">{{ item.label }}</a>
             <NuxtLink to="/" class="home" @click="close">← 포베리 홈</NuxtLink>
-            <NuxtLink to="/#contact" class="btn btn-primary" @click="closeAndTrack">도입 문의하기 →</NuxtLink>
+            <NuxtLink :to="inquiryTo" class="btn btn-primary" @click="closeAndTrack">도입 문의하기 →</NuxtLink>
         </div>
     </header>
 </template>
@@ -45,8 +46,16 @@ const props = defineProps<{
     nav: { to: string; label: string }[]
 }>()
 
+const inquiryTo = computed(() => (props.solution.slug === 'coconut' ? '/?solution=coconut#contact-form' : '/#contact'))
+
 // 열림·스크롤 상태와 리스너는 AppHeader 와 같은 composable 을 씁니다.
 const { open, scrolled, close } = useSiteHeader()
+const menuToggle = ref<HTMLButtonElement | null>(null)
+const closeAndFocus = () => {
+    if (!open.value) return
+    close()
+    menuToggle.value?.focus()
+}
 
 // 원페이지·상세 페이지와 같은 이벤트명. 어느 솔루션에 관심이 쏠리는지 파악합니다.
 const trackInquiry = () => {

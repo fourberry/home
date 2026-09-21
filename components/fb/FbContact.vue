@@ -4,7 +4,11 @@
             <div class="contact-grid">
                 <div v-reveal class="contact-head">
                     <span class="eyebrow">Contact · 문의</span>
-                    <h2>성공적인 파트너가<br />기다리고 있습니다.</h2>
+                    <h2>
+                        성공적인 파트너가
+                        <br />
+                        기다리고 있습니다.
+                    </h2>
                     <p class="lead">프로젝트 구축, 솔루션 도입, IT 컨설팅 — 무엇이든 지금 바로 문의하세요.</p>
                     <div class="contact-info">
                         <div class="ci-row">
@@ -13,7 +17,11 @@
                         </div>
                         <div class="ci-row">
                             <div class="ci-k">Address</div>
-                            <div class="ci-v">{{ fbCompany.address.region }} {{ fbCompany.address.locality }} {{ fbCompany.address.road }}<br />{{ fbCompany.address.building }} (선유도 인근)</div>
+                            <div class="ci-v">
+                                {{ fbCompany.address.region }} {{ fbCompany.address.locality }} {{ fbCompany.address.road }}
+                                <br />
+                                {{ fbCompany.address.building }} (선유도 인근)
+                            </div>
                         </div>
                         <div class="ci-row">
                             <div class="ci-k">Tel</div>
@@ -27,8 +35,8 @@
                     <ClientOnly><FbMap /></ClientOnly>
                 </div>
 
-                <form v-reveal class="form-card" @submit.prevent="handleSubmit">
-                    <h3>상담 문의</h3>
+                <form id="contact-form" v-reveal class="form-card" aria-labelledby="contact-form-title" @submit.prevent="handleSubmit">
+                    <h3 id="contact-form-title">{{ isSsoInquiry ? 'SSO 도입 상담' : '상담 문의' }}</h3>
                     <p class="fc-sub">어떤 유형의 상담을 원하시나요? 필수 선택 📌</p>
 
                     <div class="field">
@@ -39,6 +47,7 @@
                                 type="button"
                                 class="chip"
                                 :class="{ on: selectedType === t.value }"
+                                :aria-pressed="selectedType === t.value"
                                 @click="selectedType = t.value"
                             >
                                 {{ t.label }}
@@ -47,7 +56,10 @@
                     </div>
 
                     <div class="field">
-                        <label>관심 서비스 <span class="opt">다중 선택</span></label>
+                        <label>
+                            관심 서비스
+                            <span class="opt">다중 선택</span>
+                        </label>
                         <div class="chips">
                             <button
                                 v-for="s in favoriteServices"
@@ -55,6 +67,7 @@
                                 type="button"
                                 class="chip"
                                 :class="{ on: selectedServices.includes(s.value) }"
+                                :aria-pressed="selectedServices.includes(s.value)"
                                 @click="toggleService(s.value)"
                             >
                                 {{ s.label }}
@@ -62,24 +75,69 @@
                         </div>
                     </div>
 
+                    <fieldset v-if="isSsoInquiry" class="sso-inquiry-fields">
+                        <legend>
+                            SSO 도입 환경
+                            <span>선택 입력</span>
+                        </legend>
+                        <p>현재 확인된 항목만 선택해 주세요. 미정인 내용은 상담에서 함께 정리합니다.</p>
+                        <div class="field">
+                            <label for="sso-services">연동할 서비스 수</label>
+                            <select id="sso-services" v-model="ssoContext.services">
+                                <option value="">미정</option>
+                                <option>1개</option>
+                                <option>2~5개</option>
+                                <option>6개 이상</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="sso-accounts">현재 계정 방식</label>
+                            <select id="sso-accounts" v-model="ssoContext.accounts">
+                                <option value="">미정</option>
+                                <option>서비스별 회원 DB</option>
+                                <option>공통 회원 DB</option>
+                                <option>사내 AD·LDAP / 기존 SSO</option>
+                                <option>신규 구축</option>
+                            </select>
+                        </div>
+                        <div class="field">
+                            <label for="sso-environment">희망 설치 환경</label>
+                            <select id="sso-environment" v-model="ssoContext.environment">
+                                <option value="">미정</option>
+                                <option>고객사 내부 서버</option>
+                                <option>고객사 클라우드</option>
+                                <option>운영 방식 상담 필요</option>
+                            </select>
+                        </div>
+                    </fieldset>
+
                     <div class="form-row">
                         <div class="field">
                             <label for="fb-company">회사/단체명</label>
                             <input id="fb-company" v-model="clientInfo.company" type="text" maxlength="50" placeholder="포베리" />
                         </div>
                         <div class="field">
-                            <label for="fb-name">담당자명 <span class="req">*</span></label>
+                            <label for="fb-name">
+                                담당자명
+                                <span class="req">*</span>
+                            </label>
                             <input id="fb-name" v-model="clientInfo.name" type="text" maxlength="30" placeholder="홍길동" />
                         </div>
                     </div>
 
                     <div class="form-row">
                         <div class="field">
-                            <label for="fb-tel">연락처 <span class="req">*</span></label>
+                            <label for="fb-tel">
+                                연락처
+                                <span class="req">*</span>
+                            </label>
                             <input id="fb-tel" v-model="clientInfo.tel" type="tel" maxlength="11" placeholder="01000000000" />
                         </div>
                         <div class="field">
-                            <label for="fb-email">이메일 <span class="req">*</span></label>
+                            <label for="fb-email">
+                                이메일
+                                <span class="req">*</span>
+                            </label>
                             <input id="fb-email" v-model="clientInfo.email" type="email" maxlength="100" placeholder="name@company.com" />
                         </div>
                     </div>
@@ -106,27 +164,26 @@
                         <textarea
                             id="fb-message"
                             v-model="textareaContent"
-                            maxlength="4000"
-                            placeholder="예: 프로젝트 개요, 요구사항 등 — 구체적인 내용을 적어주시면 이해하는 데 도움이 됩니다."
+                            :maxlength="messageMaxLength"
+                            :placeholder="
+                                isSsoInquiry
+                                    ? '예: 대상 서비스, 기존 회원 이전 여부, 시연에서 확인하고 싶은 로그인 흐름을 알려주세요.'
+                                    : '예: 프로젝트 개요, 요구사항 등 — 구체적인 내용을 적어주시면 이해하는 데 도움이 됩니다.'
+                            "
                         ></textarea>
-                        <div class="field-count">{{ textareaContent.length }}/4000자</div>
+                        <div class="field-count">{{ textareaContent.length }}/{{ messageMaxLength }}자</div>
                     </div>
 
                     <div class="field fb-upload">
                         <label>파일 첨부</label>
-                        <FormFileUpload
-                            id="fb-files"
-                            v-model="selectedFiles"
-                            label="파일 선택 (선택)"
-                            :max-files="5"
-                            :max-size-mb="10"
-                        />
+                        <FormFileUpload id="fb-files" v-model="selectedFiles" label="파일 선택 (선택)" :max-files="5" :max-size-mb="10" />
                     </div>
 
                     <div class="field agree">
                         <input id="fb-privacy" v-model="isPrivacyAgreed" type="checkbox" />
                         <label for="fb-privacy">
-                            <a href="#" @click.prevent="showPrivacy = true">개인정보보호정책</a>에 동의합니다.
+                            <a href="#" @click.prevent="showPrivacy = true">개인정보보호정책</a>
+                            에 동의합니다.
                             <span class="req">*</span>
                         </label>
                     </div>
@@ -145,111 +202,141 @@
 
         <FbDialog :show="showPrivacy" title="개인정보보호정책" @close="showPrivacy = false">
             <p>
-                <b>제1조 (총칙)</b><br />
-                주식회사 포베리(이하 '회사'라 함)는 이용자의 개인정보를 중요시하며, '개인정보 보호법', '정보통신망 이용촉진
-                및 정보보호 등에 관한 법률' 등 관련 법령을 준수하고 있습니다.
-            </p>
-            <p>
-                <b>제2조 (수집하는 개인정보의 항목)</b><br />
-                회사는 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.<br />
-                - 필수항목 : 담당자명, 연락처, 이메일<br />
-                - 선택항목 : 회사/단체명, 상담내용, 첨부파일<br />
+                <b>제1조 (총칙)</b>
                 <br />
-                또한 서비스 이용 과정에서 아래 정보가 자동으로 생성·수집될 수 있습니다.<br />
-                - 방문 일시, 방문한 페이지 및 이용 기록, 브라우저 및 기기 정보(OS·화면 크기 등), 접속 국가·도시 수준의 지역
-                정보, 유입 경로, 쿠키를 통해 생성된 식별자
+                주식회사 포베리(이하 '회사'라 함)는 이용자의 개인정보를 중요시하며, '개인정보 보호법', '정보통신망 이용촉진 및 정보보호 등에 관한 법률' 등 관련 법령을 준수하고 있습니다.
             </p>
             <p>
-                <b>제3조 (개인정보의 수집 및 이용목적)</b><br />
-                회사는 수집한 개인정보를 다음의 목적을 위해 활용합니다.<br />
-                - 서비스 제공에 관한 계약 이행 및 서비스 제공에 따른 요금정산<br />
-                - 콘텐츠 제공, 구매 및 요금 결제, 물품배송 또는 청구지 등 발송<br />
-                - 회원 관리: 본인확인, 개인 식별, 부정 이용 방지, 민원처리, 고지사항 전달<br />
+                <b>제2조 (수집하는 개인정보의 항목)</b>
+                <br />
+                회사는 상담, 서비스 신청 등을 위해 아래와 같은 개인정보를 수집하고 있습니다.
+                <br />
+                - 필수항목 : 담당자명, 연락처, 이메일
+                <br />
+                - 선택항목 : 회사/단체명, 상담내용, 첨부파일
+                <br />
+                <br />
+                또한 서비스 이용 과정에서 아래 정보가 자동으로 생성·수집될 수 있습니다.
+                <br />
+                - 방문 일시, 방문한 페이지 및 이용 기록, 브라우저 및 기기 정보(OS·화면 크기 등), 접속 국가·도시 수준의 지역 정보, 유입 경로, 쿠키를 통해 생성된 식별자
+            </p>
+            <p>
+                <b>제3조 (개인정보의 수집 및 이용목적)</b>
+                <br />
+                회사는 수집한 개인정보를 다음의 목적을 위해 활용합니다.
+                <br />
+                - 서비스 제공에 관한 계약 이행 및 서비스 제공에 따른 요금정산
+                <br />
+                - 콘텐츠 제공, 구매 및 요금 결제, 물품배송 또는 청구지 등 발송
+                <br />
+                - 회원 관리: 본인확인, 개인 식별, 부정 이용 방지, 민원처리, 고지사항 전달
+                <br />
                 - 마케팅 및 광고에 활용: 신규 서비스 개발, 이벤트 등 광고성 정보 전달, 이용 통계
             </p>
             <p>
-                <b>제4조 (개인정보의 보유 및 이용기간)</b><br />
-                회사는 원칙적으로 개인정보의 수집·이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 다만 아래의
-                경우에는 명시한 기간 동안 보존합니다.<br />
-                - 문의·상담 기록 : 문의 처리 완료 후 3년<br />
+                <b>제4조 (개인정보의 보유 및 이용기간)</b>
+                <br />
+                회사는 원칙적으로 개인정보의 수집·이용 목적이 달성된 후에는 해당 정보를 지체 없이 파기합니다. 다만 아래의 경우에는 명시한 기간 동안 보존합니다.
+                <br />
+                - 문의·상담 기록 : 문의 처리 완료 후 3년
+                <br />
                 - 관련 법령에서 보존을 요구하는 경우 : 해당 법령에서 정한 기간
             </p>
             <p>
-                <b>제5조 (개인정보의 파기절차 및 방법)</b><br />
-                ① 파기절차 : 보유기간이 경과하거나 처리목적이 달성된 개인정보는 지체 없이(정당한 사유가 없는 한 5일 이내)
-                파기합니다.<br />
+                <b>제5조 (개인정보의 파기절차 및 방법)</b>
                 <br />
-                ② 파기방법 : 전자적 파일 형태로 저장된 개인정보는 복구·재생할 수 없는 기술적 방법으로 영구 삭제하며, 종이
-                문서에 기록된 개인정보는 분쇄하거나 소각하여 파기합니다.
+                ① 파기절차 : 보유기간이 경과하거나 처리목적이 달성된 개인정보는 지체 없이(정당한 사유가 없는 한 5일 이내) 파기합니다.
+                <br />
+                <br />
+                ② 파기방법 : 전자적 파일 형태로 저장된 개인정보는 복구·재생할 수 없는 기술적 방법으로 영구 삭제하며, 종이 문서에 기록된 개인정보는 분쇄하거나 소각하여 파기합니다.
             </p>
             <p>
-                <b>제6조 (정보주체의 권리·의무 및 행사방법)</b><br />
-                ① 이용자는 언제든지 자신의 개인정보에 대한 열람·정정·삭제·처리정지를 회사에 요구할 수 있습니다.<br />
+                <b>제6조 (정보주체의 권리·의무 및 행사방법)</b>
                 <br />
-                ② 제1항에 따른 권리 행사는 서면, 이메일 등을 통하여 하실 수 있으며, 회사는 이에 대해 지체 없이
-                조치합니다.<br />
+                ① 이용자는 언제든지 자신의 개인정보에 대한 열람·정정·삭제·처리정지를 회사에 요구할 수 있습니다.
                 <br />
-                ③ 권리 행사는 이용자의 법정대리인이나 위임을 받은 자 등 대리인을 통하여도 하실 수 있습니다.<br />
+                <br />
+                ② 제1항에 따른 권리 행사는 서면, 이메일 등을 통하여 하실 수 있으며, 회사는 이에 대해 지체 없이 조치합니다.
+                <br />
+                <br />
+                ③ 권리 행사는 이용자의 법정대리인이나 위임을 받은 자 등 대리인을 통하여도 하실 수 있습니다.
+                <br />
                 <br />
                 ④ 개인정보의 열람 및 처리정지 요구는 관련 법령에서 정하는 바에 따라 제한될 수 있습니다.
             </p>
             <p>
-                <b>제7조 (쿠키 등 자동수집장치의 설치·운영 및 거부)</b><br />
-                ① 회사는 웹사이트 이용 통계를 분석하기 위해 Google LLC의 Google Analytics를 사용하며, 이 과정에서
-                쿠키(cookie)를 사용합니다.<br />
+                <b>제7조 (쿠키 등 자동수집장치의 설치·운영 및 거부)</b>
                 <br />
-                ② 쿠키는 웹사이트가 이용자의 브라우저에 저장하는 작은 텍스트 파일로, 회사는 이를 통해 방문자 수·이용 패턴 등을
-                파악하여 서비스 개선에 활용합니다. 이름·연락처·이메일 등 개인을 식별할 수 있는 정보는 Google Analytics로
-                전송하지 않습니다.<br />
+                ① 회사는 웹사이트 이용 통계를 분석하기 위해 Google LLC의 Google Analytics를 사용하며, 이 과정에서 쿠키(cookie)를 사용합니다.
                 <br />
-                ③ 이용자는 쿠키 설치에 대한 선택권을 가지며, 아래 방법으로 이를 거부할 수 있습니다.<br />
-                - 브라우저 설정에서 쿠키 저장을 거부하거나 저장 시마다 확인을 거치도록 변경<br />
-                - Google Analytics 차단 브라우저 부가기능 설치 (<a
-                    href="https://tools.google.com/dlpage/gaoptout"
-                    target="_blank"
-                    rel="noopener noreferrer"
-                    >tools.google.com/dlpage/gaoptout</a
-                >)<br />
+                <br />
+                ② 쿠키는 웹사이트가 이용자의 브라우저에 저장하는 작은 텍스트 파일로, 회사는 이를 통해 방문자 수·이용 패턴 등을 파악하여 서비스 개선에 활용합니다. 이름·연락처·이메일 등 개인을 식별할 수
+                있는 정보는 Google Analytics로 전송하지 않습니다.
+                <br />
+                <br />
+                ③ 이용자는 쿠키 설치에 대한 선택권을 가지며, 아래 방법으로 이를 거부할 수 있습니다.
+                <br />
+                - 브라우저 설정에서 쿠키 저장을 거부하거나 저장 시마다 확인을 거치도록 변경
+                <br />
+                - Google Analytics 차단 브라우저 부가기능 설치 (
+                <a href="https://tools.google.com/dlpage/gaoptout" target="_blank" rel="noopener noreferrer">tools.google.com/dlpage/gaoptout</a>
+                )
+                <br />
                 <br />
                 ④ 다만 쿠키 저장을 거부할 경우 웹사이트 일부 기능의 이용에 어려움이 있을 수 있습니다.
             </p>
             <p>
-                <b>제8조 (개인정보의 국외 이전)</b><br />
-                회사는 웹사이트 이용 통계 분석을 위해 아래와 같이 개인정보를 국외로 이전하고 있습니다.<br />
-                - 이전받는 자 : Google LLC<br />
-                - 이전 국가 : 미국<br />
-                - 이전 항목 : 쿠키를 통해 생성된 식별자, 방문 일시 및 페이지 이용 기록, 브라우저·기기 정보, 접속 지역 정보<br />
-                - 이전 일시 및 방법 : 서비스 이용 시점에 네트워크를 통해 전송<br />
-                - 이용 목적 : 웹사이트 이용 통계 분석 및 서비스 개선<br />
+                <b>제8조 (개인정보의 국외 이전)</b>
+                <br />
+                회사는 웹사이트 이용 통계 분석을 위해 아래와 같이 개인정보를 국외로 이전하고 있습니다.
+                <br />
+                - 이전받는 자 : Google LLC
+                <br />
+                - 이전 국가 : 미국
+                <br />
+                - 이전 항목 : 쿠키를 통해 생성된 식별자, 방문 일시 및 페이지 이용 기록, 브라우저·기기 정보, 접속 지역 정보
+                <br />
+                - 이전 일시 및 방법 : 서비스 이용 시점에 네트워크를 통해 전송
+                <br />
+                - 이용 목적 : 웹사이트 이용 통계 분석 및 서비스 개선
+                <br />
                 - 보유·이용 기간 : 이벤트 데이터 2개월, 사용자 데이터 14개월(재방문 시 갱신)
             </p>
             <p>
-                <b>제9조 (개인정보 보호책임자)</b><br />
-                ① 회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제를
-                위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.<br />
-                - 성명 · 직책 : 우대식 / 대표이사<br />
-                - 연락처 : 010-2755-0650, fourberry@fourberry.co.kr<br />
+                <b>제9조 (개인정보 보호책임자)</b>
                 <br />
-                ② 이용자는 서비스를 이용하면서 발생한 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보
-                보호책임자에게 문의하실 수 있습니다.<br />
+                ① 회사는 개인정보 처리에 관한 업무를 총괄해서 책임지고, 개인정보 처리와 관련한 이용자의 불만처리 및 피해구제를 위하여 아래와 같이 개인정보 보호책임자를 지정하고 있습니다.
                 <br />
-                ③ 개인정보 침해에 대한 신고나 상담이 필요한 경우 아래 기관에 문의하실 수 있습니다.<br />
-                - 개인정보침해신고센터 (privacy.kisa.or.kr / 국번없이 118)<br />
-                - 개인정보 분쟁조정위원회 (kopico.go.kr / 1833-6972)<br />
-                - 대검찰청 사이버범죄수사단 (spo.go.kr / 1301)<br />
+                - 성명 · 직책 : 우대식 / 대표이사
+                <br />
+                - 연락처 : 010-2755-0650, fourberry@fourberry.co.kr
+                <br />
+                <br />
+                ② 이용자는 서비스를 이용하면서 발생한 개인정보 보호 관련 문의, 불만처리, 피해구제 등에 관한 사항을 개인정보 보호책임자에게 문의하실 수 있습니다.
+                <br />
+                <br />
+                ③ 개인정보 침해에 대한 신고나 상담이 필요한 경우 아래 기관에 문의하실 수 있습니다.
+                <br />
+                - 개인정보침해신고센터 (privacy.kisa.or.kr / 국번없이 118)
+                <br />
+                - 개인정보 분쟁조정위원회 (kopico.go.kr / 1833-6972)
+                <br />
+                - 대검찰청 사이버범죄수사단 (spo.go.kr / 1301)
+                <br />
                 - 경찰청 사이버수사국 (ecrm.police.go.kr / 국번없이 182)
             </p>
             <p>
-                <b>제10조 (개인정보 처리방침의 변경)</b><br />
-                이 개인정보 처리방침은 2026년 8월 12일부터 적용됩니다. 법령·정책 또는 보안기술의 변경에 따라 내용의 추가·삭제
-                및 수정이 있을 경우에는 변경사항의 시행일 최소 7일 전부터 웹사이트를 통하여 고지합니다.
+                <b>제10조 (개인정보 처리방침의 변경)</b>
+                <br />
+                이 개인정보 처리방침은 2026년 8월 12일부터 적용됩니다. 법령·정책 또는 보안기술의 변경에 따라 내용의 추가·삭제 및 수정이 있을 경우에는 변경사항의 시행일 최소 7일 전부터 웹사이트를
+                통하여 고지합니다.
             </p>
         </FbDialog>
     </section>
 </template>
 
 <script setup lang="ts">
-import { ref } from 'vue'
+import { computed, onMounted, ref, watch } from 'vue'
 import FormFileUpload from '~/components/contact/FormFileUpload.vue'
 import { fbCompany } from '~/data/company'
 
@@ -297,6 +384,32 @@ const selectedSchedule = ref('')
 const textareaContent = ref('')
 const selectedFiles = ref<File[]>([])
 const isPrivacyAgreed = ref(false)
+const route = useRoute()
+const ssoContext = ref({ services: '', accounts: '', environment: '' })
+const isSsoInquiry = computed(() => selectedServices.value.includes('SERVICE_01'))
+const ssoSummary = computed(() => {
+    if (!isSsoInquiry.value) return ''
+    const entries = [
+        ['연동 서비스 수', ssoContext.value.services],
+        ['현재 계정 방식', ssoContext.value.accounts],
+        ['희망 설치 환경', ssoContext.value.environment],
+    ]
+    const values = entries.filter(([, value]) => value).map(([label, value]) => label + ': ' + value)
+    return values.length ? '[SSO 도입 환경]\n' + values.join('\n') + '\n\n' : ''
+})
+const messageMaxLength = computed(() => 4000 - ssoSummary.value.length)
+// 정적 페이지의 hydration 이후에만 URL의 상담 맥락을 적용합니다. 이미 입력한 선택은 보존합니다.
+onMounted(() => {
+    watch(
+        () => route.query.solution,
+        value => {
+            if (value !== 'coconut') return
+            if (!selectedType.value) selectedType.value = 'TYPE_03'
+            if (!selectedServices.value.length) selectedServices.value = ['SERVICE_01']
+        },
+        { immediate: true }
+    )
+})
 const isLoading = ref(false)
 
 const clientInfo = ref({ company: '', name: '', tel: '', email: '' })
@@ -342,6 +455,7 @@ const resetForm = () => {
     selectedBudget.value = ''
     selectedSchedule.value = ''
     textareaContent.value = ''
+    ssoContext.value = { services: '', accounts: '', environment: '' }
     selectedFiles.value = []
     isPrivacyAgreed.value = false
     clientInfo.value = { company: '', name: '', tel: '', email: '' }
@@ -365,6 +479,10 @@ const validateForm = (): boolean => {
     }
     if (!clientInfo.value.email.trim() || !emailRegex.test(clientInfo.value.email)) {
         openModal('입력 확인', '유효한 이메일을 입력해주세요.', 'validation')
+        return false
+    }
+    if (textareaContent.value.length > messageMaxLength.value) {
+        openModal('입력 확인', '도입 환경을 포함한 문의 내용은 4000자 이내로 작성해 주세요.', 'validation')
         return false
     }
     if (!isPrivacyAgreed.value) {
@@ -441,7 +559,7 @@ const handleSubmit = async () => {
                 services: serviceLabels,
                 budget: budgetLabel,
                 schedule: scheduleLabel,
-                message: textareaContent.value || 'N/A',
+                message: (ssoSummary.value + textareaContent.value).trim() || 'N/A',
                 attachmentNames: attachments.length > 0 ? attachments.map(a => a.filename).join(', ') : '없음',
             },
             attachments,
@@ -475,3 +593,35 @@ const handleSubmit = async () => {
     }
 }
 </script>
+
+<style scoped>
+#contact-form {
+    scroll-margin-top: 90px;
+}
+.sso-inquiry-fields {
+    margin: 0 0 24px;
+    padding: 18px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    min-width: 0;
+}
+.sso-inquiry-fields legend {
+    padding: 0 6px;
+    font-weight: 600;
+    font-size: 14px;
+}
+.sso-inquiry-fields legend span {
+    margin-left: 8px;
+    color: var(--ink-3);
+    font-weight: 400;
+    font-size: 12px;
+}
+.sso-inquiry-fields > p {
+    color: var(--ink-2);
+    font-size: 13px;
+    margin: 0 0 16px;
+}
+.sso-inquiry-fields .field:last-child {
+    margin-bottom: 0;
+}
+</style>

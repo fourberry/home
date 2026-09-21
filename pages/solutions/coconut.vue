@@ -39,16 +39,31 @@
             </div>
         </section>
 
-        <!-- 문제 상황 -->
+        <!-- 문제 상황 → 도입 후. 좌우 분할(fb-split)은 왼쪽이 비어 허전해서 대응표로 바꿨습니다. -->
         <section class="section section--alt">
-            <div class="fb-split container">
-                <div class="fb-split-side">
+            <div class="container">
+                <div class="section-head">
                     <span class="eyebrow">Problem · 이런 상황이라면</span>
                     <h2>서비스마다 로그인을 다시 만들고 계신가요.</h2>
                 </div>
-                <ul class="fb-problems">
-                    <li v-for="p in solution.problems" :key="p">{{ p }}</li>
-                </ul>
+                <div class="bp-compare" role="table" aria-label="도입 전후 비교">
+                    <div class="bp-compare-head" role="row">
+                        <span role="columnheader">지금</span>
+                        <span aria-hidden="true"></span>
+                        <span role="columnheader" class="is-after">{{ solution.name }} 도입 후</span>
+                    </div>
+                    <div v-for="(row, i) in coconutProblems" :key="row.after" class="bp-compare-row" role="row">
+                        <div class="bp-compare-now" role="cell">
+                            <span class="idx">{{ String(i + 1).padStart(2, '0') }}</span>
+                            <p>{{ row.now }}</p>
+                        </div>
+                        <span class="bp-compare-arrow" aria-hidden="true">→</span>
+                        <div class="bp-compare-after" role="cell">
+                            <b>{{ row.after }}</b>
+                            <span>{{ row.how }}</span>
+                        </div>
+                    </div>
+                </div>
             </div>
         </section>
 
@@ -337,6 +352,7 @@ import {
     coconutBrochure,
     coconutHero,
     coconutOgImage,
+    coconutProblems,
     coconutFacts,
     coconutLoginSteps,
     coconutTour,

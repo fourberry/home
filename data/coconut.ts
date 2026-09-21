@@ -19,6 +19,33 @@ export const coconutOgImage = `${IMG}/cover.jpg`
 /** 고객 배포용 제품 설명서(PDF, 14쪽). 원본: coconut/output/pdf/Coconut-제품설명서-공통배포용.pdf */
 export const coconutBrochure = '/docs/coconut-product-guide.pdf'
 
+/**
+ * 문제 상황 → 도입 후. 왼쪽 문제는 data/solutions.ts 의 problems 와 같은 문장이고,
+ * 오른쪽은 README 에 있는 기능(SSO 토큰 검증 · 표준 흐름 · 클라이언트별 MFA · 관리자 콘솔)만 적습니다.
+ */
+export const coconutProblems = [
+    {
+        now: '서비스마다 회원 테이블이 따로 있어, 같은 고객이 계정을 여러 개 들고 있습니다.',
+        after: '계정 하나로 모든 서비스에 로그인',
+        how: '회원 정보는 COCONUT 한 곳에 두고, 서비스는 토큰만 확인합니다.',
+    },
+    {
+        now: '신규 서비스를 붙일 때마다 로그인·비밀번호 찾기·세션 관리를 처음부터 다시 만듭니다.',
+        after: '표준 OAuth2·OIDC 흐름에 연결만',
+        how: '로그인·비밀번호 찾기·회원가입 화면은 COCONUT 이 제공합니다.',
+    },
+    {
+        now: '보안 요건 때문에 2단계 인증을 넣어야 하는데 서비스별로 각각 구현해야 합니다.',
+        after: '2단계 인증은 인가 서버가 처리',
+        how: 'SMS·이메일·OTP 앱을 클라이언트별 설정으로 켭니다. 서비스 코드는 그대로입니다.',
+    },
+    {
+        now: '어떤 계정이 어떤 서비스에 접근할 수 있는지 한눈에 파악할 방법이 없습니다.',
+        after: '관리자 콘솔에서 한눈에',
+        how: '테넌트·클라이언트·사용자와 로그인 이력을 한 화면에서 보고 즉시 차단합니다.',
+    },
+]
+
 /** 히어로 아래 한 줄 요약 4개 */
 export const coconutFacts = [
     { k: 'OAuth2 · OIDC', v: '표준 인가 서버' },

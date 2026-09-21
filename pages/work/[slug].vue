@@ -32,7 +32,7 @@
             <div class="fb-split container">
                 <div class="fb-split-side">
                     <span class="eyebrow">Scope · 수행 범위</span>
-                    <h2>포베리가 한 일.</h2>
+                    <h2>수행 범위.</h2>
                 </div>
                 <ol class="fb-scope">
                     <li v-for="s in project.scope" :key="s">{{ s }}</li>

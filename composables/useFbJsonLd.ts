@@ -38,7 +38,7 @@ export const orgJsonLd = (): JsonLdNode => ({
     email: fbCompany.email,
     telephone: fbCompany.tel,
     foundingDate: fbCompany.foundingDate,
-    founder: { '@type': 'Person', name: fbCompany.ceo },
+    // 대표자 정보만으로 창업자(founder)를 단정하지 않습니다.
     address: {
         '@type': 'PostalAddress',
         addressCountry: 'KR',
@@ -78,10 +78,10 @@ export const webSiteJsonLd = (): JsonLdNode => ({
 /**
  * 자주 묻는 질문.
  *
- * ⚠️ 기대치: FAQ 리치 결과(검색 결과에 질문이 펼쳐 보이는 것)는 구글이 2023년에
- * 정부·의료 사이트로 제한해서 일반 기업 사이트에는 거의 표시되지 않습니다.
- * 그래도 페이지 주제를 정확히 전달하는 값어치가 있어 넣습니다.
- * 반드시 화면에 실제로 보이는 질문/답변과 같아야 합니다(다르면 스팸으로 판단됩니다).
+ * Google의 FAQ 리치 결과는 2026-05-07부터 검색 결과에 표시되지 않습니다.
+ * 출처: https://developers.google.com/search/updates (2026년 5월 8일 공지)
+ * 이 데이터는 화면의 문답을 기계가 읽을 수 있도록 표현하며, AI 인용을 보장하지 않습니다.
+ * 반드시 사용자가 페이지에서 읽을 수 있는 질문·답변과 같아야 합니다.
  */
 export const faqJsonLd = (items: FbFaqItem[]): JsonLdNode => ({
     '@context': 'https://schema.org',
@@ -112,7 +112,7 @@ export const solutionJsonLd = (s: FbSolution): JsonLdNode => ({
     name: s.name,
     alternateName: s.ko,
     applicationCategory: s.category,
-    operatingSystem: 'Web',
+    // 웹 서비스·데스크톱 관리 앱의 지원 OS를 하나의 값으로 추정하지 않습니다.
     description: s.seoDescription,
     url: abs(`/solutions/${s.slug}`),
     image: SITE_URL + s.image,

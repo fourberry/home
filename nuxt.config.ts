@@ -1,6 +1,6 @@
 // https://nuxt.com/docs/api/configuration/nuxt-config
 import { defineNuxtConfig } from 'nuxt/config'
-import { SITE_URL, SITE_TITLE_SUFFIX, SITE_OG_IMAGE } from './data/company'
+import { SITE_URL, SITE_TITLE_SUFFIX, SITE_OG_IMAGE, SITE_DESCRIPTION } from './data/company'
 import { fbSolutions } from './data/solutions'
 import { fbProjects } from './data/projects'
 
@@ -23,16 +23,7 @@ export default defineNuxtConfig({
     // 로컬 개발 서버 포트. 3000 은 다른 프로젝트와 충돌하므로 4000 을 사용합니다.
     devServer: { port: 4000 },
 
-    modules: [
-        '@nuxtjs/tailwindcss',
-        'nuxt-swiper',
-        ['@nuxt/image', { format: ['webp', 'avif'] }],
-        '@vueuse/nuxt',
-        'unplugin-icons/nuxt',
-        '@vueuse/motion/nuxt',
-        '@nuxtjs/sitemap',
-        'nuxt-gtag',
-    ],
+    modules: ['@nuxtjs/tailwindcss', 'nuxt-swiper', ['@nuxt/image', { format: ['webp', 'avif'] }], '@vueuse/nuxt', 'unplugin-icons/nuxt', '@vueuse/motion/nuxt', '@nuxtjs/sitemap', 'nuxt-gtag'],
 
     // ✅ Google Analytics 4 (nuxt-gtag)
     //  - 원페이지 사이트라 페이지뷰보다 문의 폼 전환(generate_lead)이 핵심 지표입니다.
@@ -90,13 +81,7 @@ export default defineNuxtConfig({
             crawlLinks: true,
             // 끝의 슬래시는 canonical·sitemap·내부 링크와 같은 형태입니다.
             // 빼면 같은 페이지를 두 주소로 두 번 프리렌더하게 됩니다.
-            routes: [
-                '/solutions/',
-                '/work/',
-                '/services/si-sm/',
-                ...fbSolutions.map(s => `/solutions/${s.slug}/`),
-                ...fbProjects.map(p => `/work/${p.id}/`),
-            ],
+            routes: ['/solutions/', '/work/', '/services/si-sm/', '/how-we-work/', ...fbSolutions.map(s => `/solutions/${s.slug}/`), ...fbProjects.map(p => `/work/${p.id}/`)],
         },
     },
 
@@ -111,12 +96,11 @@ export default defineNuxtConfig({
                 { charset: 'utf-8' },
                 {
                     name: 'description',
-                    content:
-                        'IT와 AI의 결합으로 새로운 가치를 창출하는 포베리(Fourberry). 인공지능(AI) 솔루션 개발, SI/SM 시스템 통합, 빅데이터 분석 및 맞춤형 소프트웨어 컨설팅을 제공합니다.',
+                    content: SITE_DESCRIPTION,
                 },
                 {
                     name: 'keywords',
-                    content: '포베리, Fourberry, AI, 인공지능, AI 솔루션, AI 개발, 딥러닝, 머신러닝, SI, SM, 시스템 통합, IT 컨설팅, 웹 개발',
+                    content: '포베리, Fourberry, AI 활용 개발, SI, SM, 시스템 통합, IT 컨설팅, 웹 개발, SSO, 메시징, 업무 자동화',
                 },
                 { name: 'naver-site-verification', content: 'dbb8fecd579367cf06f6d9c76589b36d6f59738a' },
                 { name: 'google-site-verification', content: '7cGSanoPk5RmyIUaeIFy6yyajvN1-BA8QccITOXgtyY' },
@@ -126,7 +110,7 @@ export default defineNuxtConfig({
                 { property: 'og:type', content: 'website' },
                 { property: 'og:site_name', content: '(주)포베리' },
                 { property: 'og:title', content: SITE_TITLE_SUFFIX },
-                { property: 'og:description', content: '혁신적인 AI 기술과 안정적인 IT 서비스로 비즈니스의 성공을 돕습니다.' },
+                { property: 'og:description', content: SITE_DESCRIPTION },
                 { property: 'og:image', content: SITE_URL + SITE_OG_IMAGE },
                 { property: 'og:url', content: SITE_URL },
             ],

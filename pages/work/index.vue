@@ -48,8 +48,7 @@ const crumbs = [
 
 useFbSeo({
     title: 'SI 구축 · SM 운영 수행 실적',
-    description:
-        '포베리가 수행한 SI 구축·SM 운영 프로젝트입니다. OMS·차세대 영업관리 시스템, 브랜드몰과 통합 인증(SSO), 자동차 사이버보안(K-CSMS) 대응 시스템, 무중단 DB 전환 등의 실적을 확인하실 수 있습니다.',
+    description: '포베리의 시스템 구축·운영 실적과 구성원의 이전 구축 경험을 소개합니다. 쿠쿠 OMS, 브랜드몰·SSO, 자동차 사이버보안 대응 시스템, DB 전환 등의 수행 주체와 범위를 확인하세요.',
     path: '/work',
 })
 </script>

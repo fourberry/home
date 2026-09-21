@@ -64,6 +64,8 @@ img{max-width:100%;display:block}
 .section--ink .btn-ghost:hover{border-color:var(--ink-fg);color:var(--ink-fg)}
 .btn .arw{transition:transform .2s ease}
 .btn:hover .arw{transform:translateX(3px)}
+.btn:focus-visible{outline:3px solid var(--accent);outline-offset:4px}
+.section--ink .btn:focus-visible{outline-color:var(--ink-accent)}
 
 /* ---------- media helpers ---------- */
 .slot-img{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;display:block;z-index:0}
@@ -342,7 +344,7 @@ img{max-width:100%;display:block}
 @media (prefers-reduced-motion:reduce){
   .reveal{opacity:1;transform:none;transition:none}
   .marquee{animation:none}
-  .fb-stagger > *{opacity:1;transform:none;transition:none}
+  .fb-stagger.reveal > *{opacity:1;transform:none;transition:none}
   .sol-media .slot-img,.work-thumb .slot-img,.cul-img .slot-img{transition:none}
   .sol-card:hover .sol-media .slot-img,
   .work-card:hover .work-thumb .slot-img,

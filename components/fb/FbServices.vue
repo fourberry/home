@@ -3,10 +3,12 @@
         <div class="container">
             <div v-reveal class="section-head">
                 <span class="eyebrow">Service · 사업영역</span>
-                <h2>기술로 연결하고,<br />혁신으로 성장합니다.</h2>
-                <p class="lead">
-                    시스템 자동화, 맞춤형 솔루션, AI 연구개발, IT 컨설팅을 통해 기업의 디지털 전환을 앞당깁니다.
-                </p>
+                <h2>
+                    기술로 연결하고,
+                    <br />
+                    혁신으로 성장합니다.
+                </h2>
+                <p class="lead">시스템 자동화와 맞춤형 솔루션, IT 컨설팅을 제공합니다. 개발 과정에는 AI를 활용하고, 요구사항과 검증 결과를 함께 관리합니다.</p>
             </div>
             <div v-reveal class="svc-grid">
                 <div v-for="s in services" :key="s.idx" class="svc">
@@ -36,9 +38,9 @@ const services = [
     },
     {
         idx: '03',
-        ko: 'AI · 빅데이터 R&D',
-        en: 'AI & Big Data R&D',
-        desc: '데이터 기반의 인공지능 기술과 산학협력을 통해 혁신적인 연구개발을 이어갑니다.',
+        ko: 'AI 활용 개발',
+        en: 'AI-Assisted Development',
+        desc: '요구사항 정리부터 구현·테스트까지 AI를 활용합니다. 회사 공통 개발 기준과 프로젝트별 규칙에 따라 검토하고 반영합니다.',
     },
     {
         idx: '04',

@@ -4,6 +4,7 @@
         <FbPartners />
         <FbAbout />
         <FbServices />
+        <FbAiWorkflow />
         <FbSolutions />
         <FbWork />
         <FbValues />
@@ -15,10 +16,11 @@
 
 <script setup lang="ts">
 import { fbFaq } from '~/data/faq'
+import { SITE_DESCRIPTION } from '~/data/company'
 
 useFbSeo({
     title: '홈',
-    description: 'IT와 AI의 결합으로 새로운 가치를 창출하는 포베리(Fourberry). 인공지능(AI) 솔루션 개발, SI/SM 시스템 통합, 빅데이터 분석 및 맞춤형 소프트웨어 컨설팅을 제공합니다.',
+    description: SITE_DESCRIPTION,
     path: '/',
 })
 

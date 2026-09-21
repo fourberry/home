@@ -10,7 +10,11 @@ export const SITE_URL = 'https://www.fourberry.co.kr'
 export const SITE_NAME = '(주)포베리'
 
 /** <title> 뒤에 붙는 공통 접미사 (nuxt.config 의 titleTemplate 과 동일) */
-export const SITE_TITLE_SUFFIX = 'AI 솔루션 & SI 전문 기업 (주)포베리'
+export const SITE_TITLE_SUFFIX = 'SI·SM · AI 활용 개발 기업 (주)포베리'
+
+/** 홈과 전역 메타에서 함께 사용하는 회사 소개 */
+export const SITE_DESCRIPTION =
+    '포베리는 시스템 구축·운영과 인증·메시징·자동화 솔루션을 제공합니다. AI 활용 경험을 회사 공통 개발 기준으로 확장해 레몬을 개발하며, 요구사항·코드 검토·테스트로 변경을 관리합니다.'
 
 /** OG 이미지 기본값 */
 export const SITE_OG_IMAGE = '/og/cover.jpg'

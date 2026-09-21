@@ -15,7 +15,7 @@
                     <h5>Company</h5>
                     <NuxtLink to="/#about">회사소개</NuxtLink>
                     <NuxtLink to="/#services">서비스</NuxtLink>
-                    <NuxtLink to="/how-we-work/">AI와 일하는 방식</NuxtLink>
+                    <NuxtLink to="/how-we-work/">AI와 함께 개발하는 방식</NuxtLink>
                     <NuxtLink to="/#culture">컬처</NuxtLink>
                     <NuxtLink to="/#faq">FAQ</NuxtLink>
                 </div>

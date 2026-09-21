@@ -59,7 +59,7 @@ export default defineNuxtConfig({
         messageApiKey: process.env.MESSAGE_API_KEY || '',
         contactRecipients:
             process.env.CONTACT_RECIPIENTS ||
-            'briskly0415@fourberry.co.kr,won567567@fourberry.co.kr,lsj8376@fourberry.co.kr,damon@fourberry.co.kr',
+            'damon@fourberry.co.kr,briskly0415@fourberry.co.kr,dodam@fourberry.co.kr,hjyoon@fourberry.co.kr,hahahagh@fourberry.co.kr,jmchoi@fourberry.co.kr,won567567@fourberry.co.kr,lsj8376@fourberry.co.kr',
         public: {
             contactEndpoint: process.env.NUXT_PUBLIC_CONTACT_ENDPOINT || '/api/contact',
         },

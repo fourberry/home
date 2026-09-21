@@ -127,6 +127,26 @@ cd /opt/fb-contact && cp server.js.bak.$(date +%Y%m%d) server.js && pm2 restart 
 `package.json` 의 의존성이 바뀐 경우에만 `npm install --omit=dev` 를 추가로 돌리세요.
 지금까지의 변경은 `server.js` 한 파일뿐이라 필요 없었습니다.
 
+## 수신자·환경변수를 바꿀 때
+
+수신자 주소(`CONTACT_RECIPIENTS`)는 **서버의 `/opt/fb-contact/.env` 에만** 있습니다. 저장소의
+`.env.example` 과 `nuxt.config.ts` 기본값은 참고용이라 고쳐도 운영 메일은 바뀌지 않습니다.
+pm2 는 시작 당시의 환경을 기억하므로 `.env` 를 고친 뒤 **`--update-env` 로 재시작**해야 반영됩니다.
+(2026-09-21 기준 수신자 8명: damon, briskly0415, dodam, hjyoon, hahahagh, jmchoi, won567567, lsj8376 @fourberry.co.kr)
+
+```bash
+cd /opt/fb-contact
+cp .env .env.bak.$(date +%Y%m%d)
+sed -i 's|^CONTACT_RECIPIENTS=.*|CONTACT_RECIPIENTS=damon@fourberry.co.kr,briskly0415@fourberry.co.kr,dodam@fourberry.co.kr,hjyoon@fourberry.co.kr,hahahagh@fourberry.co.kr,jmchoi@fourberry.co.kr,won567567@fourberry.co.kr,lsj8376@fourberry.co.kr|' .env
+grep CONTACT_RECIPIENTS .env
+set -a; . ./.env; set +a
+pm2 restart fb-contact --update-env
+pm2 env 0 | grep CONTACT_RECIPIENTS    # 0 대신 `pm2 list` 의 fb-contact id
+```
+
+마지막 줄에서 새 주소 8개가 보이면 반영된 것입니다. 홈페이지 문의 폼으로 테스트 문의를 한 번 보내
+8명 모두 받는지 확인하세요.
+
 > **순서 주의**: 프론트(홈페이지)보다 **프록시를 먼저** 올리세요. 프록시는 새 형식과 옛 형식을
 > 모두 받으므로 먼저 올려도 기존 폼이 그대로 동작합니다. 반대로 하면 그 사이 들어온 문의가
 > 400 으로 유실됩니다.

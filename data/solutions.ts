@@ -21,6 +21,30 @@ export interface FbSolutionSection {
     body: string
 }
 
+/**
+ * 브랜드 페이지(layouts/brand.vue) 전용 색상.
+ * fb-design.css 의 :root 변수와 같은 이름을 페이지 래퍼에서 덮어씁니다.
+ * 이 값이 있는 솔루션만 pages/solutions/{slug}.vue 정적 페이지가 브랜드 레이아웃을 씁니다.
+ */
+export interface FbSolutionBrand {
+    /** 주 색상(--accent). 버튼·강조·eyebrow */
+    accent: string
+    /** 버튼 hover 색 */
+    accentHover: string
+    /** 밝은 보조 색(--accent-lite) */
+    accentLite: string
+    /** 어두운 섹션 배경(--ink-bg) */
+    inkBg: string
+    /** 어두운 섹션 카드(--ink-surface) */
+    inkSurface: string
+    /** 어두운 섹션 강조(--ink-accent) */
+    inkAccent: string
+    /** 어두운 섹션 보조 글자(--ink-fg2) */
+    inkFg2: string
+    /** 헤더·푸터에 쓰는 심볼 이미지 경로 */
+    mark: string
+}
+
 export interface FbSolution {
     /** URL 경로가 됩니다: /solutions/{slug} */
     slug: string
@@ -56,6 +80,8 @@ export interface FbSolution {
      * "이 솔루션을 그 프로젝트에 납품했다"는 뜻이 아니라 "관련 분야 실적"으로 표기합니다.
      */
     relatedProjects?: string[]
+    /** 브랜드 페이지 색상. 없으면 pages/solutions/[slug].vue 의 공통 상세 페이지를 씁니다 */
+    brand?: FbSolutionBrand
 }
 
 export const fbSolutions: FbSolution[] = [
@@ -64,6 +90,7 @@ export const fbSolutions: FbSolution[] = [
         name: 'COCONUT',
         ko: '코코넛',
         tag: 'IAM · SSO · OAuth2 / OIDC',
+        // 홈·목록 카드용 사진. 브랜드 페이지의 OG 이미지는 data/coconut.ts 의 coconutOgImage 가 따로 담당합니다.
         image: '/images/SSO.png',
         desc: '하나의 계정으로 여러 서비스를 안전하게 이용하는 통합 인증(SSO) 솔루션. OAuth2·OIDC 표준을 준수하며, 멀티테넌트 환경과 2단계 인증(MFA)을 지원합니다.',
         feats: [
@@ -113,10 +140,33 @@ export const fbSolutions: FbSolution[] = [
                 q: 'COCONUT만 단독으로 도입할 수 있나요?',
                 a: '네. 자체 솔루션은 단독 도입이 가능하며 기존 서비스 구조에 맞춰 연동합니다. 도입 규모와 환경에 따라 맞춤 구성을 안내드립니다.',
             },
+            {
+                q: '어떤 환경에 설치되나요?',
+                a: 'Java 21과 MySQL 8이 있는 서버에 Docker 이미지로 배포합니다. 계정 데이터베이스는 설치한 서버의 MySQL 에 두고, 문자·이메일 발송(LIME)과 본인인증(NICE)은 각 서비스로 연결됩니다.',
+            },
+            {
+                q: '회원가입 때 본인인증도 처리하나요?',
+                a: '네. NICE 본인인증을 연동해 회원가입 단계에서 본인 확인을 받을 수 있습니다. 본인인증·약관 동의·이메일 인증의 필수 여부는 연동 서비스(클라이언트)마다 따로 설정합니다.',
+            },
+            {
+                q: '사용자 계정이 정지되면 연동 서비스는 어떻게 알게 되나요?',
+                a: '상태 변경·삭제·복원·세션 폐기 이벤트를 서명된 Webhook 으로 연동 서비스에 전달합니다. 전달에 실패하면 자동으로 재시도하며, 토큰 만료와 갱신 시점의 상태 재검사로 이중 안전장치를 둡니다.',
+            },
         ],
-        // 출처: C:\project\coconut (oidc-provider 기반 인가 서버, Prisma + MySQL)
-        stack: ['Node.js', 'Express', 'oidc-provider', 'Prisma ORM', 'MySQL', 'bcrypt', 'Swagger (OpenAPI)'],
+        // 출처: C:\project\fourberry\coconut (Spring Authorization Server 기반 인가 서버)
+        stack: ['Java 21', 'Spring Boot 3.5', 'Spring Authorization Server', 'Spring Security 6', 'MySQL 8', 'JPA · Hibernate', 'Flyway', 'Thymeleaf', 'Docker', 'Swagger (OpenAPI)'],
         relatedProjects: ['withfresh'],
+        // 관리자 콘솔·심볼(보라 계열)에 맞춘 브랜드 색. pages/solutions/coconut.vue 가 이 값으로 그려집니다.
+        brand: {
+            accent: '#6d28d9',
+            accentHover: '#5b21b6',
+            accentLite: '#8b5cf6',
+            inkBg: '#150b2e',
+            inkSurface: '#221242',
+            inkAccent: '#b79cff',
+            inkFg2: '#b5a8d9',
+            mark: '/images/solutions/coconut/mark.svg',
+        },
     },
     {
         slug: 'lime',

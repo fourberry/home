@@ -29,8 +29,6 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, onUnmounted } from 'vue'
-
 // ⚠️ 앵커는 반드시 '/#...' 형태여야 합니다.
 // '#about' 로 두면 /solutions/coconut 같은 하위 페이지에는 그런 요소가 없어 메뉴가 먹통이 됩니다.
 // NuxtLink 를 쓰므로 홈에서 눌러도 새로고침 없이 해당 섹션으로 이동합니다.
@@ -43,27 +41,6 @@ const menu = [
     { to: '/#faq', label: 'FAQ' },
 ]
 
-const open = ref(false)
-const scrolled = ref(false)
-const close = () => (open.value = false)
-
-const onScroll = () => (scrolled.value = window.scrollY > 8)
-const onResize = () => {
-    if (window.innerWidth > 920) close()
-}
-const onKey = (e: KeyboardEvent) => {
-    if (e.key === 'Escape') close()
-}
-
-onMounted(() => {
-    onScroll()
-    window.addEventListener('scroll', onScroll, { passive: true })
-    window.addEventListener('resize', onResize)
-    document.addEventListener('keydown', onKey)
-})
-onUnmounted(() => {
-    window.removeEventListener('scroll', onScroll)
-    window.removeEventListener('resize', onResize)
-    document.removeEventListener('keydown', onKey)
-})
+// 열림·스크롤 상태와 리스너는 BrandHeader 와 공유합니다 (composables/useSiteHeader.ts).
+const { open, scrolled, close } = useSiteHeader()
 </script>

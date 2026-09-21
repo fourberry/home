@@ -13,7 +13,7 @@
   --line:rgba(20,24,29,.10); --line-2:rgba(20,24,29,.06);
 
   /* 로고 블루 */
-  --accent:#003da5; --accent-2:rgba(0,61,165,.12); --accent-lite:#0084d5;
+  --accent:#003da5; --accent-2:rgba(0,61,165,.12); --accent-lite:#0084d5; --accent-hover:#00347f;
   --on-accent:#ffffff;
 
   /* 반전(다크) 섹션 — 로고 다크블루 기반 */
@@ -57,7 +57,7 @@ img{max-width:100%;display:block}
 .btn{font-family:var(--font-sans);font-size:15px;font-weight:600;letter-spacing:-.01em;padding:13px 24px;border-radius:var(--radius-s);border:1px solid transparent;display:inline-flex;align-items:center;gap:9px;cursor:pointer;transition:transform .18s ease,background .2s ease,border-color .2s,color .2s;white-space:nowrap}
 .btn:active{transform:translateY(1px)}
 .btn-primary{background:var(--accent);color:var(--on-accent)}
-.btn-primary:hover{background:#00347f;color:var(--on-accent);transform:translateY(-1px)}
+.btn-primary:hover{background:var(--accent-hover);color:var(--on-accent);transform:translateY(-1px)}
 .btn-ghost{background:transparent;color:var(--ink);border-color:var(--line)}
 .btn-ghost:hover{border-color:var(--ink);color:var(--ink)}
 .section--ink .btn-ghost{color:var(--ink-fg);border-color:var(--ink-line)}

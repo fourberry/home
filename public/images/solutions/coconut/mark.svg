@@ -1,0 +1,21 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32">
+  <defs>
+    <linearGradient id="bg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#4F46E5;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#7C3AED;stop-opacity:1" />
+    </linearGradient>
+  </defs>
+  <!-- Background rounded rectangle -->
+  <rect width="32" height="32" rx="6" ry="6" fill="url(#bg)"/>
+  <!-- IAM text/icon - simplified key/shield design -->
+  <g fill="#FFFFFF">
+    <!-- Shield shape -->
+    <path d="M16 4 L26 8 L26 16 C26 22 21 27 16 28 C11 27 6 22 6 16 L6 8 Z"
+          fill="none" stroke="#FFFFFF" stroke-width="1.5" opacity="0.9"/>
+    <!-- Key icon inside -->
+    <circle cx="16" cy="13" r="3" fill="#FFFFFF"/>
+    <rect x="15" y="15" width="2" height="8" rx="1" fill="#FFFFFF"/>
+    <rect x="17" y="19" width="3" height="1.5" rx="0.5" fill="#FFFFFF"/>
+    <rect x="17" y="21.5" width="2" height="1.5" rx="0.5" fill="#FFFFFF"/>
+  </g>
+</svg>

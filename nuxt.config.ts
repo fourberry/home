@@ -66,7 +66,8 @@ export default defineNuxtConfig({
     },
 
     // ✅ fb-design.css 는 반드시 tailwind.css / common.scss 뒤에 와야 합니다.
-    css: ['~/assets/css/tailwind.css', '~/assets/scss/common.scss', '~/assets/css/fb-design.css'],
+    //    fb-brand.css(솔루션 브랜드 페이지)는 fb-design.css 의 변수·클래스를 전제로 하므로 그 뒤에 둡니다.
+    css: ['~/assets/css/tailwind.css', '~/assets/scss/common.scss', '~/assets/css/fb-design.css', '~/assets/css/fb-brand.css'],
 
     postcss: {
         plugins: {

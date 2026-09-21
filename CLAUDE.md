@@ -38,6 +38,29 @@ npx prettier --write .   # 포맷팅
 | `/work`, `/work/{id}` | `pages/work/` | [data/projects.ts](data/projects.ts) |
 | `/services/si-sm` | [pages/services/si-sm.vue](pages/services/si-sm.vue) | 페이지 안에 인라인 |
 
+#### 솔루션 브랜드 페이지 (COCONUT)
+
+`/solutions/coconut/` 은 공통 상세 페이지가 아니라 **브랜드 페이지**입니다.
+정적 파일 [pages/solutions/coconut.vue](pages/solutions/coconut.vue)가 동적 `[slug].vue` 보다 우선하므로
+URL·canonical·프리렌더 경로는 그대로이고 화면만 바뀝니다. 구성 요소는 세 가지입니다.
+
+| 파일 | 역할 |
+|---|---|
+| [layouts/brand.vue](layouts/brand.vue) | `definePageMeta({ layout: 'brand', brand: '{slug}', brandNav })` 로 지정. `data/solutions.ts` 의 `brand` 색을 래퍼의 CSS 변수(`--accent` 등)로 덮어씀 |
+| [components/brand/BrandHeader.vue](components/brand/BrandHeader.vue) | 회사 메뉴 대신 페이지 안 앵커를 보여주는 헤더. 푸터는 회사 공통 푸터 그대로 |
+| [assets/css/fb-brand.css](assets/css/fb-brand.css) | 브랜드 페이지 전용 배치(`.bp-*`). `fb-design.css` 뒤에 로드 |
+
+카드·SEO·FAQ 는 여전히 [data/solutions.ts](data/solutions.ts)가 출처이고, 브랜드 페이지에만 보이는
+화면 투어·보안·연동·도입 절차는 [data/coconut.ts](data/coconut.ts)에 있습니다.
+화면 이미지(`public/images/solutions/coconut/`)와 제품 설명서(`public/docs/coconut-product-guide.pdf`)는
+`C:\project\fourberry\coconut\output\pdf\` 의 **공통 배포용** 산출물에서 가져온 것입니다(개인정보 가림 처리된 보정본).
+PDF 는 원본(4.2MB)을 그대로 넣지 않고 이미지를 재압축한 사본(약 0.7MB)입니다 — 저장소 이력이 커지지 않도록
+갱신할 때도 같은 방식으로 줄여서 넣으세요. 코코넛 기능이 바뀌면 그쪽 소개서를 먼저 갱신하고 여기로 옮기세요.
+
+다른 솔루션을 브랜드 페이지로 올리려면 `data/solutions.ts` 항목에 `brand` 색을 넣고
+`pages/solutions/{slug}.vue` 를 만들면 됩니다. `brand` 가 없는 solution 에 브랜드 레이아웃을 지정하면
+레이아웃이 의도적으로 에러를 냅니다.
+
 **솔루션·실적을 추가하면 하위 페이지가 자동으로 생깁니다.**
 [nuxt.config.ts](nuxt.config.ts)의 `nitro.prerender.routes`가 두 데이터 배열에서 경로를 뽑아내기
 때문입니다. 그래서 이 두 파일에는 **Nuxt 전용 API를 쓰면 안 됩니다**(nuxt.config가 import 하므로 순수 데이터만).
@@ -178,7 +201,8 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 자동 수집(향상된 측정) 대상이 아니라 직접 심어야 합니다.
 
 - `solution_inquiry_click` — [FbSolutions.vue](components/fb/FbSolutions.vue)의 `도입 문의`.
-  `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분
+  `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분. 브랜드 페이지(헤더·히어로)에서는
+  `link_location`(`brand_header`·`hero`)도 함께 보냅니다
 - `contact_channel_click` — 전화·이메일 링크. [FbContact.vue](components/fb/FbContact.vue)와
   [AppFooter.vue](components/AppFooter.vue) 양쪽에 있으며 `link_location`으로 위치를 구분
 

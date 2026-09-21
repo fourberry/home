@@ -33,7 +33,7 @@
                         </div>
                     </div>
                     <div class="bp-frame bp-frame--hero">
-                        <img :src="coconutHero.image" :alt="coconutHero.alt" :width="coconutHero.w" :height="coconutHero.h" fetchpriority="high" />
+                        <FbZoomImage :src="coconutHero.image" :full-src="coconutHero.full" :alt="coconutHero.alt" :width="coconutHero.w" :height="coconutHero.h" loading="eager" fetchpriority="high" />
                     </div>
                 </div>
             </div>
@@ -128,7 +128,7 @@
                 <div class="bp-tour">
                     <div v-for="(t, i) in coconutTour" :id="`console-${t.id}`" :key="t.id" class="bp-tour-row" :class="{ reverse: i % 2 === 1 }">
                         <div class="bp-frame">
-                            <img :src="t.image" :alt="t.alt" loading="lazy" :width="t.w" :height="t.h" />
+                            <FbZoomImage :src="t.image" :full-src="t.full" :alt="t.alt" :width="t.w" :height="t.h" />
                         </div>
                         <div class="bp-tour-text">
                             <span class="eyebrow">{{ t.eyebrow }}</span>
@@ -143,7 +143,7 @@
                 <div class="bp-tour-mini">
                     <figure v-for="m in coconutTourMini" :key="m.h2">
                         <div class="bp-frame">
-                            <img :src="m.image" :alt="m.alt" loading="lazy" :width="m.w" :height="m.h" />
+                            <FbZoomImage :src="m.image" :full-src="m.full" :alt="m.alt" :width="m.w" :height="m.h" />
                         </div>
                         <figcaption>
                             <b>{{ m.h2 }}</b>

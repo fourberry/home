@@ -82,7 +82,11 @@
 /* ---------- 관리자 콘솔 투어 ---------- */
 .bp-tour{margin-top:clamp(40px,5vw,64px);display:grid;gap:clamp(56px,7vw,104px)}
 .bp-tour-row{display:grid;grid-template-columns:minmax(0,1.25fr) minmax(0,.75fr);gap:clamp(28px,4vw,56px);align-items:center}
+/* 짝수 행은 글이 왼쪽. 순서만 바꾸면 이미지가 좁은 열로 들어가 작아지므로 열 너비도 함께 뒤집습니다. */
+.bp-tour-row.reverse{grid-template-columns:minmax(0,.75fr) minmax(0,1.25fr)}
 .bp-tour-row.reverse .bp-tour-text{order:-1}
+/* 원본 높이가 제각각(890·1052)이라 같은 비율로 잘라 보여줍니다. 전체는 클릭 확대로 봅니다. */
+.bp-tour-row .bp-frame img{aspect-ratio:16/9;object-fit:cover;object-position:top}
 .bp-tour-text h3{margin-top:14px;font-size:clamp(21px,2.4vw,30px);letter-spacing:-.03em}
 .bp-tour-text p{margin-top:14px;font-size:15.5px;color:var(--ink-2);line-height:1.75}
 .bp-tour-text ul{list-style:none;margin:20px 0 0;padding:0;display:grid;gap:9px}
@@ -160,7 +164,7 @@
   .bp-frame--hero{transform:none}
   .bp-flow{grid-template-columns:1fr}
   .bp-flow-arrow{transform:rotate(90deg);justify-self:center}
-  .bp-tour-row{grid-template-columns:1fr}
+  .bp-tour-row,.bp-tour-row.reverse{grid-template-columns:1fr}
   /* 좁은 화면에서는 좌우 교차 없이 항상 글 → 화면 순서입니다. */
   .bp-tour-text{order:-1}
   .bp-grid-3{grid-template-columns:1fr 1fr}

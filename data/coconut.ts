@@ -64,7 +64,10 @@ export const coconutLoginSteps = [
 ]
 
 export interface CoconutScreen {
+    /** 페이지에 보이는 이미지(1600px 폭으로 줄인 webp) */
     image: string
+    /** 클릭 확대용 원본 해상도(최대 2287px) webp. 글자가 작은 관리자 화면이라 줄이지 않은 파일을 따로 둡니다 */
+    full: string
     alt: string
     /** 실제 픽셀 크기. <img width/height> 로 넘겨 lazy 로딩 전 높이를 정확히 예약합니다(레이아웃 이동 방지) */
     w: number
@@ -82,6 +85,7 @@ export interface CoconutTourItem extends CoconutScreen {
 /** 히어로 화면. 투어에는 넣지 않아 같은 캡처가 두 번 보이지 않습니다 */
 export const coconutHero: CoconutScreen = {
     image: `${IMG}/dashboard.webp`,
+    full: `${IMG}/dashboard-full.webp`,
     alt: 'COCONUT 관리자 콘솔 대시보드 — 테넌트·사용자·관리자 현황과 주간 로그인 그래프(예시 데이터)',
     w: 1600,
     h: 890,
@@ -96,6 +100,7 @@ export const coconutTour: CoconutTourItem[] = [
         p: '웹·앱·API 서비스를 클라이언트로 등록하고 인증 방식과 스코프, 콜백 주소, 토큰 유효기간을 정합니다. 서버형(Confidential)과 공개형(Public)을 구분하고 PKCE 필수 여부를 서비스별로 둡니다.',
         points: ['Authorization Code · Refresh Token · Client Credentials', '스코프별 필수 동의 지정', '토큰 유효기간 · 서명 방식 · 갱신 정책'],
         image: `${IMG}/client-setup.webp`,
+        full: `${IMG}/client-setup-full.webp`,
         alt: 'COCONUT 클라이언트 생성 화면 — 인증 방식과 스코프 설정',
         w: 1600,
         h: 1052,
@@ -107,6 +112,7 @@ export const coconutTour: CoconutTourItem[] = [
         p: '이름·계정·이메일로 검색하고 상태와 소속 테넌트, 마지막 로그인을 확인합니다. 상세 화면에서 상태 변경, 비밀번호 초기화, 2단계 인증·이메일 인증 요청 제한 해제를 처리하므로 개발 요청 없이 운영 담당자 선에서 끝납니다.',
         points: ['상태 · 소속 · 로그인 정보 조회', '비밀번호 초기화 · 계정 잠금 해제', '인증 요청 제한 해제'],
         image: `${IMG}/users.webp`,
+        full: `${IMG}/users-full.webp`,
         alt: 'COCONUT 사용자 관리 화면 — 사용자 목록과 상태(예시 데이터, 개인정보 가림)',
         w: 1600,
         h: 890,
@@ -118,6 +124,7 @@ export const coconutTour: CoconutTourItem[] = [
         p: '로그인 실패 잠금 횟수와 잠금 시간, 비밀번호 만료 기간과 최소 길이, 세션 타임아웃, 토큰 유효기간을 시스템 기본값으로 두고 클라이언트별로 다르게 적용할 수 있습니다.',
         points: ['로그인 실패 잠금 · 세션 타임아웃', '비밀번호 만료 · 복잡성 규칙', '접근 토큰 · 갱신 토큰 기본 유효기간'],
         image: `${IMG}/settings.webp`,
+        full: `${IMG}/settings-full.webp`,
         alt: 'COCONUT 시스템 설정 화면 — 보안 정책과 OAuth 토큰 기본값',
         w: 1600,
         h: 890,
@@ -129,6 +136,7 @@ export const coconutTour: CoconutTourItem[] = [
         p: '로그인 성공·실패와 접속 IP, 로그인 방식을 기간·상태·클라이언트로 검색합니다. 보안 감사 로그는 심각도별로, 활동 로그는 관리자별로 따로 조회해 "고객이 로그인이 안 된다"는 문의의 원인을 바로 좁힙니다.',
         points: ['로그인 이력 — 성공 · 실패 · 잠금', '보안 감사 로그 — 심각도 · 이벤트 유형', '활동 로그 — 관리자가 무엇을 바꿨는지'],
         image: `${IMG}/logs.webp`,
+        full: `${IMG}/logs-full.webp`,
         alt: 'COCONUT 로그인 이력 화면 — 성공·실패 통계와 이력 목록(예시 데이터, 개인정보 가림)',
         w: 1600,
         h: 889,
@@ -137,8 +145,24 @@ export const coconutTour: CoconutTourItem[] = [
 
 /** 투어 아래 작은 화면 2장. 높이가 달라 화면에서는 16:10 으로 잘라 보여줍니다 */
 export const coconutTourMini: (CoconutScreen & { h2: string; p: string })[] = [
-    { h2: '약관 유형 관리', p: '이용약관·개인정보 동의 항목을 유형별로 관리하고 서비스마다 필수·선택을 지정합니다.', image: `${IMG}/terms.webp`, alt: 'COCONUT 약관 유형 관리 화면', w: 1600, h: 890 },
-    { h2: '약관 유형 추가', p: '새 약관 유형을 등록하면 회원가입과 동의 화면에 바로 반영됩니다.', image: `${IMG}/terms-setup.webp`, alt: 'COCONUT 약관 유형 등록 화면', w: 1600, h: 1052 },
+    {
+        h2: '약관 유형 관리',
+        p: '이용약관·개인정보 동의 항목을 유형별로 관리하고 서비스마다 필수·선택을 지정합니다.',
+        image: `${IMG}/terms.webp`,
+        full: `${IMG}/terms-full.webp`,
+        alt: 'COCONUT 약관 유형 관리 화면',
+        w: 1600,
+        h: 890,
+    },
+    {
+        h2: '약관 유형 추가',
+        p: '새 약관 유형을 등록하면 회원가입과 동의 화면에 바로 반영됩니다.',
+        image: `${IMG}/terms-setup.webp`,
+        full: `${IMG}/terms-setup-full.webp`,
+        alt: 'COCONUT 약관 유형 등록 화면',
+        w: 1600,
+        h: 1052,
+    },
 ]
 
 /** 보안 기능. README "보안 기능" 절 기준 */

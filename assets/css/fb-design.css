@@ -271,6 +271,20 @@ img{max-width:100%;display:block}
 .fb-dialog-body b{color:var(--ink)}
 .fb-dialog .btn{width:100%;justify-content:center}
 
+/* ---------- 이미지 확대 보기 (components/fb/FbZoomImage.vue) ---------- */
+/* 버튼이 이미지를 감쌉니다. 부모가 .bp-frame 처럼 이미지에 규칙을 걸어도 그대로 먹도록 img 는 건드리지 않습니다. */
+.fb-zoom{display:block;width:100%;padding:0;margin:0;border:0;background:none;cursor:zoom-in;position:relative;text-align:left;font:inherit;color:inherit}
+.fb-zoom:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
+.fb-zoom-badge{position:absolute;right:12px;bottom:12px;width:34px;height:34px;border-radius:50%;display:grid;place-items:center;background:var(--surface);color:var(--ink);border:1px solid var(--line);box-shadow:var(--shadow);opacity:0;transform:translateY(4px);transition:opacity .2s ease,transform .2s ease;pointer-events:none}
+.fb-zoom:hover .fb-zoom-badge,.fb-zoom:focus-visible .fb-zoom-badge{opacity:1;transform:none}
+@media (hover:none){.fb-zoom-badge{opacity:.9;transform:none}}
+.fb-lightbox{z-index:120;padding:clamp(16px,3vw,40px);cursor:zoom-out}
+.fb-lightbox-figure{margin:0;max-width:min(1400px,96vw);display:flex;flex-direction:column;align-items:center;gap:12px}
+.fb-lightbox-figure img{display:block;max-width:100%;max-height:calc(100vh - 110px);width:auto;height:auto;border-radius:var(--radius);box-shadow:var(--shadow-lg);background:var(--surface);cursor:default}
+.fb-lightbox-figure figcaption{font-size:13px;color:var(--ink-fg2);text-align:center}
+.fb-lightbox-close{position:fixed;top:16px;right:16px;width:44px;height:44px;border-radius:50%;border:1px solid rgba(255,255,255,.2);background:rgba(255,255,255,.1);color:#fff;display:grid;place-items:center;cursor:pointer}
+.fb-lightbox-close:hover{background:rgba(255,255,255,.2)}
+
 /* 기존 FormFileUpload.vue(Tailwind)를 새 디자인 톤에 맞춤 */
 /* 파일 첨부 버튼은 재사용 컴포넌트(FormFileUpload)라 Tailwind 로 flex 정렬돼 있습니다.
    위의 `.field label{display:block}` 이 specificity 로 그걸 덮어써서 아이콘이 줄바꿈되므로

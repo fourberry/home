@@ -10,6 +10,7 @@
                             {{ solution.name }}
                             <span class="ko">{{ solution.ko }}</span>
                         </div>
+                        <p v-if="solution.nameOrigin" class="bp-hero-origin">{{ solution.nameOrigin }}</p>
                         <span class="eyebrow">{{ solution.tag }}</span>
                         <h1>
                             흩어진 계정을 하나로.

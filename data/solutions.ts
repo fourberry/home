@@ -80,6 +80,8 @@ export interface FbSolution {
      * "이 솔루션을 그 프로젝트에 납품했다"는 뜻이 아니라 "관련 분야 실적"으로 표기합니다.
      */
     relatedProjects?: string[]
+    /** 이름의 유래 한 줄. 브랜드 페이지 히어로의 이름 바로 아래에 보입니다. 비우면 표시하지 않습니다 */
+    nameOrigin?: string
     /** 브랜드 페이지 색상. 없으면 pages/solutions/[slug].vue 의 공통 상세 페이지를 씁니다 */
     brand?: FbSolutionBrand
 }
@@ -156,6 +158,7 @@ export const fbSolutions: FbSolution[] = [
         // 출처: C:\project\fourberry\coconut (Spring Authorization Server 기반 인가 서버)
         stack: ['Java 21', 'Spring Boot 3.5', 'Spring Authorization Server', 'Spring Security 6', 'MySQL 8', 'JPA · Hibernate', 'Flyway', 'Thymeleaf', 'Docker', 'Swagger (OpenAPI)'],
         relatedProjects: ['withfresh'],
+        nameOrigin: '단단한 껍질 안에 알맹이를 지키는 코코넛처럼, 계정과 인증을 안에서 지킵니다.',
         // 관리자 콘솔·심볼(보라 계열)에 맞춘 브랜드 색. pages/solutions/coconut.vue 가 이 값으로 그려집니다.
         brand: {
             accent: '#6d28d9',

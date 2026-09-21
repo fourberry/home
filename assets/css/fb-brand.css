@@ -45,7 +45,7 @@
 .bp-frame::before{content:"";display:block;height:28px;border-bottom:1px solid var(--line);background-color:var(--bg-2);background-repeat:no-repeat;
   background-image:radial-gradient(circle at 16px 50%,var(--ink-3) 0 4px,transparent 4.5px),radial-gradient(circle at 32px 50%,var(--ink-3) 0 4px,transparent 4.5px),radial-gradient(circle at 48px 50%,var(--ink-3) 0 4px,transparent 4.5px);opacity:.9}
 .bp-frame img{display:block;width:100%;height:auto}
-.bp-frame--hero{transform:rotate(-1.2deg) translateY(6px)}
+.bp-frame--hero{transform:none}
 .bp-frame--hero::after{content:"";position:absolute;inset:0;pointer-events:none;box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--on-accent) 40%,transparent)}
 
 /* ---------- 문제 → 도입 후 대응표 ---------- */

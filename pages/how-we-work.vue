@@ -13,18 +13,18 @@
                     </h1>
                     <p v-reveal class="lead">{{ aiWorkflow.lead }}</p>
                     <div class="fb-page-actions">
-                        <NuxtLink to="/#contact" class="btn btn-primary">
+                        <NuxtLink :to="aiInquiryHref('hero')" class="btn btn-primary" @click="trackInquiry('hero')">
                             프로젝트 상담
                             <span class="arw">→</span>
                         </NuxtLink>
-                        <NuxtLink to="/work/" class="btn btn-ghost">수행 실적 보기</NuxtLink>
+                        <NuxtLink to="/work/" class="btn btn-ghost" @click="trackNavigation('work')">수행 실적 보기</NuxtLink>
                     </div>
                     <!-- 페이지 안 목차 — 위의 버튼과 위계가 겹치지 않도록 텍스트형으로 둡니다 -->
                     <nav class="ai-toc" aria-label="개발 방식 페이지 목차">
-                        <a href="#process">01 개발 과정</a>
-                        <a href="#experience">02 적용 경험</a>
-                        <a href="#principles">03 개발 기준</a>
-                        <a href="#questions">04 자주 묻는 질문</a>
+                        <a href="#process" @click="trackNavigation('process')">01 개발 과정</a>
+                        <a href="#experience" @click="trackNavigation('experience')">02 적용 경험</a>
+                        <a href="#principles" @click="trackNavigation('principles')">03 개발 기준</a>
+                        <a href="#questions" @click="trackNavigation('questions')">04 자주 묻는 질문</a>
                     </nav>
                 </div>
                 <!-- 기준의 층과 AI·사람의 역할 경계 — 페이지의 핵심 구조를 먼저 보여주는 도식 -->
@@ -131,12 +131,20 @@
             </div>
         </section>
 
-        <FbCtaBand title="함께 만들 프로젝트가 있으신가요?" desc="해결하려는 문제와 현재 환경을 알려주시면, 필요한 개발 범위와 진행 방법을 함께 검토합니다." />
+        <FbCtaBand
+            title="함께 만들 프로젝트가 있으신가요?"
+            desc="해결하려는 문제와 현재 환경을 알려주시면, 필요한 개발 범위와 진행 방법을 함께 검토합니다."
+            :inquiry-to="aiInquiryHref('cta_band')"
+            @inquiry="trackInquiry('cta_band')"
+        />
     </div>
 </template>
 
 <script setup lang="ts">
 import { aiWorkflow, aiWorkflowFaq } from '~/data/aiWorkflow'
+import { aiInquiryHref } from '~/utils/inquiryAnalytics'
+
+const { trackNavigation, trackInquiry } = useAiWorkflowTracking()
 
 const crumbs = [
     { name: '홈', path: '/' },

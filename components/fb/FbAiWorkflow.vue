@@ -14,7 +14,7 @@
                 <div v-reveal class="aiw-body">
                     <p>{{ aiWorkflow.summary }}</p>
                     <div>
-                        <NuxtLink to="/how-we-work/" class="btn btn-primary">
+                        <NuxtLink to="/how-we-work/" class="btn btn-primary" @click="trackEntry('home_section')">
                             {{ aiWorkflow.title }} 보기
                             <span class="arw">→</span>
                         </NuxtLink>
@@ -35,6 +35,8 @@
 
 <script setup lang="ts">
 import { aiWorkflow } from '~/data/aiWorkflow'
+
+const { trackEntry } = useAiWorkflowTracking()
 </script>
 
 <style scoped>

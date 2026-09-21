@@ -15,7 +15,7 @@
                     <h5>Company</h5>
                     <NuxtLink to="/#about">회사소개</NuxtLink>
                     <NuxtLink to="/#services">서비스</NuxtLink>
-                    <NuxtLink to="/how-we-work/">AI와 함께 개발하는 방식</NuxtLink>
+                    <NuxtLink to="/how-we-work/" @click="trackEntry('footer')">AI와 함께 개발하는 방식</NuxtLink>
                     <NuxtLink to="/#culture">컬처</NuxtLink>
                     <NuxtLink to="/#faq">FAQ</NuxtLink>
                 </div>
@@ -57,6 +57,7 @@ import { fbCompany } from '~/data/company'
 import { fbSolutions } from '~/data/solutions'
 
 const year = new Date().getFullYear()
+const { trackEntry } = useAiWorkflowTracking()
 
 // 문의 섹션(FbContact.vue)과 같은 이벤트를 쓰되 link_location 으로 위치를 구분합니다.
 const trackContactChannel = (channel: 'tel' | 'email') => {

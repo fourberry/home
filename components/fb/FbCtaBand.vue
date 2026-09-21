@@ -7,7 +7,7 @@
                 <p class="lead">{{ desc }}</p>
             </div>
             <div class="fb-cta-actions">
-                <NuxtLink :to="inquiryTo" class="btn btn-primary">
+                <NuxtLink :to="inquiryTo" class="btn btn-primary" @click="$emit('inquiry')">
                     상담 문의하기
                     <span class="arw">→</span>
                 </NuxtLink>
@@ -19,6 +19,8 @@
 
 <script setup lang="ts">
 import { fbCompany } from '~/data/company'
+
+defineEmits<{ inquiry: [] }>()
 
 withDefaults(
     defineProps<{

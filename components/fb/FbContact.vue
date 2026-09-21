@@ -339,6 +339,7 @@
 import { computed, onMounted, ref, watch } from 'vue'
 import FormFileUpload from '~/components/contact/FormFileUpload.vue'
 import { fbCompany } from '~/data/company'
+import { inquiryAttribution } from '~/utils/inquiryAnalytics'
 
 const consultationTypes = [
     { value: 'TYPE_01', label: '신규 시스템 구축' },
@@ -525,6 +526,9 @@ const handleSubmit = async () => {
     if (!validateForm()) return
 
     isLoading.value = true
+    // 전송 중 URL이 바뀌어도 시도·성공·실패는 같은 상담 진입 경로로 기록합니다.
+    const attribution = inquiryAttribution(route.query)
+    useTrackEvent('contact_submit_attempt', attribution)
 
     try {
         const attachments = await Promise.all(
@@ -575,6 +579,7 @@ const handleSubmit = async () => {
         // GA4 전환 이벤트. 이름·연락처 등 개인정보는 보내지 않고 선택 항목만 담습니다
         // (GA 정책상 개인 식별 정보 전송 금지). GTAG_ID 가 비어 있으면 no-op 입니다.
         useTrackEvent('generate_lead', {
+            ...attribution,
             inquiry_type: typeLabel,
             services: serviceLabels,
             budget: budgetLabel,
@@ -586,7 +591,7 @@ const handleSubmit = async () => {
     } catch (error) {
         console.error('문의 전송 실패:', error)
         // 프록시 장애를 통계로도 감지할 수 있게 실패도 기록합니다.
-        useTrackEvent('contact_submit_failed', { inquiry_type: selectedType.value || 'unknown' })
+        useTrackEvent('contact_submit_failed', { ...attribution, inquiry_type: selectedType.value || 'unknown' })
         openModal('전송 실패', '문의 전송에 실패했습니다. 잠시 후 다시 시도해주세요.', 'error')
     } finally {
         isLoading.value = false

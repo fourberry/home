@@ -236,14 +236,15 @@ AEO(Answer Engine Optimization, 답변형 검색 최적화)에 미치는 영향�
 `NUXT_PUBLIC_GTAG_ID=G-XXXX npm run dev`로 실행하세요 — 환경변수를 직접 준 경우에는 dev에서도
 켜집니다. **ID를 하드코딩할 때 이 가드를 함께 걷어내지 마세요.**
 
-원페이지 사이트라 페이지뷰는 방문자 수와 거의 같습니다. 실질적인 지표는
-[FbContact.vue](components/fb/FbContact.vue)의 `handleSubmit`에서 발생하는 두 이벤트입니다.
+홈과 하위 페이지를 함께 운영하므로 페이지 조회수와 방문자 수를 구분합니다. 문의 성과는
+[FbContact.vue](components/fb/FbContact.vue)의 `handleSubmit`에서 발생하는 다음 이벤트로 봅니다.
 
 - `generate_lead` — 문의 전송 성공 (GA4 권장 이벤트명, 전환으로 등록해 사용)
 - `contact_submit_failed` — 전송 실패. 프록시 장애를 통계로 감지하는 용도
+- `contact_submit_attempt` — 필수 입력 검증을 통과한 제출 시도. 입력 오류·폼 방문은 포함하지 않음
 
-추가로 직접 심은 클릭 이벤트가 둘 있습니다. 내부 앵커 이동과 `tel:`·`mailto:`는 GA의
-자동 수집(향상된 측정) 대상이 아니라 직접 심어야 합니다.
+다음 클릭 행동은 별도 이벤트로 측정합니다. 내부 링크·앵커와 `tel:`·`mailto:`의 클릭을
+자동 이탈 클릭 수집만으로 측정한다고 가정하지 않습니다.
 
 - `solution_inquiry_click` — `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분.
   홈의 [FbSolutions.vue](components/fb/FbSolutions.vue)는 카드별 버튼 없이 섹션 하단 버튼 하나라
@@ -251,9 +252,17 @@ AEO(Answer Engine Optimization, 답변형 검색 최적화)에 미치는 영향�
   같은 이벤트로 봅니다(브랜드 페이지는 `link_location` `brand_header`·`hero`)
 - `contact_channel_click` — 전화·이메일 링크. [FbContact.vue](components/fb/FbContact.vue)와
   [AppFooter.vue](components/AppFooter.vue) 양쪽에 있으며 `link_location`으로 위치를 구분
+- `ai_workflow_link_click` / `ai_workflow_navigation` — AI 소개 링크 및 목차·실적 링크 클릭.
+  [useAiWorkflowTracking.ts](composables/useAiWorkflowTracking.ts)에서 고정된 구분 값으로 관리
+- `contact_cta_click` — AI 소개 페이지의 상단·하단 상담 버튼 클릭. 문의 성공과 구분
+
+상담 링크의 출처는 [inquiryAnalytics.ts](utils/inquiryAnalytics.ts)에서 허용한 고정 값만 사용하며,
+제출 시도·성공·실패에 같은 출처를 기록합니다. 원문 URL이나 임의 쿼리 값을 이벤트 매개변수로 보내지 않습니다.
+내부 링크에 UTM을 붙이지 않고, 자동 페이지 조회와 수동 `page_view`를 중복 전송하지 않습니다.
+이벤트 계약·GA 계정 설정·보고서 해석은 [GA4 운영 안내](docs/ga4-guide.md)를 함께 갱신합니다.
 
 **이벤트에 이름·연락처·이메일 등 개인 식별 정보를 넣지 마세요.** GA 정책 위반입니다.
-현재는 상담 유형·관심 서비스·예산·일정 같은 선택 항목만 보냅니다.
+현재는 상담 유형·관심 서비스·예산·일정 같은 선택 항목과 고정된 링크·상담 진입 구분 값을 보냅니다.
 
 ### 배포
 

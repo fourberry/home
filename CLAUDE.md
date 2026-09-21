@@ -200,9 +200,10 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 추가로 직접 심은 클릭 이벤트가 둘 있습니다. 내부 앵커 이동과 `tel:`·`mailto:`는 GA의
 자동 수집(향상된 측정) 대상이 아니라 직접 심어야 합니다.
 
-- `solution_inquiry_click` — [FbSolutions.vue](components/fb/FbSolutions.vue)의 `도입 문의`.
-  `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분. 브랜드 페이지(헤더·히어로)에서는
-  `link_location`(`brand_header`·`hero`)도 함께 보냅니다
+- `solution_inquiry_click` — `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분.
+  홈의 [FbSolutions.vue](components/fb/FbSolutions.vue)는 카드별 버튼 없이 섹션 하단 버튼 하나라
+  `solution: 'ALL'`, `link_location: 'solutions_footer'` 로 보내고, 솔루션별 관심은 상세·브랜드 페이지의
+  같은 이벤트로 봅니다(브랜드 페이지는 `link_location` `brand_header`·`hero`)
 - `contact_channel_click` — 전화·이메일 링크. [FbContact.vue](components/fb/FbContact.vue)와
   [AppFooter.vue](components/AppFooter.vue) 양쪽에 있으며 `link_location`으로 위치를 구분
 

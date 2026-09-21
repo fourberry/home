@@ -158,30 +158,29 @@ img{max-width:100%;display:block}
 
 /* ---------- solutions ---------- */
 .sol{margin-top:clamp(40px,5vw,60px);display:grid;gap:28px}
-/* minmax(0,·) 필수: 1fr 의 최소값은 min-content 라서, 미디어가 폭을 독차지하고
+/* 카드 전체가 NuxtLink 입니다(크롤러가 상세 페이지를 발견하는 경로). 카드 안에 버튼을 두지 마세요.
+   minmax(0,·) 필수: 1fr 의 최소값은 min-content 라서, 미디어가 폭을 독차지하고
    본문 칼럼이 짜부라져 세로로 길어지다 overflow:hidden 에 잘립니다. */
-.sol-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-l);overflow:hidden;box-shadow:var(--shadow)}
+.sol-card{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);background:var(--surface);border:1px solid var(--line);border-radius:var(--radius-l);overflow:hidden;box-shadow:var(--shadow);color:inherit;transition:transform .2s ease,border-color .2s}
+.sol-card:hover{transform:translateY(-3px);border-color:var(--accent);color:inherit}
 .sol-card.reverse .sol-media{order:2}
-.sol-body{padding:clamp(30px,3.6vw,52px);display:flex;flex-direction:column;justify-content:center}
-/* 서브제목+제목을 한 그룹으로 묶고 CTA 를 그 옆 상단에 우측 정렬합니다.
-   align-items:flex-start 라서 CTA 윗변이 서브제목 줄과 같은 높이에 놓입니다.
-   (CTA 를 본문 아래에서 올려 카드 높이를 미디어의 3:2 에 맞추기 위함) */
-.sol-head{display:flex;align-items:flex-start;justify-content:space-between;gap:20px;flex-wrap:wrap}
-.sol-head-text{min-width:0}
+.sol-body{padding:clamp(30px,3.6vw,52px);display:flex;flex-direction:column;justify-content:center;align-items:flex-start}
 .sol-tag{font-family:var(--font-mono);font-size:11.5px;letter-spacing:.08em;text-transform:uppercase;color:var(--accent)}
 .sol-body h3{font-size:clamp(24px,2.8vw,34px);margin-top:14px}
 .sol-body h3 .ko{color:var(--ink-3);font-size:.62em;font-weight:500;margin-left:8px;letter-spacing:-.02em}
-.sol-body>p{margin-top:16px;font-size:15px;color:var(--ink-2)}
-.sol-feats{margin-top:24px;display:grid;grid-template-columns:1fr 1fr;gap:16px 22px}
-.sol-feats .f{padding-left:18px;position:relative}
-.sol-feats .f::before{content:"";position:absolute;left:0;top:8px;width:7px;height:7px;border-radius:2px;background:var(--accent)}
-.sol-feats .f b{display:block;font-size:14px;font-weight:600}
-.sol-feats .f span{font-size:13px;color:var(--ink-2);line-height:1.45}
+.sol-body>p{margin-top:16px;font-size:15.5px;line-height:1.6;color:var(--ink-2);max-width:460px}
+/* 핵심 기능은 이름만 칩으로. 설명까지 넣으면 제목·소개·기능 세 층이 반복돼 카드가 복잡해집니다. */
+.sol-chips{list-style:none;margin:22px 0 0;padding:0;display:flex;flex-wrap:wrap;gap:8px}
+.sol-chips li{padding:7px 12px;border:1px solid var(--line);border-radius:999px;background:var(--surface);font-size:12.5px;color:var(--ink-2)}
+.sol-more{margin-top:32px;display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent)}
+.sol-more .arw{transition:transform .2s ease}
+.sol-card:hover .sol-more .arw{transform:translateX(3px)}
 /* 미디어 높이는 행(=본문) 높이를 따릅니다. aspect-ratio 로 고정하면 본문이 더 길 때
-   미디어가 늘어나지 않아 카드에 빈 공간이 생기거나 본문이 잘립니다.
-   CTA 를 타이틀 줄로 옮겨 본문 높이가 이미 3:2 에 근접하므로 cover 로도 잘림이 거의 없습니다. */
+   미디어가 늘어나지 않아 카드에 빈 공간이 생기거나 본문이 잘립니다. */
 .sol-media{position:relative;min-height:320px;background:var(--bg)}
-.sol-cta{flex:none;margin-top:0}
+/* 섹션 하단 문의. 카드마다 있던 '도입 문의' 버튼을 여기 한 곳으로 모았습니다. */
+.sol-foot{margin-top:clamp(32px,4vw,44px);display:flex;align-items:center;justify-content:center;gap:16px;flex-wrap:wrap}
+.sol-foot p{font-size:14.5px;color:var(--ink-3)}
 
 /* ---------- work ---------- */
 .work-grid{margin-top:clamp(40px,5vw,60px);display:grid;grid-template-columns:repeat(3,1fr);gap:20px}
@@ -381,7 +380,7 @@ img{max-width:100%;display:block}
   .nav-contact{display:none}
   .hero-stats{flex-wrap:wrap;gap:20px 32px}
   .work-grid,.val-grid,.culture-grid{grid-template-columns:1fr}
-  .sol-feats,.form-row{grid-template-columns:1fr}
+  .form-row{grid-template-columns:1fr}
   .about-stats{grid-template-columns:1fr}
   .about-stats .as{border-right:0!important;border-bottom:1px solid var(--line)}
   .footer-top{grid-template-columns:1fr}
@@ -493,11 +492,6 @@ img{max-width:100%;display:block}
 .fb-cta-inner .lead{margin-top:16px;font-size:16px;color:var(--ink-fg2);max-width:560px}
 .fb-cta-actions{display:flex;flex-wrap:wrap;gap:12px;justify-content:flex-end}
 
-/* ---------- 원페이지에서 하위 페이지로 가는 링크 ---------- */
-.sol-detail{margin-top:22px;display:inline-flex;align-items:center;gap:8px;font-family:var(--font-mono);font-size:11.5px;letter-spacing:.1em;text-transform:uppercase;color:var(--accent);border-bottom:1px solid var(--accent-2);padding-bottom:4px}
-.sol-detail:hover{border-bottom-color:var(--accent)}
-.sol-detail .arw{transition:transform .2s ease}
-.sol-detail:hover .arw{transform:translateX(3px)}
 .work-foot{margin-top:clamp(32px,4vw,48px);display:flex;justify-content:center}
 
 @media (max-width:920px){

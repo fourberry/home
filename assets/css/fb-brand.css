@@ -174,7 +174,7 @@
 }
 
 
-/* ---------- 도입 판단과 SSO 흐름 ---------- */
+/* ---------- 도입 판단 ---------- */
 .bp-hero-visual { min-width: 0; }
 .bp-hero-visual .bp-note { text-align: center; }
 .bp-fit-grid { margin-top: clamp(28px, 4vw, 48px); display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 20px; }
@@ -185,25 +185,6 @@
 .bp-fit-card p { margin-top: 12px; font-size: 15px; color: var(--ink-2); line-height: 1.8; }
 .bp-text-link { display: inline-flex; align-items: center; gap: 12px; margin-top: 24px; min-height: 44px; color: var(--accent); font-weight: 600; font-size: 14px; }
 .bp-text-link:hover { text-decoration: underline; text-underline-offset: 5px; }
-.bp-journey { margin-top: 36px; padding: clamp(20px, 3.5vw, 40px); border: 1px solid var(--line); border-radius: var(--radius-l); background: linear-gradient(125deg, var(--accent-2), var(--surface) 75%); }
-.bp-journey-heading { display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
-.bp-journey-heading p { font-size: 13px; color: var(--ink-2); }
-.bp-journey-controls { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 26px; }
-.bp-journey-controls button { display: flex; align-items: center; gap: 12px; min-height: 60px; padding: 14px 18px; border: 1px solid var(--line); border-radius: var(--radius); background: var(--surface); color: var(--ink-2); font: inherit; font-size: 14px; font-weight: 600; text-align: left; cursor: pointer; transition: background .2s, border-color .2s, color .2s; }
-.bp-journey-controls button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
-.bp-journey-controls button[aria-pressed="true"] .bp-index { color: var(--on-accent); }
-.bp-journey-controls button:hover:not([aria-pressed="true"]) { border-color: var(--accent); }
-.bp-journey-panel { margin-top: 30px; min-height: 210px; }
-.bp-journey-scene { display: grid; grid-template-columns: minmax(0, 1.5fr) minmax(0, .75fr); align-items: center; gap: 32px; }
-.bp-journey-tag { font-size: 12px; color: var(--accent); font-weight: 600; }
-.bp-journey-scene h3 { margin-top: 12px; font-size: clamp(22px, 2.5vw, 30px); line-height: 1.45; }
-.bp-journey-scene > div > p { margin-top: 14px; color: var(--ink-2); font-size: 15px; line-height: 1.8; }
-.bp-journey-result { background: var(--surface); border: 1px solid var(--line); border-radius: var(--radius); padding: 26px; }
-.bp-journey-result > span { display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--accent-2); color: var(--accent); }
-.bp-journey-result p { font-weight: 600; }
-.bp-scene-enter-active, .bp-scene-leave-active { transition: opacity .16s ease, transform .16s ease; }
-.bp-scene-enter-from { opacity: 0; transform: translateY(6px); }
-.bp-scene-leave-to { opacity: 0; transform: translateY(-4px); }
 
 /* 기본 details 동작을 유지해 키보드·JS 없는 환경에서도 내용을 엽니다. */
 .bp-detail { margin-top: 24px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); padding: 0; }
@@ -250,11 +231,6 @@
     .bp-fit-grid { grid-template-columns: minmax(0, 1fr); }
     .bp-fit-card { padding: 24px; }
     .bp-fit-card .bp-index + h3 { margin-top: 12px; }
-    .bp-journey-scene { grid-template-columns: minmax(0, 1fr); gap: 20px; }
-    .bp-journey-panel { min-height: 310px; }
-    .bp-journey-result { display: flex; align-items: center; gap: 16px; padding: 18px; }
-    .bp-journey-result > span { flex: none; }
-    .bp-journey-scene .bp-journey-result p { margin-top: 0; }
     .bp-terms-content { grid-template-columns: minmax(0, 1fr); gap: 20px; }
     .bp-compat-row { grid-template-columns: minmax(0, 1fr) auto; gap: 12px 20px; }
     .bp-compat-row p { grid-column: 1 / -1; }
@@ -263,9 +239,6 @@
 @media (max-width: 560px) {
     .bp-hero .fb-page-actions { display: grid; grid-template-columns: minmax(0, 1fr); }
     .bp-hero .fb-page-actions .btn { justify-content: center; }
-    .bp-journey-controls { grid-template-columns: minmax(0, 1fr); }
-    .bp-journey-controls button { min-height: 48px; padding: 12px 14px; }
-    .bp-journey-panel { min-height: 350px; }
     .bp-compat-row { grid-template-columns: minmax(0, 1fr); }
     .bp-compat-row p { grid-column: auto; }
     .bp-poc { padding: 22px; }
@@ -275,7 +248,6 @@
 @media (prefers-reduced-motion: reduce) {
     .brand-page *, .brand-page *::before, .brand-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     .brand-page .reveal, .brand-page .fb-stagger.reveal > * { opacity: 1 !important; transform: none !important; }
-    .bp-scene-enter-from, .bp-scene-leave-to { transform: none; }
 }
 
 /* ==========================================================================
@@ -313,7 +285,6 @@
     .bp-hero .lead { font-size: 16px; }
     .bp-facts { margin-top: 28px; }
     .bp-facts span { font-size: 14px; }
-    .bp-journey-heading p { font-size: 14px; }
     .bp-mock-label { font-size: 12.5px; }
     .bp-status { font-size: 12.5px; }
     .bp-tour-text h3 { font-size: 20px; }
@@ -348,11 +319,6 @@
     .bp-compare.is-now .bp-compare-after, .bp-compare.is-now .bp-compare-arrow { display: none; }
     .bp-compare.is-after .bp-compare-row, .bp-compare.is-now .bp-compare-row { padding: 16px 0; }
 
-    /* SSO 이용 흐름 — 세로로 쌓인 버튼 3개를 가로 칩으로, 고정 높이 제거 */
-    .bp-journey-controls { display: flex; gap: 8px; margin-top: 20px; overflow-x: auto; scrollbar-width: none; }
-    .bp-journey-controls::-webkit-scrollbar { display: none; }
-    .bp-journey-controls button { flex: none; min-height: 44px; padding: 0 14px; border-radius: 999px; }
-    .bp-journey-panel { min-height: 0; margin-top: 22px; }
 
     /* 관리자 콘솔 탭 — 화면 4개 중 하나만, 사진이 먼저 글이 아래 */
     .bp-tour-tabs { display: flex; gap: 8px; margin-top: 24px; padding-bottom: 2px; overflow-x: auto; scrollbar-width: none; }

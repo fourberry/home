@@ -117,34 +117,6 @@
                 </div>
                 <!-- 로그인 한 번으로 서비스 A·B를 이용하는 흐름 애니메이션(14초 순환). 정적 3단계 카드(.bp-flow)를 대체합니다. -->
                 <BrandCoconutFlow />
-                <div class="bp-journey">
-                    <div class="bp-journey-heading">
-                        <span class="eyebrow">SSO 이용 흐름 예시</span>
-                        <p>같은 테넌트에 연결된 서비스 A와 B를 이용하는 경우</p>
-                    </div>
-                    <div class="bp-journey-controls" role="group" aria-label="SSO 이용 단계 선택">
-                        <button v-for="(step, i) in coconutJourney" :key="step.label" type="button" :aria-pressed="journeyStep === i" aria-controls="sso-journey-panel" @click="journeyStep = i">
-                            <span class="bp-index">0{{ i + 1 }}</span>
-                            {{ step.label }}
-                        </button>
-                    </div>
-                    <div id="sso-journey-panel" class="bp-journey-panel" aria-live="polite" aria-atomic="true">
-                        <Transition name="bp-scene" mode="out-in">
-                            <div :key="journeyStep" class="bp-journey-scene">
-                                <div>
-                                    <span class="bp-journey-tag">{{ currentJourney.tag }}</span>
-                                    <h3>{{ currentJourney.title }}</h3>
-                                    <p>{{ currentJourney.body }}</p>
-                                </div>
-                                <div class="bp-journey-result">
-                                    <span aria-hidden="true">✓</span>
-                                    <p>{{ currentJourney.result }}</p>
-                                </div>
-                            </div>
-                        </Transition>
-                    </div>
-                    <p class="bp-note">이용 흐름을 설명하는 예시입니다. 실제 재인증·동의 절차는 세션 상태와 서비스 설정에 따라 달라집니다.</p>
-                </div>
                 <details class="bp-detail bp-technical-flow">
                     <summary>
                         개발 담당자를 위한 인증 처리 순서
@@ -495,7 +467,6 @@ import {
     coconutTour,
     coconutTerms,
     coconutFit,
-    coconutJourney,
     coconutCompatibility,
     coconutOperations,
     coconutSupply,
@@ -526,9 +497,6 @@ definePageMeta({
         { to: '#faq', label: 'FAQ' },
     ],
 })
-
-const journeyStep = ref(0)
-const currentJourney = computed(() => coconutJourney[journeyStep.value]!)
 
 /**
  * 모바일 가독성: PC 화면은 그대로 두고 920px 이하에서만 접기·탭·더 보기를 씁니다.

@@ -115,6 +115,8 @@
                     <h2>인증은 COCONUT이, 업무 권한은 서비스가.</h2>
                     <p class="lead">공통 로그인 화면으로 인증 기능의 중복 개발을 줄입니다. 연동 서비스는 로그인 응답·토큰을 검증해 자체 세션과 업무 권한을 적용합니다.</p>
                 </div>
+                <!-- 로그인 한 번으로 서비스 A·B를 이용하는 흐름 애니메이션(14초 순환). 정적 3단계 카드(.bp-flow)를 대체합니다. -->
+                <BrandCoconutFlow />
                 <div class="bp-journey">
                     <div class="bp-journey-heading">
                         <span class="eyebrow">SSO 이용 흐름 예시</span>
@@ -142,22 +144,6 @@
                         </Transition>
                     </div>
                     <p class="bp-note">이용 흐름을 설명하는 예시입니다. 실제 재인증·동의 절차는 세션 상태와 서비스 설정에 따라 달라집니다.</p>
-                </div>
-                <div class="bp-flow">
-                    <div class="bp-flow-node">
-                        <b>연동 서비스</b>
-                        <span>로그인 버튼을 누르면 표준 인가 요청을 보냅니다.</span>
-                    </div>
-                    <div class="bp-flow-arrow" aria-hidden="true">→</div>
-                    <div class="bp-flow-node is-core">
-                        <b>{{ solution.name }}</b>
-                        <span>사용자를 인증하고 2단계 인증·동의를 거쳐 토큰을 발급합니다.</span>
-                    </div>
-                    <div class="bp-flow-arrow" aria-hidden="true">→</div>
-                    <div class="bp-flow-node">
-                        <b>연동 서비스</b>
-                        <span>토큰을 검증하고 자기 업무 권한을 적용합니다.</span>
-                    </div>
                 </div>
                 <details class="bp-detail bp-technical-flow">
                     <summary>

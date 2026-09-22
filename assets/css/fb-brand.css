@@ -64,13 +64,7 @@
 .bp-compare-after span{font-size:14px;line-height:1.55;color:var(--ink-2)}
 
 /* ---------- 동작 흐름 ---------- */
-.bp-flow{margin-top:clamp(36px,4.5vw,54px);display:grid;grid-template-columns:1fr auto 1fr auto 1fr;align-items:stretch;gap:14px}
-.bp-flow-node{padding:22px 22px 24px;border:1px solid var(--line);border-radius:var(--radius);background:var(--surface)}
-.bp-flow-node b{display:block;font-size:16px}
-.bp-flow-node span{display:block;margin-top:8px;font-size:14px;color:var(--ink-2);line-height:1.6}
-.bp-flow-node.is-core{background:var(--accent);border-color:var(--accent);color:var(--on-accent)}
-.bp-flow-node.is-core span{color:color-mix(in srgb,var(--on-accent) 82%,transparent)}
-.bp-flow-arrow{align-self:center;font-family:var(--font-mono);color:var(--ink-3);font-size:18px}
+/* 정적 3단계 카드(.bp-flow)는 components/brand/BrandCoconutFlow.vue 의 애니메이션으로 대체됐습니다. */
 
 .bp-steps{margin-top:clamp(40px,5vw,64px);display:grid;grid-template-columns:repeat(5,1fr);gap:0;border-top:1px solid var(--line)}
 .bp-step{padding:22px 20px 0 0;position:relative}
@@ -162,8 +156,6 @@
   .bp-compare-after{padding-left:0}
   .bp-hero-grid{grid-template-columns:1fr}
   .bp-frame--hero{transform:none}
-  .bp-flow{grid-template-columns:1fr}
-  .bp-flow-arrow{transform:rotate(90deg);justify-self:center}
   .bp-tour-row,.bp-tour-row.reverse{grid-template-columns:1fr}
   /* 좁은 화면에서는 좌우 교차 없이 항상 글 → 화면 순서입니다. */
   .bp-tour-text{order:-1}

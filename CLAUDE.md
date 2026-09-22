@@ -60,6 +60,12 @@ URL·canonical·프리렌더 경로는 그대로이고 화면만 바뀝니다. �
 PDF 는 원본(4.2MB)을 그대로 넣지 않고 이미지를 재압축한 사본(약 0.7MB)입니다 — 저장소 이력이 커지지 않도록
 갱신할 때도 같은 방식으로 줄여서 넣으세요. 코코넛 기능이 바뀌면 그쪽 소개서를 먼저 갱신하고 여기로 옮기세요.
 
+**모바일 가독성은 PC 를 건드리지 않고 920px 이하에서만 바꿉니다.** [composables/useIsMobile.ts](composables/useIsMobile.ts)가
+SSR·첫 렌더에서 `false` 라 정적 HTML 은 항상 전부 펼쳐진 상태이고, 마운트 뒤 모바일이면
+[components/brand/BrandFold.vue](components/brand/BrandFold.vue)(제목만 보이고 눌러서 펼침)·'지금/도입 후' 전환·콘솔 탭·FAQ 더 보기·하단 고정 바가
+켜집니다. 접히는 내용도 DOM 에 그대로 남으므로 FAQ JSON-LD 와 화면 일치 규칙이 유지됩니다.
+`hidden` 속성으로 숨기는 요소가 `display` 를 지정한 클래스에 지지 않도록 `.brand-page [hidden]` 에 `!important` 를 둔 것을 걷어내지 마세요.
+
 다른 솔루션을 브랜드 페이지로 올리려면 `data/solutions.ts` 항목에 `brand` 색을 넣고
 `pages/solutions/{slug}.vue` 를 만들면 됩니다. `brand` 가 없는 solution 에 브랜드 레이아웃을 지정하면
 레이아웃이 의도적으로 에러를 냅니다.
@@ -249,7 +255,7 @@ AEO(Answer Engine Optimization, 답변형 검색 최적화)에 미치는 영향�
 - `solution_inquiry_click` — `solution` 파라미터로 COCONUT/LIME/MUSCAT 구분.
   홈의 [FbSolutions.vue](components/fb/FbSolutions.vue)는 카드별 버튼 없이 섹션 하단 버튼 하나라
   `solution: 'ALL'`, `link_location: 'solutions_footer'` 로 보내고, 솔루션별 관심은 상세·브랜드 페이지의
-  같은 이벤트로 봅니다(브랜드 페이지는 `link_location` `brand_header`·`hero`)
+  같은 이벤트로 봅니다(브랜드 페이지는 `link_location` `brand_header`·`hero`·`pilot`·`mobile_bar`)
 - `contact_channel_click` — 전화·이메일 링크. [FbContact.vue](components/fb/FbContact.vue)와
   [AppFooter.vue](components/AppFooter.vue) 양쪽에 있으며 `link_location`으로 위치를 구분
 - `ai_workflow_link_click` / `ai_workflow_navigation` — AI 소개 링크 및 목차·실적 링크 클릭.

@@ -227,7 +227,7 @@
 .bp-terms-content { display: grid; grid-template-columns: minmax(0, .7fr) minmax(0, 1fr); gap: 32px; align-items: center; }
 .bp-terms-content > p { color: var(--ink-2); line-height: 1.8; font-size: 15px; }
 .bp-faq .bp-detail { margin: 0; border-bottom: 0; }
-.bp-faq .bp-detail:last-child { border-bottom: 1px solid var(--line); }
+.bp-faq .bp-detail:last-of-type { border-bottom: 1px solid var(--line); }
 .bp-faq { min-width: 0; }
 .bp-mock-label { position: absolute; top: 18px; left: 18px; font-size: 11px; color: var(--ink-2); }
 .bp-login-stage { padding-top: 58px; }
@@ -284,4 +284,99 @@
     .brand-page *, .brand-page *::before, .brand-page *::after { animation: none !important; transition: none !important; scroll-behavior: auto !important; }
     .brand-page .reveal, .brand-page .fb-stagger.reveal > * { opacity: 1 !important; transform: none !important; }
     .bp-scene-enter-from, .bp-scene-leave-to { transform: none; }
+}
+
+/* ==========================================================================
+   모바일 가독성 — PC 는 그대로 두고 920px 이하에서만 적용합니다.
+   - 접기(BrandFold)·'지금/도입 후' 전환·콘솔 탭·FAQ 더 보기·하단 고정 바는 useIsMobile 이 true 일 때만 동작합니다.
+   - SSR 은 전부 펼쳐진 HTML 을 내보내므로 JS 없이도 내용이 보이고 색인도 같습니다.
+   - hidden 속성으로 숨기는 요소(.bp-tour-row 등)가 display 를 지정한 클래스에 지지 않도록 !important 를 씁니다.
+   ========================================================================== */
+.brand-page [hidden] { display: none !important; }
+
+/* BrandFold — PC: 항상 열려 있고 summary/body 가 상자를 만들지 않아 기존 카드·그리드 구조(.bp-compat-row 3열 등)가 그대로입니다. */
+.bp-fold > summary { list-style: none; cursor: default; }
+.bp-fold > summary::-webkit-details-marker { display: none; }
+.bp-fold > summary, .bp-fold > .bp-fold-body { display: contents; }
+.bp-fold-icon { display: none; }
+
+/* 모바일 전용 요소의 기본값(PC 에서는 안 보임) */
+.brand-chips, .bp-compare-switch, .bp-tour-tabs, .bp-faq-more, .bp-mobile-bar { display: none; }
+
+@media (max-width: 920px) {
+    .brand-page { --section-y: 56px; padding-bottom: calc(74px + env(safe-area-inset-bottom)); }
+    .brand-page .scroll-top { bottom: calc(88px + env(safe-area-inset-bottom)); }
+
+    /* 섹션 바로가기 칩 — 헤더 높이가 70 → 116px 이 되므로 앵커 보정·메뉴 위치도 함께 옮깁니다 */
+    .brand-chips { display: flex; gap: 8px; padding: 0 24px 10px; overflow-x: auto; scrollbar-width: none; -webkit-overflow-scrolling: touch; }
+    .brand-chips::-webkit-scrollbar { display: none; }
+    .brand-chips a { flex: none; display: inline-flex; align-items: center; height: 36px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--surface); color: var(--ink); font-size: 13.5px; font-weight: 600; white-space: nowrap; }
+    .brand-chips a:hover { border-color: var(--accent); color: var(--accent); }
+    .brand-page [id] { scroll-margin-top: 124px; }
+    .brand-header .mobile-menu { top: 116px; max-height: calc(100dvh - 116px); }
+
+    /* 글자 크기·대비 — 11~12px 옅은 회색 캡션을 13px 이상, --ink-2 로 */
+    .bp-note { font-size: 13px; color: var(--ink-2); letter-spacing: 0; }
+    .bp-hero-name .ko { font-size: 14px; }
+    .bp-hero .lead { font-size: 16px; }
+    .bp-facts { margin-top: 28px; }
+    .bp-facts span { font-size: 14px; }
+    .bp-journey-heading p { font-size: 14px; }
+    .bp-mock-label { font-size: 12.5px; }
+    .bp-status { font-size: 12.5px; }
+    .bp-tour-text h3 { font-size: 20px; }
+    .bp-tour-text p { font-size: 15px; line-height: 1.65; }
+    /* 이름 유래 한 줄은 모바일에서 접습니다(HTML·색인에는 그대로 남음) */
+    .bp-hero-origin { display: none; }
+
+    /* BrandFold — 모바일: 제목 줄 + 펼침 아이콘, 본문은 눌러서 */
+    .bp-fold > summary { display: flex; align-items: center; gap: 12px; min-height: 44px; cursor: pointer; }
+    .bp-fold > summary > h3, .bp-fold > summary > b { flex: 1; min-width: 0; margin-top: 0; }
+    .bp-fold > .bp-fold-body { display: block; }
+    .bp-fold-icon { display: block; flex: none; font-size: 22px; line-height: 1; font-weight: 400; color: var(--accent); transition: transform .18s ease; }
+    .bp-fold[open] > summary .bp-fold-icon { transform: rotate(45deg); }
+    .section--ink .bp-fold-icon { color: var(--ink-accent); }
+    .bp-fit-card.bp-fold { padding: 6px 20px; }
+    .bp-fit-card.bp-fold > summary > h3 { margin-top: 0; font-size: 17px; }
+    .bp-fit-card.bp-fold p { margin: 0 0 16px; }
+    .fb-feat.bp-fold { padding: 6px 18px; }
+    .fb-feat.bp-fold span { margin: 0 0 14px; }
+    .bp-compat-row.bp-fold { display: block; padding: 0; }
+    .bp-compat-row.bp-fold > summary { justify-content: space-between; padding: 12px 0; }
+    .bp-compat-row.bp-fold > summary > h3 { padding-top: 0; }
+    .bp-compat-row.bp-fold .bp-status { flex: none; }
+    .bp-compat-row.bp-fold p { margin: 0 0 16px; }
+
+    /* 지금 / 도입 후 전환 — 4행을 한 번에 다 읽지 않게 */
+    .bp-compare-switch { display: flex; gap: 4px; margin-top: 24px; padding: 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); }
+    .bp-compare-switch button { flex: 1; min-height: 44px; border: 0; border-radius: 8px; background: transparent; color: var(--ink-2); font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+    .bp-compare-switch button[aria-pressed="true"] { background: var(--ink); color: var(--bg-2); box-shadow: 0 1px 2px rgba(15, 20, 28, .12); }
+    .bp-compare-switch + .bp-compare { margin-top: 8px; }
+    .bp-compare.is-after .bp-compare-now, .bp-compare.is-after .bp-compare-arrow,
+    .bp-compare.is-now .bp-compare-after, .bp-compare.is-now .bp-compare-arrow { display: none; }
+    .bp-compare.is-after .bp-compare-row, .bp-compare.is-now .bp-compare-row { padding: 16px 0; }
+
+    /* SSO 이용 흐름 — 세로로 쌓인 버튼 3개를 가로 칩으로, 고정 높이 제거 */
+    .bp-journey-controls { display: flex; gap: 8px; margin-top: 20px; overflow-x: auto; scrollbar-width: none; }
+    .bp-journey-controls::-webkit-scrollbar { display: none; }
+    .bp-journey-controls button { flex: none; min-height: 44px; padding: 0 14px; border-radius: 999px; }
+    .bp-journey-panel { min-height: 0; margin-top: 22px; }
+
+    /* 관리자 콘솔 탭 — 화면 4개 중 하나만, 사진이 먼저 글이 아래 */
+    .bp-tour-tabs { display: flex; gap: 8px; margin-top: 24px; padding-bottom: 2px; overflow-x: auto; scrollbar-width: none; }
+    .bp-tour-tabs::-webkit-scrollbar { display: none; }
+    .bp-tour-tabs button { flex: none; min-height: 40px; padding: 0 14px; border-radius: 999px; border: 1px solid var(--line); background: var(--bg); color: var(--ink); font: inherit; font-size: 13.5px; font-weight: 600; cursor: pointer; }
+    .bp-tour-tabs button[aria-pressed="true"] { background: var(--accent); border-color: var(--accent); color: var(--on-accent); }
+    .bp-tour-tabs + .bp-tour { margin-top: 16px; }
+    .bp-tour-row .bp-tour-text, .bp-tour-row.reverse .bp-tour-text { order: 0; }
+
+    /* FAQ — 앞의 3개만 먼저(FAQ_PREVIEW), 나머지는 더 보기. 3번째 항목 아래 선을 살립니다. */
+    .bp-faq.is-trimmed .bp-faq-extra { display: none; }
+    .bp-faq.is-trimmed .bp-detail:nth-child(3) { border-bottom: 1px solid var(--line); }
+    .bp-faq-more { display: inline-flex; align-items: center; gap: 8px; min-height: 44px; margin-top: 10px; padding: 0; border: 0; background: transparent; color: var(--accent); font: inherit; font-size: 14.5px; font-weight: 600; cursor: pointer; }
+
+    /* 하단 고정 바 — 긴 페이지 어디서든 문의·설명서로 */
+    .bp-mobile-bar { position: fixed; left: 0; right: 0; bottom: 0; z-index: 46; display: flex; gap: 10px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); background: color-mix(in srgb, var(--bg-2) 94%, transparent); backdrop-filter: blur(10px); border-top: 1px solid var(--line); box-shadow: 0 -8px 24px -16px rgba(15, 20, 28, .30); }
+    .bp-mobile-bar .btn { flex: 1; justify-content: center; min-height: 50px; }
+    .bp-mobile-bar-doc { flex: none; display: grid; place-items: center; width: 50px; height: 50px; border-radius: var(--radius-s); border: 1px solid var(--line); background: var(--surface); color: var(--ink); }
 }

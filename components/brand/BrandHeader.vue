@@ -28,6 +28,10 @@
                 </button>
             </div>
         </div>
+        <!-- 모바일 전용 섹션 바로가기 칩. 헤더 안에 있어 스크롤해도 같이 고정됩니다(PC 는 fb-brand.css 가 숨김). -->
+        <nav class="brand-chips" :aria-label="`${solution.name} 섹션 바로가기`">
+            <a v-for="item in nav" :key="item.to" :href="item.to" @click="close">{{ item.label }}</a>
+        </nav>
         <div id="brandMobileMenu" class="mobile-menu" :class="{ open }" :inert="!open">
             <a v-for="item in nav" :key="item.to" :href="item.to" @click="close">{{ item.label }}</a>
             <NuxtLink to="/" class="home" @click="close">← 포베리 홈</NuxtLink>

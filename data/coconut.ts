@@ -76,6 +76,8 @@ export interface CoconutScreen {
 
 export interface CoconutTourItem extends CoconutScreen {
     id: string
+    /** 모바일 탭 전환 버튼에 쓰는 짧은 한국어 이름 */
+    tab: string
     eyebrow: string
     h2: string
     p: string
@@ -95,6 +97,7 @@ export const coconutHero: CoconutScreen = {
 export const coconutTour: CoconutTourItem[] = [
     {
         id: 'clients',
+        tab: '클라이언트',
         eyebrow: 'Client',
         h2: '서비스에 맞는 로그인 방식을 구성합니다.',
         p: '웹·앱·API 서비스를 클라이언트로 등록하고 인증 방식과 스코프, 콜백 주소, 토큰 유효기간을 정합니다. 서버형(Confidential)과 공개형(Public)을 구분하고 PKCE 필수 여부를 서비스별로 둡니다.',
@@ -107,6 +110,7 @@ export const coconutTour: CoconutTourItem[] = [
     },
     {
         id: 'users',
+        tab: '사용자',
         eyebrow: 'User',
         h2: '사용자를 찾고, 상태를 바꾸고, 잠금을 풉니다.',
         p: '이름·계정·이메일로 검색하고 상태와 소속 테넌트, 마지막 로그인을 확인합니다. 부여된 관리 권한 안에서 상태 변경, 비밀번호 초기화, 2단계 인증·이메일 인증 요청 제한 해제를 처리합니다.',
@@ -119,6 +123,7 @@ export const coconutTour: CoconutTourItem[] = [
     },
     {
         id: 'settings',
+        tab: '정책',
         eyebrow: 'Policy',
         h2: '지원하는 인증 정책을 설정으로 관리합니다.',
         p: '시스템 기본값과 서비스별 인증 설정을 관리합니다. 로그인 실패 잠금, 비밀번호 규칙, 토큰 유효기간 등은 지원하는 항목별 설정 범위에 맞춰 구성합니다.',
@@ -131,6 +136,7 @@ export const coconutTour: CoconutTourItem[] = [
     },
     {
         id: 'logs',
+        tab: '모니터링',
         eyebrow: 'Monitoring',
         h2: '누가, 언제, 어디서 로그인했는지 남습니다.',
         p: '로그인 성공·실패와 접속 IP, 로그인 방식을 기간·상태·클라이언트로 검색합니다. 보안 감사 로그는 심각도별로, 활동 로그는 관리자별로 따로 조회해 "고객이 로그인이 안 된다"는 문의의 원인을 바로 좁힙니다.',

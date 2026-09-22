@@ -57,12 +57,15 @@
                     <h2>우리 서비스에 필요한 인증인지 먼저 확인하세요.</h2>
                     <p class="lead">고객용 웹·앱의 공통 인증과 조직별 계정 운영을 검토할 때 시작할 수 있습니다.</p>
                 </div>
+                <!-- 모바일에서는 제목만 보이고 눌러서 펼칩니다(BrandFold). PC 는 기존 카드 그대로입니다. -->
                 <div v-reveal class="bp-fit-grid fb-stagger">
-                    <article v-for="item in coconutFit" :key="item.n" class="bp-fit-card">
-                        <span class="bp-index">{{ item.n }}</span>
-                        <h3>{{ item.t }}</h3>
+                    <BrandFold v-for="(item, i) in coconutFit" :key="item.n" class="bp-fit-card" :is-mobile="isMobile" :default-open="i === 0">
+                        <template #summary>
+                            <span class="bp-index">{{ item.n }}</span>
+                            <h3>{{ item.t }}</h3>
+                        </template>
                         <p>{{ item.d }}</p>
-                    </article>
+                    </BrandFold>
                 </div>
                 <a class="bp-text-link" href="#integration">
                     기존 인증 체계와의 연동 범위 확인
@@ -78,7 +81,12 @@
                     <span class="eyebrow">Problem · 이런 상황이라면</span>
                     <h2>서비스마다 로그인을 다시 만들고 계신가요.</h2>
                 </div>
-                <div class="bp-compare" role="table" aria-label="도입 전후 비교">
+                <!-- 모바일 전용: 4행을 한 번에 다 읽지 않도록 '지금 / 도입 후' 를 나눠 보여줍니다. PC 는 대응표 그대로입니다. -->
+                <div class="bp-compare-switch" role="group" aria-label="지금과 도입 후 비교 보기" :hidden="!isMobile">
+                    <button type="button" :aria-pressed="compareMode === 'now'" @click="compareMode = 'now'">지금</button>
+                    <button type="button" :aria-pressed="compareMode === 'after'" @click="compareMode = 'after'">{{ solution.name }} 도입 후</button>
+                </div>
+                <div class="bp-compare" :class="isMobile ? `is-${compareMode}` : null" role="table" aria-label="도입 전후 비교">
                     <div class="bp-compare-head" role="row">
                         <span role="columnheader">지금</span>
                         <span aria-hidden="true"></span>
@@ -175,8 +183,12 @@
                     <h2>운영 담당자가 직접 다룹니다.</h2>
                     <p class="lead">테넌트·클라이언트·사용자·정책·이력을 한 콘솔에서 확인합니다. 관리자는 부여된 역할과 범위 안에서 계정 운영 업무를 처리합니다.</p>
                 </div>
+                <!-- 모바일 전용: 화면 4개를 탭으로 전환합니다. PC 는 위아래로 나열된 그대로입니다. -->
+                <div class="bp-tour-tabs" role="group" aria-label="관리자 콘솔 화면 선택" :hidden="!isMobile">
+                    <button v-for="(t, i) in coconutTour" :key="t.id" type="button" :aria-pressed="tourTab === i" @click="tourTab = i">{{ t.tab }}</button>
+                </div>
                 <div class="bp-tour">
-                    <div v-for="(t, i) in coconutTour" v-reveal :id="`console-${t.id}`" :key="t.id" class="bp-tour-row" :class="{ reverse: i % 2 === 1 }">
+                    <div v-for="(t, i) in coconutTour" v-reveal :id="`console-${t.id}`" :key="t.id" class="bp-tour-row" :class="{ reverse: i % 2 === 1 }" :hidden="isMobile && tourTab !== i">
                         <div class="bp-frame">
                             <FbZoomImage :src="t.image" :full-src="t.full" :alt="t.alt" :width="t.w" :height="t.h" />
                         </div>
@@ -213,10 +225,12 @@
                     <p class="lead">표준 로그인 연동 후 지원하는 정책을 관리자 설정으로 변경합니다. 필요한 감사 기록과 보관 범위는 고객의 운영 기준에 맞춰 확인합니다.</p>
                 </div>
                 <div v-reveal class="bp-grid-3 fb-stagger">
-                    <div v-for="s in coconutSecurity" :key="s.t" class="fb-feat">
-                        <b>{{ s.t }}</b>
+                    <BrandFold v-for="s in coconutSecurity" :key="s.t" class="fb-feat" :is-mobile="isMobile">
+                        <template #summary>
+                            <b>{{ s.t }}</b>
+                        </template>
                         <span>{{ s.d }}</span>
-                    </div>
+                    </BrandFold>
                 </div>
             </div>
         </section>
@@ -274,11 +288,13 @@
                     <p class="lead">사용자 로그인과 서버 간 인증을 구분해 연결합니다. 기존 사내 인증 체계나 회원 이전은 현재 환경을 확인한 뒤 적용 범위를 정합니다.</p>
                 </div>
                 <div v-reveal class="bp-compatibility fb-stagger">
-                    <article v-for="item in coconutCompatibility" :key="item.t" class="bp-compat-row">
-                        <h3>{{ item.t }}</h3>
-                        <span class="bp-status" :class="item.kind">{{ item.status }}</span>
+                    <BrandFold v-for="(item, i) in coconutCompatibility" :key="item.t" class="bp-compat-row" :is-mobile="isMobile" :default-open="i === 0">
+                        <template #summary>
+                            <h3>{{ item.t }}</h3>
+                            <span class="bp-status" :class="item.kind">{{ item.status }}</span>
+                        </template>
                         <p>{{ item.d }}</p>
-                    </article>
+                    </BrandFold>
                 </div>
                 <p class="bp-note">기본 제공 기능도 서비스 측 연동과 검수가 필요합니다. 사전 검토 항목의 적용 범위와 일정은 환경 확인 후 안내합니다.</p>
                 <details class="bp-detail">
@@ -305,10 +321,12 @@
                     <p class="lead">계정 정지, 세션 종료, 장애가 발생했을 때 각 서비스가 어떻게 동작할지 확인합니다.</p>
                 </div>
                 <div v-reveal class="bp-fit-grid fb-stagger">
-                    <article v-for="item in coconutOperations" :key="item.t" class="bp-fit-card">
-                        <h3>{{ item.t }}</h3>
+                    <BrandFold v-for="item in coconutOperations" :key="item.t" class="bp-fit-card" :is-mobile="isMobile">
+                        <template #summary>
+                            <h3>{{ item.t }}</h3>
+                        </template>
                         <p>{{ item.d }}</p>
-                    </article>
+                    </BrandFold>
                 </div>
                 <aside class="bp-callout">
                     <b>외부 서비스의 즉시 차단에는 수신 처리가 필요합니다.</b>
@@ -376,10 +394,12 @@
                     <p class="lead">설치·연동·운영에 포함되는 항목을 구분하고, 현재 환경에 맞춰 협의합니다.</p>
                 </div>
                 <div v-reveal class="bp-fit-grid fb-stagger">
-                    <article v-for="item in coconutSupply" :key="item.t" class="bp-fit-card">
-                        <h3>{{ item.t }}</h3>
+                    <BrandFold v-for="item in coconutSupply" :key="item.t" class="bp-fit-card" :is-mobile="isMobile">
+                        <template #summary>
+                            <h3>{{ item.t }}</h3>
+                        </template>
                         <p>{{ item.d }}</p>
-                    </article>
+                    </BrandFold>
                 </div>
                 <div class="bp-poc">
                     <div>
@@ -425,14 +445,20 @@
                     <span class="eyebrow">FAQ · 자주 묻는 질문</span>
                     <h2>{{ solution.name }} 도입 전 확인.</h2>
                 </div>
-                <div class="bp-faq">
-                    <details v-for="(item, i) in solution.faq" :key="item.q" class="bp-detail" :open="i === 0">
+                <!-- 모바일에서는 앞의 3개만 먼저 보이고 '더 보기' 로 나머지를 폅니다.
+                     9개 전부 DOM 에 남아 있어 FAQ JSON-LD 와 화면 내용이 계속 일치합니다. -->
+                <div class="bp-faq" :class="{ 'is-trimmed': isMobile && !faqExpanded }">
+                    <details v-for="(item, i) in solution.faq" :key="item.q" class="bp-detail" :class="{ 'bp-faq-extra': i >= FAQ_PREVIEW }" :open="i === 0">
                         <summary>
                             {{ item.q }}
                             <span class="bp-detail-icon" aria-hidden="true">+</span>
                         </summary>
                         <p>{{ item.a }}</p>
                     </details>
+                    <button v-if="solution.faq.length > FAQ_PREVIEW" type="button" class="bp-faq-more" :hidden="!isMobile || faqExpanded" @click="faqExpanded = true">
+                        질문 {{ solution.faq.length - FAQ_PREVIEW }}개 더 보기
+                        <span aria-hidden="true">↓</span>
+                    </button>
                 </div>
             </div>
         </section>
@@ -451,6 +477,21 @@
         </section>
 
         <FbCtaBand :inquiry-to="coconutInquiryHref" :title="`${solution.name} 도입을 검토 중이신가요?`" desc="현재 회원 구조와 연동할 서비스를 알려주시면 전환 방안과 일정을 제안드립니다." />
+
+        <!-- 모바일 전용 하단 고정 바. 긴 페이지 어디서든 문의·설명서로 갈 수 있게 합니다. PC 는 헤더 버튼이 그 역할입니다. -->
+        <div class="bp-mobile-bar" :hidden="!isMobile">
+            <a :href="coconutBrochure" class="bp-mobile-bar-doc" target="_blank" rel="noopener" aria-label="제품 설명서 PDF 내려받기">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M12 4v11" />
+                    <path d="M7 10l5 5 5-5" />
+                    <path d="M5 20h14" />
+                </svg>
+            </a>
+            <NuxtLink :to="coconutInquiryHref" class="btn btn-primary" @click="trackInquiry('mobile_bar')">
+                도입 문의
+                <span class="arw">→</span>
+            </NuxtLink>
+        </div>
     </div>
 </template>
 
@@ -502,6 +543,17 @@ definePageMeta({
 
 const journeyStep = ref(0)
 const currentJourney = computed(() => coconutJourney[journeyStep.value]!)
+
+/**
+ * 모바일 가독성: PC 화면은 그대로 두고 920px 이하에서만 접기·탭·더 보기를 씁니다.
+ * isMobile 은 SSR·첫 렌더에서 false 라 정적 HTML 에는 전부 펼쳐진 상태로 들어갑니다
+ * (JS 실패 시에도 내용이 보이고, 검색엔진도 같은 HTML 을 봅니다). 상세는 composables/useIsMobile.ts.
+ */
+const isMobile = useIsMobile()
+const compareMode = ref<'now' | 'after'>('after')
+const tourTab = ref(0)
+const FAQ_PREVIEW = 3
+const faqExpanded = ref(false)
 const solution = findSolution('coconut')!
 const related = computed(() => fbProjects.filter(p => solution.relatedProjects?.includes(p.id)))
 

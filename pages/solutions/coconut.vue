@@ -231,7 +231,7 @@
                         하나의 인가 서버를 쓰더라도 서비스마다 로고·색상·문구를 따로 둡니다. 관리자 콘솔에서 미리보기와 저장·게시 기능으로 관리합니다. 로그인 템플릿 등 항목에 따라 반영 방식이
                         다릅니다.
                     </p>
-                    <ul class="bp-brand-list">
+                    <ul v-reveal class="bp-brand-list fb-stagger">
                         <li v-for="b in coconutBranding" :key="b.t">
                             <b>{{ b.t }}</b>
                             <span>{{ b.d }}</span>
@@ -273,7 +273,7 @@
                     <h2>연동할 수 있는 범위부터 확인합니다.</h2>
                     <p class="lead">사용자 로그인과 서버 간 인증을 구분해 연결합니다. 기존 사내 인증 체계나 회원 이전은 현재 환경을 확인한 뒤 적용 범위를 정합니다.</p>
                 </div>
-                <div class="bp-compatibility">
+                <div v-reveal class="bp-compatibility fb-stagger">
                     <article v-for="item in coconutCompatibility" :key="item.t" class="bp-compat-row">
                         <h3>{{ item.t }}</h3>
                         <span class="bp-status" :class="item.kind">{{ item.status }}</span>
@@ -375,7 +375,7 @@
                     <h2>비용과 일정은 적용 범위에서 시작합니다.</h2>
                     <p class="lead">설치·연동·운영에 포함되는 항목을 구분하고, 현재 환경에 맞춰 협의합니다.</p>
                 </div>
-                <div class="bp-fit-grid">
+                <div v-reveal class="bp-fit-grid fb-stagger">
                     <article v-for="item in coconutSupply" :key="item.t" class="bp-fit-card">
                         <h3>{{ item.t }}</h3>
                         <p>{{ item.d }}</p>

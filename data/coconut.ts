@@ -16,7 +16,7 @@ const IMG = '/images/solutions/coconut'
  */
 export const coconutOgImage = `${IMG}/cover.jpg`
 
-/** 고객 배포용 제품 설명서(PDF, 14쪽). 원본: coconut/output/pdf/Coconut-제품설명서-공통배포용.pdf */
+/** 고객 배포용 제품 설명서(PDF, 16쪽). 원본: coconut/output/pdf/Coconut-제품설명서-공통배포용.pdf */
 export const coconutBrochure = '/docs/coconut-product-guide.pdf'
 
 /**

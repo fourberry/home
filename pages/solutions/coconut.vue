@@ -469,8 +469,8 @@
             <div class="container">
                 <div class="bp-doc">
                     <div>
-                        <b>{{ solution.name }} 제품 설명서 (PDF · 14쪽 · 약 0.7MB)</b>
-                        <span>관리자 콘솔 화면과 도입 절차를 정리한 고객 배포용 문서입니다. 내부 검토용으로 전달하실 때 쓰세요.</span>
+                        <b>{{ solution.name }} 제품 설명서 (PDF · 16쪽 · 약 0.9MB)</b>
+                        <span>관리자 콘솔 화면과 연동 기능, 도입 절차를 정리한 고객 배포용 문서입니다. 내부 검토용으로 전달하실 때 쓰세요.</span>
                     </div>
                     <a :href="coconutBrochure" class="btn btn-ghost" target="_blank" rel="noopener">내려받기 ↓</a>
                 </div>

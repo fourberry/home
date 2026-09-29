@@ -57,8 +57,9 @@ URL·canonical·프리렌더 경로는 그대로이고 화면만 바뀝니다. �
 화면 투어·보안·연동·도입 절차는 [data/coconut.ts](data/coconut.ts)에 있습니다.
 화면 이미지(`public/images/solutions/coconut/`)와 제품 설명서(`public/docs/coconut-product-guide.pdf`)는
 `C:\project\fourberry\coconut\output\pdf\` 의 **공통 배포용** 산출물에서 가져온 것입니다(개인정보 가림 처리된 보정본).
-PDF 는 원본(4.2MB)을 그대로 넣지 않고 이미지를 재압축한 사본(약 0.7MB)입니다 — 저장소 이력이 커지지 않도록
+PDF 는 원본(4.2MB)을 그대로 넣지 않고 PNG 화면만 JPEG 로 재압축한 사본(약 0.9MB)입니다 — 저장소 이력이 커지지 않도록
 갱신할 때도 같은 방식으로 줄여서 넣으세요. 코코넛 기능이 바뀌면 그쪽 소개서를 먼저 갱신하고 여기로 옮기세요.
+소개서는 `output\pdf\product-guide-src\build_product_guide.py` 로 만들며, `--web --out` 으로 이 사본을 함께 만듭니다.
 
 **모바일 가독성은 PC 를 건드리지 않고 920px 이하에서만 바꿉니다.** [composables/useIsMobile.ts](composables/useIsMobile.ts)가
 SSR·첫 렌더에서 `false` 라 정적 HTML 은 항상 전부 펼쳐진 상태이고, 마운트 뒤 모바일이면

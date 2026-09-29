@@ -4,6 +4,7 @@
 
 COCONUT 브랜드 페이지의 업데이트 섹션(`/solutions/coconut/#updates`)에 올린 항목의 공개 기준과 근거입니다.
 데이터는 [data/coconut.ts](../data/coconut.ts)의 `coconutUpdates`이며, 기준 월은 `coconutUpdatesAsOf`입니다.
+"최근 추가" 기능은 2026-09-29 제품 설명서(16쪽)의 관련 장에도 반영했습니다. 개발 중 기능은 설명서에 넣지 않습니다.
 
 ## 공개 기준
 

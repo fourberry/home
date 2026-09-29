@@ -326,6 +326,49 @@
             </div>
         </section>
 
+        <!-- 업데이트 — 최근 추가 · 개발 중 -->
+        <section id="updates" class="section section--alt">
+            <div class="fb-split container">
+                <div class="fb-split-side">
+                    <span class="eyebrow">Updates · 업데이트</span>
+                    <h2>
+                        코코넛은 계속
+                        <br />
+                        기능을 넓히고 있습니다.
+                    </h2>
+                    <p class="bp-lead">최근 추가된 기능과 개발 중인 기능을 구분해 알려드립니다. 필요한 기능의 제공 범위는 도입 상담에서 확인합니다.</p>
+                    <p class="bp-updates-asof">
+                        최종 갱신
+                        <time :datetime="coconutUpdatesAsOf.datetime">{{ coconutUpdatesAsOf.label }}</time>
+                    </p>
+                </div>
+                <div class="bp-updates">
+                    <div v-for="group in updateGroups" :key="group.key" class="bp-updates-group">
+                        <h3 class="bp-updates-head">
+                            {{ group.label }}
+                            <span>{{ group.items.length }}</span>
+                        </h3>
+                        <div v-reveal class="bp-updates-list fb-stagger">
+                            <BrandFold v-for="(item, i) in group.items" :key="item.t" class="bp-update-row" :is-mobile="isMobile" :default-open="group.key === 'added' && i === 0">
+                                <template #summary>
+                                    <!-- 상태는 그룹으로 정합니다. 날짜 유무로 정하면 개발 중 항목에 날짜를 넣는 순간 출시된 기능처럼 보입니다. -->
+                                    <span v-if="group.key === 'dev'" class="bp-status dev">개발 중</span>
+                                    <time v-else-if="item.date" class="bp-update-date" :datetime="item.date.replace('.', '-')">{{ item.date }}</time>
+                                    <h4>{{ item.t }}</h4>
+                                </template>
+                                <p>{{ item.d }}</p>
+                                <a v-if="item.link" :href="item.link.href" class="bp-update-link">
+                                    {{ item.link.label }}
+                                    <span class="arw" aria-hidden="true">→</span>
+                                </a>
+                            </BrandFold>
+                        </div>
+                        <p v-if="group.key === 'dev'" class="bp-updates-note">개발 중인 기능은 제공 일정을 약속하지 않으며, 검증 결과에 따라 범위와 제공 시점이 달라질 수 있습니다.</p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
         <!-- 도입 절차 -->
         <section id="adoption" class="section section--ink">
             <div class="container">
@@ -476,6 +519,8 @@ import {
     coconutIntegrations,
     coconutSpec,
     coconutAdoption,
+    coconutUpdates,
+    coconutUpdatesAsOf,
 } from '~/data/coconut'
 
 /**
@@ -510,6 +555,10 @@ const FAQ_PREVIEW = 3
 const faqExpanded = ref(false)
 const solution = findSolution('coconut')!
 const related = computed(() => fbProjects.filter(p => solution.relatedProjects?.includes(p.id)))
+const updateGroups = [
+    { key: 'added', label: '최근 추가', items: coconutUpdates.added },
+    { key: 'dev', label: '개발 중', items: coconutUpdates.dev },
+]
 
 const crumbs = [
     { name: '홈', path: '/' },

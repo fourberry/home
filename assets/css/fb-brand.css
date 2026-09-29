@@ -219,6 +219,21 @@
 .bp-poc h3 { font-size: 20px; }
 .bp-poc p { margin-top: 10px; max-width: 700px; color: var(--ink-2); font-size: 15px; line-height: 1.8; }
 .bp-poc .btn { flex-shrink: 0; }
+
+/* 업데이트(#updates) — 날짜 | 제목·설명. 제목을 설명 위 넓은 칸에 두어 줄바꿈 없이 읽히게 합니다. */
+.bp-updates { display: flex; flex-direction: column; gap: 48px; min-width: 0; }
+.bp-updates-asof { margin-top: 14px; font-family: var(--font-mono); font-size: 12px; color: var(--ink-2); }
+.bp-updates-head { display: flex; align-items: baseline; gap: 10px; padding-bottom: 14px; border-bottom: 1px solid var(--ink); font-size: 17px; font-weight: 700; }
+.bp-updates-head span { font-family: var(--font-mono); font-size: 12px; font-weight: 500; color: var(--ink-2); }
+.bp-update-row { display: grid; grid-template-columns: 80px minmax(0, 1fr); gap: 8px 24px; align-items: start; padding: 20px 0; border-bottom: 1px solid var(--line); }
+.bp-update-row :is(.bp-update-date, .bp-status) { grid-column: 1; grid-row: 1 / span 2; }
+.bp-update-row :is(h4, p, .bp-update-link) { grid-column: 2; }
+.bp-update-date { font-family: var(--font-mono); font-size: 13px; font-weight: 500; color: var(--accent); padding-top: 2px; }
+.bp-update-row h4 { font-size: 16px; font-weight: 600; line-height: 1.5; }
+.bp-update-row p { font-size: 14px; line-height: 1.75; color: var(--ink-2); }
+.bp-update-link { justify-self: start; font-size: 13px; font-weight: 600; color: var(--accent); }
+.bp-status.dev { background: transparent; border-style: dashed; border-color: var(--ink-3); padding: 4px 8px; }
+.bp-updates-note { margin-top: 16px; font-size: 13px; line-height: 1.7; color: var(--ink-2); }
 .brand-page :is(a, button, summary):focus-visible { outline: 3px solid var(--accent); outline-offset: 5px; border-radius: 4px; }
 .brand-page .section--ink :is(a, button, summary):focus-visible { outline-color: var(--ink-accent); }
 .brand-header .mobile-menu[inert] { visibility: hidden; }
@@ -309,6 +324,15 @@
     .bp-compat-row.bp-fold > summary > h3 { padding-top: 0; }
     .bp-compat-row.bp-fold .bp-status { flex: none; }
     .bp-compat-row.bp-fold p { margin: 0 0 16px; }
+    .bp-updates { gap: 36px; }
+    /* 날짜·상태 칸 폭과 간격. 펼친 본문 들여쓰기가 이 두 값으로 제목 시작점에 맞춰집니다 */
+    .bp-update-row.bp-fold { --upd-lead: 58px; --upd-gap: 12px; display: block; padding: 0; }
+    .bp-update-row.bp-fold > summary { gap: var(--upd-gap); min-height: 56px; padding: 12px 0; }
+    .bp-update-row.bp-fold > summary > h4 { flex: 1; min-width: 0; font-size: 15px; }
+    .bp-update-row :is(.bp-update-date, .bp-status) { flex: none; width: var(--upd-lead); }
+    .bp-update-row .bp-status.dev { padding: 3px 0; text-align: center; }
+    .bp-update-row.bp-fold > .bp-fold-body { padding: 0 0 16px calc(var(--upd-lead) + var(--upd-gap)); }
+    .bp-update-row.bp-fold .bp-update-link { display: inline-block; margin-top: 8px; }
 
     /* 지금 / 도입 후 전환 — 4행을 한 번에 다 읽지 않게 */
     .bp-compare-switch { display: flex; gap: 4px; margin-top: 24px; padding: 4px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); }

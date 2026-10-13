@@ -76,29 +76,71 @@ export default defineEventHandler(async event => {
         throw createError({ statusCode: 413, statusMessage: '첨부파일 총 용량이 너무 큽니다.' })
     }
 
-    // --- 상위 API 호출 ---
+    // --- 상위 API 호출 (라임 v2) ---
+    let response
     try {
-        const result = await $fetch(`${config.messageApiBase}/api/v1/messages/send`, {
+        response = await $fetch.raw<LimeEnvelope>(`${config.messageApiBase}/api/v2/messages/send`, {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
                 'X-API-Key': config.messageApiKey,
             },
-            body: {
-                channel: 'email',
-                to: config.contactRecipients, // 서버에서 고정
-                ...(useTemplate ? { templateId: body.templateId, data: body.data ?? {} } : { subject: body.subject, content: body.content, data: body.data ?? {} }),
-                attachments,
-            },
+            body: buildLimeRequest(body, useTemplate, config.contactRecipients, attachments), // 수신자는 서버에서 고정
             timeout: 30_000,
+            // 4xx/5xx 도 v2 오류 봉투를 읽어야 하므로 예외로 바꾸지 않는다.
+            ignoreResponseError: true,
         })
-
-        return { ok: true, result }
     } catch (error: any) {
-        console.error('[api/contact] 발송 실패:', error?.data ?? error?.message ?? error)
+        console.error('[api/contact] 발송 서버 연결 실패:', error?.message ?? error)
         throw createError({
             statusCode: 502,
             statusMessage: '메일 발송 서버에 전달하지 못했습니다.',
         })
     }
+
+    const envelope = response._data
+    if (!response.ok || envelope?.success !== true) {
+        const { code, message } = limeError(envelope)
+        console.error('[api/contact] 발송 실패:', response.status, code, message)
+        // 503 은 라임이 큐에 넣지 못한 경우라 다시 시도하면 될 수 있다.
+        throw createError(
+            response.status === 503
+                ? { statusCode: 503, statusMessage: '메일 발송 서버가 잠시 응답하지 않습니다. 잠시 후 다시 시도해 주세요.' }
+                : { statusCode: 502, statusMessage: '메일 발송 서버 오류' }
+        )
+    }
+
+    return { ok: true, messageId: envelope.data?.messageId }
 })
+
+/** 라임 v2 응답 봉투. 성공은 { success:true, data }, 실패는 { success:false, error:{ code, message } } */
+interface LimeEnvelope {
+    success?: boolean
+    data?: { messageId?: string; status?: string }
+    error?: { code?: string; message?: string | string[] }
+}
+
+/**
+ * 라임 v2 발송 요청 본문을 만든다.
+ *
+ * 프론트가 보내는 형식(templateId+data / subject+content)은 그대로 받고, 여기서만 v2 로 바꾼다.
+ * v2 는 정의되지 않은 필드가 하나라도 있으면 400 이므로 옛 필드(templateId·data·subject)를 그대로 넘기면 안 된다.
+ * 문의 메일은 회사 담당자에게 가는 업무 알림이라 발송 목적은 항상 transactional 이다.
+ */
+function buildLimeRequest(body: ContactPayload, useTemplate: boolean, to: string, attachments: Attachment[]) {
+    return {
+        channel: 'email',
+        to,
+        messagePurpose: 'transactional',
+        ...(useTemplate ? { template: { id: body.templateId, variables: body.data ?? {} } } : { content: { subject: body.subject, body: body.content } }),
+        // 첨부도 정의된 필드만 넘긴다 (모르는 필드가 섞이면 400).
+        attachments: attachments.map(a => ({ filename: a.filename, mimeType: a.mimeType, content: a.content })),
+    }
+}
+
+/** v2 오류 봉투에서 코드·메시지를 꺼낸다. message 는 문자열 배열일 수 있다. */
+function limeError(envelope: LimeEnvelope | string | undefined) {
+    const error = typeof envelope === 'object' ? (envelope?.error ?? {}) : {}
+    const message = Array.isArray(error.message) ? error.message.join('; ') : error.message
+    return { code: error.code ?? 'UNKNOWN', message: message ?? '응답 본문 없음' }
+}

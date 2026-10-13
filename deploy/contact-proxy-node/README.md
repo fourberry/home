@@ -104,7 +104,7 @@ https://<노출된-주소>/api/contact     (또는 리버스 프록시 경로)
 cd /opt/fb-contact
 cp server.js server.js.bak.$(date +%Y%m%d)
 curl -fsSL https://raw.githubusercontent.com/fourberry/home/main/deploy/contact-proxy-node/server.js -o server.js
-grep -c useTemplate server.js    # 0 이면 옛 코드가 그대로 — 받아지지 않은 것
+grep -c 'api/v2/messages/send' server.js    # 0 이면 옛 코드(v1)가 그대로 — 받아지지 않은 것
 pm2 restart fb-contact
 pm2 logs fb-contact --lines 20 --nostream
 ```
@@ -164,12 +164,30 @@ pm2 env 0 | grep CONTACT_RECIPIENTS    # 0 대신 `pm2 list` 의 fb-contact id
 
 `attachments` 는 `[{filename, mimeType, content(base64)}]` 형식입니다.
 
-- 성공: `200 { "ok": true }`
-- 실패: `4xx/5xx { "ok": false, "message": "..." }`
+- 성공: `200 { "ok": true, "messageId": "..." }`
+- 실패: `4xx/5xx { "ok": false, "message": "..." }` — 라임이 큐 등록에 실패한 경우(503)만 503, 나머지 발송 오류는 502
 - 제한: 첨부 최대 5개 · 개당 10MB · 합계 25MB
 
+### 라임으로 보내는 요청 (v2)
+
+프록시는 라임 **v2** `POST /api/v2/messages/send` 를 호출합니다(2026-10-14 v1 에서 전환).
+v1 은 라임에서 동결된 레거시이고, 큐 등록 실패도 성공(queued)으로 응답해 문의가 조용히 유실될 수 있었습니다.
+
+| 프론트 요청 | 라임 v2 본문 |
+|---|---|
+| `templateId` + `data` | `template: { id, variables }` |
+| `subject` + `content` | `content: { subject, body }` |
+| (공통) | `channel: "email"`, `to`(= `CONTACT_RECIPIENTS`), `messagePurpose: "transactional"`, `attachments` |
+
+- `messagePurpose` 는 필수로 봐야 합니다. 라임이 광고 정책을 도입한 발송 주체의 새 이메일은
+  목적이 없으면 `400 MESSAGE_PURPOSE_REQUIRED` 로 거절합니다. 문의 메일은 업무 알림이라 `transactional` 입니다.
+- v2 는 정의되지 않은 필드를 400 으로 거절하므로 옛 필드(`templateId`·`data`·최상위 `subject`)를 섞으면 안 됩니다.
+- `to` 는 쉼표로 이은 여러 주소를 한 문자열로 넘깁니다. 라임은 이 값을 그대로 저장하고 SMTP 발송 때
+  `to` 헤더에 넣으므로 수신자 전원이 한 통을 함께 받습니다. 라임의 수신자 칸은 255자까지라 그보다 길면 저장에 실패합니다.
+- 응답은 `{ success: true, data: { messageId, status } }` / `{ success: false, error: { code, message } }` 봉투이며,
+  `error.message` 는 문자열 배열일 수 있습니다. 프록시 로그에는 상태 코드·오류 코드·메시지만 남깁니다.
+
 발송 API 로는 수신자(`CONTACT_RECIPIENTS`)와 `X-API-Key` 를 붙여 넘깁니다.
-템플릿 방식이면 `templateId`+`data` 를, 아니면 `subject`+`content` 를 싣습니다.
 
 ## 보안 메모
 발송 API 키는 그동안 정적 번들과 git 히스토리에 노출되어 있었습니다. 프록시로 옮긴 뒤에도

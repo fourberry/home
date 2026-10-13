@@ -154,6 +154,12 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 
 첨부 제한은 5개 · 개당 10MB · 합계 25MB이고 `attachments: [{filename, mimeType, content(base64)}]` 형식입니다.
 
+프록시는 이 요청을 **라임 v2**(`/api/v2/messages/send`) 형식으로 바꿔 보냅니다 —
+`template: { id, variables }` 또는 `content: { subject, body }`, 그리고 `messagePurpose: 'transactional'`.
+`messagePurpose` 를 빼면 라임이 `400 MESSAGE_PURPOSE_REQUIRED` 로 거절하고, v1 필드를 섞으면 400 입니다.
+화면이 보내는 형식은 그대로 두고 프록시 안에서만 변환합니다. 자세한 대응표는
+[deploy/contact-proxy-node/README.md](deploy/contact-proxy-node/README.md)의 "라임으로 보내는 요청 (v2)" 절에 있습니다.
+
 **메일 문구·디자인은 이 저장소에 없습니다.** 라임의 `HOMEPAGE_CONTACT` 템플릿(홈페이지 프로젝트)과
 거기 연결된 이메일 레이아웃에 있습니다. 문구를 고치려면 라임에서 고치세요 — 여기를 배포할 필요가 없습니다.
 폼이 보내는 `data` 키(`clientLabel`·`clientName`·`message` 등)와 템플릿의 `{{변수}}` 는 짝이므로,

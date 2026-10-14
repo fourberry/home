@@ -182,10 +182,15 @@ v1 은 라임에서 동결된 레거시이고, 큐 등록 실패도 성공(queue
 - `messagePurpose` 는 필수로 봐야 합니다. 라임이 광고 정책을 도입한 발송 주체의 새 이메일은
   목적이 없으면 `400 MESSAGE_PURPOSE_REQUIRED` 로 거절합니다. 문의 메일은 업무 알림이라 `transactional` 입니다.
 - v2 는 정의되지 않은 필드를 400 으로 거절하므로 옛 필드(`templateId`·`data`·최상위 `subject`)를 섞으면 안 됩니다.
-- `to` 는 쉼표로 이은 여러 주소를 한 문자열로 넘깁니다. 라임은 이 값을 그대로 저장하고 SMTP 발송 때
-  `to` 헤더에 넣으므로 수신자 전원이 한 통을 함께 받습니다. 라임의 수신자 칸은 255자까지라 그보다 길면 저장에 실패합니다.
-- 응답은 `{ success: true, data: { messageId, status } }` / `{ success: false, error: { code, message } }` 봉투이며,
-  `error.message` 는 문자열 배열일 수 있습니다. 프록시 로그에는 상태 코드·오류 코드·메시지만 남깁니다.
+- `to` 는 쉼표로 이은 여러 주소를 한 문자열로 넘깁니다. 라임의 "이메일 여러 수신자 한 통 발송"(2026-10-14 운영 반영)
+  규칙을 따르며, 수신자 전원이 서로 보이는 메일 한 통을 함께 받습니다.
+  - 중복을 뺀 **최대 50명**, **주소만** 적습니다. `홍길동 <a@x.com>` 처럼 이름을 붙이거나 형식이 틀린 주소가
+    하나라도 있으면 한 건도 접수되지 않고 `400 INVALID_RECIPIENT` 입니다 — `CONTACT_RECIPIENTS` 를 고칠 때 주의하세요.
+  - 라임 월 사용량은 **주소 수만큼** 소진됩니다(수신자 8명이면 문의 1건에 8건).
+  - 결과는 수신자마다 따로 기록됩니다. 메일 서버가 일부 주소만 거절하면 그 수신자만 실패하고 나머지는 발송됩니다.
+- 응답은 `{ success: true, data: { messageId, status, deliveryGroupId, recipients } }` /
+  `{ success: false, error: { code, message } }` 봉투이며, `error.message` 는 문자열 배열일 수 있습니다.
+  프록시는 `data.messageId`(대표 = 첫 수신자 메시지)만 돌려주고, 로그에는 상태 코드·오류 코드·메시지만 남깁니다.
 
 발송 API 로는 수신자(`CONTACT_RECIPIENTS`)와 `X-API-Key` 를 붙여 넘깁니다.
 

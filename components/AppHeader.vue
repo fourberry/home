@@ -36,6 +36,7 @@ const menu = [
     { to: '/#about', label: '회사소개' },
     { to: '/#services', label: '서비스' },
     { to: '/#solutions', label: '솔루션' },
+    { to: '/#tools', label: '도구' },
     { to: '/#work', label: '실적' },
     { to: '/#culture', label: '컬처' },
     { to: '/#faq', label: 'FAQ' },

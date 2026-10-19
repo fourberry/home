@@ -4,7 +4,7 @@
             <div v-reveal class="section-head">
                 <span class="eyebrow">Solution · 자체 솔루션</span>
                 <h2>
-                    검증된 자체 솔루션으로
+                    업무에 맞는 자체 솔루션으로
                     <br />
                     도입을 앞당깁니다.
                 </h2>

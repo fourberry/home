@@ -28,7 +28,13 @@ export const SITE_OG_IMAGE = '/og/cover.jpg'
  * "정규 주소라고 선언한 URL 이 다른 곳으로 리다이렉트되는" 신호 충돌이 생깁니다.
  * 그래서 주소를 만들 때는 반드시 이 함수를 거칩니다.
  */
-export const withSlash = (path: string) => (path.endsWith('/') ? path : `${path}/`)
+export const withSlash = (path: string) => {
+    // 앵커·쿼리는 그대로 두고 실제 페이지 경로에만 슬래시를 붙입니다.
+    const suffixAt = path.search(/[?#]/)
+    const pathname = suffixAt < 0 ? path : path.slice(0, suffixAt)
+    const suffix = suffixAt < 0 ? '' : path.slice(suffixAt)
+    return (pathname.endsWith('/') ? pathname : `${pathname}/`) + suffix
+}
 
 /**
  * 주소 조각. 화면마다 줄바꿈 위치가 달라서 도로명과 건물명을 따로 둡니다.

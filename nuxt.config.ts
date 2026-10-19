@@ -2,6 +2,7 @@
 import { defineNuxtConfig } from 'nuxt/config'
 import { SITE_URL, SITE_TITLE_SUFFIX, SITE_OG_IMAGE, SITE_DESCRIPTION } from './data/company'
 import { fbSolutions } from './data/solutions'
+import { linkberryPath } from './data/linkberry'
 import { fbProjects } from './data/projects'
 
 // GA4 측정 ID.
@@ -67,6 +68,8 @@ export default defineNuxtConfig({
         },
     },
 
+    sitemap: { exclude: ['/solutions/linkberry', '/solutions/linkberry/'] },
+
     routeRules: {
         '/**': { prerender: true },
         // 문의 프록시는 프리렌더 대상에서 제외 (런타임에서만 실행)
@@ -81,7 +84,16 @@ export default defineNuxtConfig({
             crawlLinks: true,
             // 끝의 슬래시는 canonical·sitemap·내부 링크와 같은 형태입니다.
             // 빼면 같은 페이지를 두 주소로 두 번 프리렌더하게 됩니다.
-            routes: ['/solutions/', '/work/', '/services/si-sm/', '/how-we-work/', ...fbSolutions.map(s => `/solutions/${s.slug}/`), ...fbProjects.map(p => `/work/${p.id}/`)],
+            routes: [
+                linkberryPath + '/',
+                '/solutions/linkberry/',
+                '/solutions/',
+                '/work/',
+                '/services/si-sm/',
+                '/how-we-work/',
+                ...fbSolutions.map(s => `/solutions/${s.slug}/`),
+                ...fbProjects.map(p => `/work/${p.id}/`),
+            ],
         },
     },
 

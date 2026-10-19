@@ -39,10 +39,12 @@
 </template>
 
 <script setup lang="ts">
+import { fbSolutions } from '~/data/solutions'
+
 const stats = [
     // 연도는 0 부터 세면 고장난 것처럼 보이므로 카운트업 제외
     { num: '2023', lbl: '설립 연도 · Founded', count: false },
     { num: '15+', lbl: '수행 프로젝트 · Projects' },
-    { num: '3', lbl: '자체 솔루션 · Products' },
+    { num: String(fbSolutions.length), lbl: '자체 솔루션 · Products' },
 ]
 </script>

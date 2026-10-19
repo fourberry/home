@@ -12,7 +12,8 @@
                 <NuxtLink to="/" class="home">← 포베리 홈</NuxtLink>
             </nav>
             <div class="nav-cta">
-                <NuxtLink :to="inquiryTo" class="btn btn-primary nav-contact" @click="trackInquiry">도입 문의</NuxtLink>
+                <a v-if="solution.slug === 'linkberry'" href="#download" class="btn btn-primary nav-contact">베타 다운로드</a>
+                <NuxtLink v-else :to="inquiryTo" class="btn btn-primary nav-contact" @click="trackInquiry">도입 문의</NuxtLink>
                 <button
                     ref="menuToggle"
                     class="nav-toggle"
@@ -35,7 +36,8 @@
         <div id="brandMobileMenu" class="mobile-menu" :class="{ open }" :inert="!open">
             <a v-for="item in nav" :key="item.to" :href="item.to" @click="close">{{ item.label }}</a>
             <NuxtLink to="/" class="home" @click="close">← 포베리 홈</NuxtLink>
-            <NuxtLink :to="inquiryTo" class="btn btn-primary" @click="closeAndTrack">도입 문의하기 →</NuxtLink>
+            <a v-if="solution.slug === 'linkberry'" href="#download" class="btn btn-primary" @click="close">베타 다운로드 →</a>
+            <NuxtLink v-else :to="inquiryTo" class="btn btn-primary" @click="closeAndTrack">도입 문의하기 →</NuxtLink>
         </div>
     </header>
 </template>

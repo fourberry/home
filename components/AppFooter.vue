@@ -23,6 +23,9 @@
                     <h5>Solution</h5>
                     <NuxtLink to="/solutions/">자체 솔루션</NuxtLink>
                     <NuxtLink v-for="s in fbSolutions" :key="s.slug" :to="`/solutions/${s.slug}/`">{{ s.name }} {{ s.ko }}</NuxtLink>
+                    <h5 class="footer-tools-heading">Tools</h5>
+                    <NuxtLink to="/#tools">개발·운영 도구</NuxtLink>
+                    <NuxtLink :to="linkberryPath + '/'">{{ linkberryTool.name }} {{ linkberryTool.ko }} · 베타</NuxtLink>
                 </div>
                 <div class="footer-col">
                     <h5>Work</h5>
@@ -55,6 +58,7 @@
 <script setup lang="ts">
 import { fbCompany } from '~/data/company'
 import { fbSolutions } from '~/data/solutions'
+import { linkberryTool, linkberryPath } from '~/data/linkberry'
 
 const year = new Date().getFullYear()
 const { trackEntry } = useAiWorkflowTracking()
@@ -64,3 +68,9 @@ const trackContactChannel = (channel: 'tel' | 'email') => {
     useTrackEvent('contact_channel_click', { channel, link_location: 'footer' })
 }
 </script>
+
+<style scoped>
+.footer-tools-heading {
+    margin-top: 24px;
+}
+</style>

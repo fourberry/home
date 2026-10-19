@@ -6,8 +6,8 @@ Codex의 진입 문서는 루트 [AGENTS.md](AGENTS.md)이며 이 파일을 함�
 ## 프로젝트 개요
 
 (주)포베리 회사 소개 홈페이지. Nuxt 4 기반이며 **정적 사이트(SSG)로 빌드되어 GitHub Pages에 배포**됩니다.
-`/`는 주요 내용을 요약하는 원페이지이고, 그 아래에 **검색 노출용 하위 페이지 13개**가 함께 있습니다
-(솔루션 3 + 실적 6 + 허브 2 + 서비스 1 + AI 활용 개발 방식 1). 현재 색인 대상 URL은 14개입니다.
+`/`는 주요 내용을 요약하는 원페이지이고, 그 아래에 **검색 노출용 하위 페이지 14개**가 함께 있습니다
+(솔루션 3 + 개발·운영 도구 1 + 실적 6 + 허브 2 + 서비스 1 + AI 활용 개발 방식 1). 현재 색인 대상 URL은 15개입니다.
 페이지를 추가·삭제할 때 이 개수도 실제 프리렌더 경로·사이트맵과 함께 갱신합니다.
 
 ## 명령어
@@ -37,11 +37,18 @@ npx prettier --write .   # 포맷팅
 | 경로 | 파일 | 데이터 |
 |---|---|---|
 | `/solutions`, `/solutions/{slug}` | `pages/solutions/` | [data/solutions.ts](data/solutions.ts) |
+| `/tools/linkberry` | `pages/tools/linkberry.vue` | [data/linkberry.ts](data/linkberry.ts) |
 | `/work`, `/work/{id}` | `pages/work/` | [data/projects.ts](data/projects.ts) |
 | `/services/si-sm` | [pages/services/si-sm.vue](pages/services/si-sm.vue) | 페이지 안에 인라인 |
 | `/how-we-work` | [pages/how-we-work.vue](pages/how-we-work.vue) | [data/aiWorkflow.ts](data/aiWorkflow.ts) |
 
-#### 솔루션 브랜드 페이지 (COCONUT)
+#### 브랜드 페이지 (COCONUT·LinkBerry)
+
+`/tools/linkberry/`는 Windows SSH·SFTP 도구의 베타 브랜드·다운로드 페이지입니다.
+메인 `/#tools` 개발·운영 도구 섹션에서 별도 관리하며 `fbSolutions`에 포함하지 않습니다.
+이전 `/solutions/linkberry/`는 새 주소로 이동하는 noindex 안내 페이지로만 보존하며 사이트맵에서 제외합니다.
+제품·FAQ·이용 안내는 `data/linkberry.ts`, 설치 파일의 버전·크기·해시는 `data/linkberry-release.json`이 정본입니다.
+배포 준비와 한계는 `docs/linkberry-beta.md`를 따릅니다. 베타를 정식 출시나 검증 완료로 표현하지 않습니다.
 
 `/solutions/coconut/` 은 공통 상세 페이지가 아니라 **브랜드 페이지**입니다.
 정적 파일 [pages/solutions/coconut.vue](pages/solutions/coconut.vue)가 동적 `[slug].vue` 보다 우선하므로
@@ -49,7 +56,7 @@ URL·canonical·프리렌더 경로는 그대로이고 화면만 바뀝니다. �
 
 | 파일 | 역할 |
 |---|---|
-| [layouts/brand.vue](layouts/brand.vue) | `definePageMeta({ layout: 'brand', brand: '{slug}', brandNav })` 로 지정. `data/solutions.ts` 의 `brand` 색을 래퍼의 CSS 변수(`--accent` 등)로 덮어씀 |
+| [layouts/brand.vue](layouts/brand.vue) | `definePageMeta({ layout: 'brand', brand: '{slug}', brandNav })` 로 지정. 각 제품 데이터의 `brand` 색을 래퍼의 CSS 변수(`--accent` 등)로 덮어씀 |
 | [components/brand/BrandHeader.vue](components/brand/BrandHeader.vue) | 회사 메뉴 대신 페이지 안 앵커를 보여주는 헤더. 푸터는 회사 공통 푸터 그대로 |
 | [assets/css/fb-brand.css](assets/css/fb-brand.css) | 브랜드 페이지 전용 배치(`.bp-*`). `fb-design.css` 뒤에 로드 |
 

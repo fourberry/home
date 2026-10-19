@@ -6,6 +6,7 @@
         <FbServices />
         <FbAiWorkflow />
         <FbSolutions />
+        <FbTools />
         <FbWork />
         <FbValues />
         <FbCulture />

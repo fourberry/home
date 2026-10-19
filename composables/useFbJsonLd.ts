@@ -106,7 +106,7 @@ export const breadcrumbJsonLd = (items: { name: string; path: string }[]): JsonL
 })
 
 /** 자체 솔루션(소프트웨어 제품) */
-export const solutionJsonLd = (s: FbSolution): JsonLdNode => ({
+export const solutionJsonLd = (s: FbSolution, pagePath = `/solutions/${s.slug}`): JsonLdNode => ({
     '@context': 'https://schema.org',
     '@type': 'SoftwareApplication',
     name: s.name,
@@ -114,7 +114,7 @@ export const solutionJsonLd = (s: FbSolution): JsonLdNode => ({
     applicationCategory: s.category,
     // 웹 서비스·데스크톱 관리 앱의 지원 OS를 하나의 값으로 추정하지 않습니다.
     description: s.seoDescription,
-    url: abs(`/solutions/${s.slug}`),
+    url: abs(pagePath),
     image: SITE_URL + s.image,
     featureList: s.feats.map(f => `${f.t}: ${f.d}`),
     provider: { '@id': `${SITE_URL}/#organization` },

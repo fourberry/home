@@ -7,13 +7,16 @@ import path from 'node:path'
 const root = fileURLToPath(new URL('../', import.meta.url))
 const release = JSON.parse(await readFile(path.join(root, 'data/linkberry-release.json'), 'utf8'))
 const directory = path.join(root, 'public/downloads/linkberry')
-const installer = path.join(directory, release.fileName)
-if (process.argv.includes('--fetch')) {
-    await mkdir(directory, { recursive: true })
-    execFileSync('gh', ['release', 'download', release.releaseTag, '--repo', process.env.GITHUB_REPOSITORY, '--pattern', release.fileName, '--dir', directory], { stdio: 'inherit' })
+const artifacts = [release, { ...release.updateManifest, releaseTag: release.releaseTag }, ...(release.retainedDownloads || [])]
+await mkdir(directory, { recursive: true })
+for (const artifact of artifacts) {
+    const file = path.join(directory, artifact.fileName)
+    if (process.argv.includes('--fetch')) {
+        execFileSync('gh', ['release', 'download', artifact.releaseTag, '--repo', process.env.GITHUB_REPOSITORY, '--pattern', artifact.fileName, '--dir', directory], { stdio: 'inherit' })
+    }
+    const bytes = await readFile(file)
+    if ((await stat(file)).size !== artifact.bytes || createHash('sha256').update(bytes).digest('hex') !== artifact.sha256) {
+        throw new Error('LinkBerry 배포 파일의 크기 또는 SHA-256이 배포 정보와 다릅니다: ' + artifact.fileName)
+    }
+    console.log('LinkBerry 배포 파일 크기·SHA-256 확인 완료: ' + artifact.fileName)
 }
-const bytes = await readFile(installer)
-if ((await stat(installer)).size !== release.bytes || createHash('sha256').update(bytes).digest('hex') !== release.sha256) {
-    throw new Error('LinkBerry 설치 파일의 크기 또는 SHA-256이 배포 정보와 다릅니다.')
-}
-console.log('LinkBerry 설치 파일 크기·SHA-256 확인 완료: ' + release.fileName)

@@ -1,9 +1,22 @@
 {
-    "version": "0.1.1-beta.1",
+    "version": "0.1.1-beta.3",
     "stage": "베타",
     "date": "2026-10-19",
-    "fileName": "LinkBerry-Setup-0.1.1-beta.1-x64.exe",
-    "releaseTag": "linkberry-v0.1.1-beta.1",
-    "bytes": 113843007,
-    "sha256": "23523b6b69d4bfcdae42e902e6064e4e3c64553194260462399d5b32efdf0f36"
+    "fileName": "LinkBerry-Setup-0.1.1-beta.3-x64.exe",
+    "releaseTag": "linkberry-v0.1.1-beta.3",
+    "bytes": 114172386,
+    "sha256": "85ecd8ce8edb25e3dd455147175aa55aa168f42031785c476cb9882d817261d7",
+    "updateManifest": {
+        "fileName": "beta.yml",
+        "bytes": 376,
+        "sha256": "6e6c8b704edcfe95a5fff7d232b73765b03b2b2bd650c96b51e2d28954d061d3"
+    },
+    "retainedDownloads": [
+        {
+            "fileName": "LinkBerry-Setup-0.1.1-beta.1-x64.exe",
+            "releaseTag": "linkberry-v0.1.1-beta.1",
+            "bytes": 113843007,
+            "sha256": "23523b6b69d4bfcdae42e902e6064e4e3c64553194260462399d5b32efdf0f36"
+        }
+    ]
 }

@@ -15,7 +15,7 @@
                             </a>
                             <a href="#terms" class="btn btn-ghost">이용 안내 확인</a>
                         </div>
-                        <p class="lb-caption">Windows x64 · v{{ release.version }} · 자동 업데이트 미지원</p>
+                        <p class="lb-caption">Windows x64 · v{{ release.version }} · 자동 업데이트 지원</p>
                     </div>
                     <div class="lb-identity">
                         <img :src="solution.brand!.mark" alt="LinkBerry 연결 고리 심볼" width="112" height="112" />
@@ -79,9 +79,10 @@
                     <ul class="lb-limits">
                         <li>Windows x64용 · Node.js 별도 설치 불필요</li>
                         <li>코드 서명 없음 · 보안 경고 또는 설치 차단 가능</li>
-                        <li>자동 업데이트 없음 · 버전 간 업데이트 설치 미검증</li>
+                        <li>새 버전 자동 확인·다운로드 · 작업 후 종료 시 설치</li>
                         <li>모든 Windows 환경과 기업 설치 정책의 호환성 미검증</li>
                     </ul>
+                    <p class="lb-caption">0.1.1-beta.1 이하 버전은 이번 설치 파일을 한 번 직접 설치해야 자동 업데이트가 시작됩니다. 기존 앱의 연결과 파일 작업을 마친 뒤 설치하세요.</p>
                     <p class="lb-caption">보안 기능을 끄거나 조직의 설치 정책을 우회하지 마세요.</p>
                 </div>
                 <div class="lb-download-card">

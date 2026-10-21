@@ -16,7 +16,7 @@ const hasMacTrial = linkberryMacTrial.downloads.length > 0
 
 export const linkberryRelease = {
     ...release,
-    downloadPath: '/downloads/linkberry/' + release.fileName,
+    downloadPath: (release as typeof release & { downloadUrl?: string }).downloadUrl || '/downloads/linkberry/' + release.fileName,
     sizeLabel: (release.bytes / 1024 / 1024).toFixed(1) + ' MiB',
 }
 

@@ -65,3 +65,14 @@ Mac 파일은 홈페이지의 CPU별 버튼에서 회사 공개 GitHub Release �
 두 CPU의 최종 Mac 빌드와 DMG 복사본 실행 검사는 2026-10-21에 통과했습니다. 빌드 소스는 `4f4f01db422084956aa87769e6685fda11a21928`이며 버전은 `0.1.1-beta.10`입니다. 파일 크기와 SHA-256은 `data/linkberry-mac-trial.json`에 기록합니다. 각 네이티브 macOS 환경에서 기본 117개 검사, 실제 앱 화면, SSH·SFTP·원격 파일 편집과 패키지 구성을 검증했습니다.
 
 Mac 시험판은 Developer ID 서명·Apple 공증·자동 업데이트를 제공하지 않습니다. CI 결과가 실제 팀원의 인터넷 다운로드 후 Gatekeeper·Applications 설치·Keychain·재실행을 대신하지 않습니다. Apple Silicon CI의 제한된 화면에서는 큰 창 레이아웃 검증이 제한됩니다. 공개 Windows 설치본은 이전 LinkBerry 이름이며 기존 파일·업데이트 채널을 유지합니다.
+
+
+## BerryLinker Windows beta.11 배포 — 2026-10-21
+
+Windows 설치 파일을 BerryLinker-Setup-0.1.1-beta.11-x64.exe로 갱신합니다. 이전 항목의 Windows 구명칭 설치본 안내는 이번 배포부터 적용되지 않습니다. 버전·파일 크기·SHA-256과 다운로드 URL의 정본은 data/linkberry-release.json입니다.
+
+새 Windows EXE는 회사 공개 GitHub Release 자산으로 제공합니다. 기존 Windows 파일은 기존 Pages 주소에 그대로 보존하며, 업데이트 채널 https://www.fourberry.co.kr/downloads/linkberry/beta.yml도 유지합니다. 새 beta.yml의 파일 URL만 검증된 GitHub Release 자산을 가리킵니다. 새 EXE는 .data/windows-downloads에서 검증하고 정적 출력에는 추가하지 않아 기존 Pages 용량을 더 늘리지 않습니다. 기존 Pages 출력이 약 1GB를 초과하는 경고는 남아 있으며, 기존 주소 이전은 이번 범위에 포함하지 않습니다.
+
+정적 생성, 15개 색인 URL의 제목·설명·canonical·FAQ와 JSON-LD, 다운로드 필수 확인란, 새 EXE와 beta.yml 및 기존 다운로드의 크기·해시를 확인했습니다. 실제 브라우저의 PC 및 390px 모바일 표시에서 새 파일명·버전·버튼과 Mac 시험본 안내를 확인했습니다. Mac 배포 정보와 네 파일은 변경하지 않습니다. GEO·AEO 영향은 배포 버전·다운로드 경로 정보이며 제품 기능이나 지원 범위에 대한 새 주장은 추가하지 않았습니다.
+
+설정 보존과 실제 NSIS 업그레이드의 세부 검증은 앱 저장소 VERIFICATION.md의 Windows beta.11 기록을 기준으로 합니다. 이 PC의 실제 사용자 설치본을 덮어쓰는 시험은 하지 않습니다. 코드 서명은 기존과 같이 제공하지 않습니다.

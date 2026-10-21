@@ -12,12 +12,15 @@ for (const artifact of macTrial.artifacts) {
         throw new Error('Mac 시험본 배포 정보가 올바르지 않습니다.')
     }
 }
+for (const artifact of [release, ...(release.retainedDownloads || [])]) {
+    if (artifact.downloadUrl && artifact.downloadUrl !== 'https://github.com/fourberry/home/releases/download/' + artifact.releaseTag + '/' + artifact.fileName) throw new Error('Windows 다운로드 주소가 허용된 Release 경로와 다릅니다.')
+}
 const directory = path.join(root, 'public/downloads/linkberry')
 const artifacts = [release, { ...release.updateManifest, releaseTag: release.releaseTag }, ...(release.retainedDownloads || []), ...macTrial.artifacts]
 
 for (const artifact of artifacts) {
-    // Mac 파일은 Pages 용량 제한을 넘지 않도록 Release에 보관합니다.
-    const artifactDirectory = macTrial.artifacts.includes(artifact) ? path.join(root, '.data/mac-trial-downloads') : directory
+    // Release 주소를 가진 설치 파일은 Pages 출력과 분리해 검증합니다.
+    const artifactDirectory = macTrial.artifacts.includes(artifact) ? path.join(root, '.data/mac-trial-downloads') : artifact.downloadUrl ? path.join(root, '.data/windows-downloads') : directory
     await mkdir(artifactDirectory, { recursive: true })
     const file = path.join(artifactDirectory, artifact.fileName)
     if (process.argv.includes('--fetch')) {

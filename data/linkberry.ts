@@ -9,6 +9,50 @@ export const linkberryRelease = {
 
 export const linkberryPath = '/tools/linkberry'
 
+// 실제 앱에 가상 데이터를 넣어 촬영한 화면입니다. 접속 정보와 업무 내용은 예시입니다.
+export const linkberryScreens = [
+    {
+        id: 'workspace',
+        label: '분할 터미널',
+        title: '터미널과 파일 작업을 한 화면에서',
+        description: '분할 터미널로 서비스 상태와 로그를 나란히 확인하고, SFTP 파일 탐색기로 원격 파일을 관리하세요.',
+        image: '/images/solutions/linkberry/workspace.png',
+        alt: 'LinkBerry의 왼쪽 SFTP 파일 탐색기와 서비스 상태·로그를 나란히 표시한 두 개의 분할 터미널. 데모 데이터 화면.',
+    },
+    {
+        id: 'files',
+        label: '파일 전송',
+        title: '원격 파일을 찾고, 전송하고',
+        description: '원격 폴더를 탐색하며 파일을 업로드하고 다운로드하세요. 파일 목록과 전송 결과를 터미널 옆에서 확인할 수 있습니다.',
+        image: '/images/solutions/linkberry/files.png',
+        alt: 'SFTP 탐색기에 업로드된 release-notes.md와 다운로드 메뉴, 업로드 완료 상태가 표시된 LinkBerry 데모 화면.',
+    },
+    {
+        id: 'editor',
+        label: '원격 편집',
+        title: '설정 파일을 열고, 바로 수정',
+        description: '원격 텍스트 파일을 앱 안에서 열어 내용을 확인하고 수정하세요. 변경 내용을 확인한 뒤 원격 서버에 저장할 수 있습니다.',
+        image: '/images/solutions/linkberry/editor.png',
+        alt: '가상 프로젝트의 nginx.conf를 연 LinkBerry 원격 텍스트 편집기와 저장하지 않은 변경 표시, 원격에 저장 버튼.',
+    },
+    {
+        id: 'commands',
+        label: '명령어 사전',
+        title: '필요한 명령어를 찾아서 활용',
+        description: '작업에 맞는 Linux·Docker 명령어를 검색하고 설명과 예제를 확인하세요. 예제를 복사해 경로와 이름을 환경에 맞게 바꿔 사용할 수 있습니다.',
+        image: '/images/solutions/linkberry/commands.png',
+        alt: '로그를 검색한 LinkBerry 명령어 사전에서 docker logs의 설명과 기본·응용 예제를 터미널 옆에 표시한 화면.',
+    },
+    {
+        id: 'notes',
+        label: '작업 메모',
+        title: '서버 작업에 필요한 정보를 함께 기록',
+        description: '서버별 메모에 작업 경로, 확인할 내용과 작업 기록을 정리하세요. 색상과 태그로 구분하고 메모 보드에 자유롭게 배치할 수 있습니다.',
+        image: '/images/solutions/linkberry/notes.png',
+        alt: '데모 서버의 배포 확인 목록, 작업 경로, 로그 명령어와 작업 기록을 색상과 태그로 구분한 LinkBerry 메모 보드.',
+    },
+]
+
 // 공통 브랜드 표시 형식만 재사용하며 솔루션 목록에는 등록하지 않습니다.
 export const linkberryTool: FbSolution = {
     slug: 'linkberry',

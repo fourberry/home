@@ -47,6 +47,8 @@
             </div>
         </section>
 
+        <BrandLinkberryGallery />
+
         <section id="features" class="section section--alt">
             <div class="container">
                 <div class="section-head">
@@ -174,6 +176,7 @@ definePageMeta({
     layout: 'brand',
     brand: 'linkberry',
     brandNav: [
+        { to: '#screens', label: '화면 둘러보기' },
         { to: '#features', label: '기능' },
         { to: '#download', label: '다운로드' },
         { to: '#terms', label: '이용 안내' },

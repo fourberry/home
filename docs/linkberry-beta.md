@@ -55,3 +55,13 @@ JavaScript 비활성은 생성 HTML의 본문·FAQ·네이티브 폼으로, 동�
 프로그램 소스 커밋: e0b9b7b38da266855c2f65ace114c4e6a9260694 (master, 로컬 저장소에 remote 없음). 기존 Electron 회귀의 스크롤 시험 실패는 실제 키 입력 대신 직접 IPC를 호출한 시험 조건을 수정하고 36개 최종 통과했습니다. 테스트 실패와 정리 오류도 원본 VERIFICATION.md에 기록했습니다. 이번 변경은 updater·안내·배포 검증 범위이며 불필요해진 정적 버전 CSS 외 기존 기능을 제거하지 않았습니다.
 
 공개 배포 후 운영 URL의 버전·EXE SHA-256·beta.yml과 기존 다운로드를 다시 검증합니다. 같은 이름의 공개 자산을 덮어쓰지 않고 다음 버전은 새 태그·EXE로 게시합니다.
+
+
+## BerryLinker Mac 시험판 배포 준비 — 2026-10-21
+Mac 파일은 홈페이지의 CPU별 버튼에서 회사 공개 GitHub Release 자산으로 연결합니다. 기존 Windows 다운로드 보존으로 Pages 용량이 약 1GB에 근접하여 Mac 파일을 정적 출력에 추가하지 않습니다. 다운로드 준비 스크립트는 Mac 파일을 `.data/mac-trial-downloads`에서 별도로 해시 검증합니다.
+
+상한 근거: https://docs.github.com/en/pages/getting-started-with-github-pages/github-pages-limits . 기존 Windows 파일·해시·업데이트 URL은 유지합니다. 앱 소스는 회사 비공개 저장소에만 있으며 공개 저장소에는 검증된 설치 파일과 홈페이지 코드·배포 정보만 게시합니다.
+
+두 CPU의 최종 Mac 빌드와 DMG 복사본 실행 검사는 2026-10-21에 통과했습니다. 빌드 소스는 `4f4f01db422084956aa87769e6685fda11a21928`이며 버전은 `0.1.1-beta.10`입니다. 파일 크기와 SHA-256은 `data/linkberry-mac-trial.json`에 기록합니다. 각 네이티브 macOS 환경에서 기본 117개 검사, 실제 앱 화면, SSH·SFTP·원격 파일 편집과 패키지 구성을 검증했습니다.
+
+Mac 시험판은 Developer ID 서명·Apple 공증·자동 업데이트를 제공하지 않습니다. CI 결과가 실제 팀원의 인터넷 다운로드 후 Gatekeeper·Applications 설치·Keychain·재실행을 대신하지 않습니다. Apple Silicon CI의 제한된 화면에서는 큰 창 레이아웃 검증이 제한됩니다. 공개 Windows 설치본은 이전 LinkBerry 이름이며 기존 파일·업데이트 채널을 유지합니다.

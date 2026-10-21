@@ -5,7 +5,7 @@
                 <FbBreadcrumb :items="crumbs" />
                 <div class="bp-hero-grid">
                     <div>
-                        <span class="eyebrow">LinkBerry · Beta</span>
+                        <span class="eyebrow">BerryLinker · Beta</span>
                         <h1>{{ solution.headline }}</h1>
                         <p class="lead">{{ solution.desc }}</p>
                         <div class="fb-page-actions">
@@ -13,14 +13,15 @@
                                 베타 다운로드
                                 <span aria-hidden="true">↓</span>
                             </a>
+                            <a v-if="macTrial.downloads.length" href="#mac-trial" class="btn btn-ghost">Mac 시험본 다운로드</a>
                             <a href="#terms" class="btn btn-ghost">이용 안내 확인</a>
                         </div>
                         <p class="lb-caption">Windows x64 · v{{ release.version }} · 자동 업데이트 지원</p>
                     </div>
                     <div class="lb-identity">
-                        <img :src="solution.brand!.mark" alt="LinkBerry 연결 고리 심볼" width="112" height="112" />
+                        <img :src="solution.brand!.mark" alt="BerryLinker 연결 고리 심볼" width="112" height="112" />
                         <p class="lb-wordmark">
-                            LinkBerry
+                            BerryLinker
                             <span>BETA</span>
                         </p>
                         <p>서버를 연결하고, 작업을 이어갑니다.</p>
@@ -89,7 +90,8 @@
                 </div>
                 <div class="lb-download-card">
                     <span class="lb-badge">{{ release.stage }} · v{{ release.version }}</span>
-                    <h3>Windows용 LinkBerry</h3>
+                    <h3>Windows용 BerryLinker</h3>
+                    <p v-if="release.fileName.startsWith('LinkBerry-')" class="lb-caption">제품 이름을 LinkBerry에서 BerryLinker(베리링커)로 변경했습니다. 현재 Windows 다운로드는 이름 변경 전 LinkBerry 설치본이며, 새 이름은 다음 배포부터 적용됩니다.</p>
                     <dl>
                         <div>
                             <dt>파일</dt>
@@ -125,6 +127,43 @@
                         <p>파일이 안내된 설치 파일과 같은지 비교하는 값입니다. 코드 서명을 대신하지 않습니다.</p>
                     </details>
                 </div>
+            </div>
+        </section>
+
+        <section v-if="macTrial.downloads.length" id="mac-trial" class="section section--alt">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">macOS · Trial</span>
+                    <h2>Mac 시험용 다운로드.</h2>
+                    <p class="lead">v{{ macTrial.version }} · 팀원의 실제 Mac 설치·동작 확인을 위한 시험본입니다. 정식 지원 검증은 진행 중입니다.</p>
+                    <ul class="lb-limits">
+                        <li>이 Mac에 관하여에서 칩을 확인하고 Apple Silicon 또는 Intel 파일을 선택하세요.</li>
+                        <li>DMG를 열고 앱을 응용 프로그램(Applications) 폴더로 복사합니다. Node.js는 별도로 설치하지 않습니다.</li>
+                        <li>Developer ID 서명·Apple 공증 없음 · 시험용 ad-hoc 서명은 게시자 신원을 보증하지 않습니다. macOS가 실행을 차단할 수 있습니다.</li>
+                        <li>설치가 차단되면 경고 내용을 담당자에게 전달하세요. 보안 기능을 끄거나 조직 정책을 우회하지 마세요.</li>
+                        <li>자동 업데이트 미지원 · 파일은 포베리 GitHub 릴리스에서 내려받으며, 새 시험본은 수동으로 설치합니다.</li>
+                    </ul>
+                </div>
+                <div class="lb-download-grid">
+                    <article v-for="file in macTrial.downloads" :key="file.arch" class="lb-download-card">
+                        <span class="lb-badge">Mac 시험본</span>
+                        <h3>{{ file.label }}</h3>
+                        <dl>
+                            <div><dt>파일</dt><dd>{{ file.fileName }}</dd></div>
+                            <div><dt>크기</dt><dd>{{ file.sizeLabel }}</dd></div>
+                            <div><dt>빌드 날짜</dt><dd>{{ macTrial.date }}</dd></div>
+                        </dl>
+                        <form :action="file.downloadPath" method="get">
+                            <label class="lb-confirm" :for="'mac-ack-' + file.arch">
+                                <input :id="'mac-ack-' + file.arch" type="checkbox" required />
+                                <span>Mac 시험본의 미검증 범위와 <a href="#terms">베타 이용 안내</a>를 확인했습니다.</span>
+                            </label>
+                            <button type="submit" class="btn btn-primary" :aria-label="file.label + ' DMG 다운로드'">DMG 다운로드</button>
+                        </form>
+                        <details class="lb-checksum"><summary>파일 확인용 SHA-256</summary><code>{{ file.sha256 }}</code></details>
+                    </article>
+                </div>
+                <p class="lb-caption">검증 순서: 설치·첫 실행 → SSH 비밀번호/키 인증 → ⌘C·⌘V → SFTP 업로드·다운로드·편집 → 메모 저장 → 앱 재실행 후 설정 확인. 시험 서버를 사용하고 앱 버전·Mac 칩·macOS 버전·오류를 담당자에게 알려주세요. 비밀번호·개인 키·내부 서버 정보는 공유하지 마세요.</p>
             </div>
         </section>
 
@@ -169,7 +208,7 @@
 </template>
 
 <script setup lang="ts">
-import { linkberryTool as solution, linkberryPath, linkberryRelease as release, linkberryTerms } from '~/data/linkberry'
+import { linkberryTool as solution, linkberryPath, linkberryRelease as release, linkberryMacTrial as macTrial, linkberryTerms } from '~/data/linkberry'
 import { fbCompany } from '~/data/company'
 
 definePageMeta({
@@ -186,7 +225,7 @@ definePageMeta({
 const crumbs = [
     { name: '홈', path: '/' },
     { name: '개발·운영 도구', path: '/#tools' },
-    { name: 'LinkBerry', path: linkberryPath },
+    { name: 'BerryLinker', path: linkberryPath },
 ]
 useFbSeo({ title: solution.seoTitle, description: solution.seoDescription, path: linkberryPath })
 useFbJsonLd([solutionJsonLd(solution, linkberryPath), faqJsonLd(solution.faq)])

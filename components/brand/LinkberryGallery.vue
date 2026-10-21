@@ -3,7 +3,7 @@
         <div class="container">
             <div class="section-head">
                 <span class="eyebrow">Workspace tour</span>
-                <h2 id="lb-gallery-title">실제 화면으로 만나는 LinkBerry.</h2>
+                <h2 id="lb-gallery-title">실제 화면으로 만나는 BerryLinker.</h2>
                 <p class="lead">서버 연결부터 파일 관리와 작업 메모까지, 필요한 기능을 살펴보세요.</p>
             </div>
 
@@ -36,7 +36,7 @@
             </div>
 
             <div class="lb-gallery-footer">
-                <p class="lb-gallery-note">데모 데이터로 구성한 실제 LinkBerry 화면입니다. 터미널 출력과 업무 내용은 예시이며, 베타 버전에 따라 화면이 달라질 수 있습니다.</p>
+                <p class="lb-gallery-note">데모 데이터로 구성한 실제 BerryLinker 화면입니다. 터미널 출력과 업무 내용은 예시이며, 베타 버전에 따라 화면이 달라질 수 있습니다.</p>
                 <div v-if="enhanced" class="lb-gallery-pager" role="group" aria-label="화면 이동">
                     <button type="button" aria-label="이전 기능 화면" @click="move(-1)">←</button>
                     <span aria-live="polite" aria-atomic="true">

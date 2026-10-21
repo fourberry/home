@@ -1,0 +1,37 @@
+{
+    "version": "0.1.1-beta.10",
+    "sourceCommit": "4f4f01db422084956aa87769e6685fda11a21928",
+    "date": "2026-10-21",
+    "signing": "ad-hoc",
+    "notarized": false,
+    "artifacts": [
+        {
+            "fileName": "BerryLinker-0.1.1-beta.10-mac-arm64.dmg",
+            "arch": "arm64",
+            "bytes": 133081817,
+            "sha256": "a99d079a04c5dddf500737266381e8cab2aac0f96a0f2b382e36a521ea01354a",
+            "releaseTag": "berrylinker-mac-trial-0.1.1-beta.10-4f4f01d"
+        },
+        {
+            "fileName": "BerryLinker-0.1.1-beta.10-mac-arm64.zip",
+            "arch": "arm64",
+            "bytes": 133036109,
+            "sha256": "e58980cbee654296365aebd51a7e2f3e174a47e97ddf7ad3cbf28339259a34fd",
+            "releaseTag": "berrylinker-mac-trial-0.1.1-beta.10-4f4f01d"
+        },
+        {
+            "fileName": "BerryLinker-0.1.1-beta.10-mac-x64.dmg",
+            "arch": "x64",
+            "bytes": 138639420,
+            "sha256": "28606282115872103966eeb1f3ec2507cd10f496a0227f2d4e7fc6cc2bb8e12b",
+            "releaseTag": "berrylinker-mac-trial-0.1.1-beta.10-4f4f01d"
+        },
+        {
+            "fileName": "BerryLinker-0.1.1-beta.10-mac-x64.zip",
+            "arch": "x64",
+            "bytes": 138641975,
+            "sha256": "587baf858f1ac1e4fa31c5ada690b0291b7df99853f957c103c75cececf83eff",
+            "releaseTag": "berrylinker-mac-trial-0.1.1-beta.10-4f4f01d"
+        }
+    ]
+}

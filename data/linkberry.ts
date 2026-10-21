@@ -1,5 +1,18 @@
 import type { FbSolution } from './solutions'
 import release from './linkberry-release.json'
+import macTrial from './linkberry-mac-trial.json'
+
+type MacArtifact = { fileName: string; arch: string; bytes: number; sha256: string; releaseTag: string }
+export const linkberryMacTrial = {
+    ...macTrial,
+    downloads: (macTrial.artifacts as MacArtifact[]).filter(file => file.fileName.endsWith('.dmg')).map(file => ({
+        ...file,
+        label: file.arch === 'arm64' ? 'Apple Silicon (M 시리즈)' : 'Intel Mac',
+        downloadPath: 'https://github.com/fourberry/home/releases/download/' + file.releaseTag + '/' + file.fileName,
+        sizeLabel: (file.bytes / 1024 / 1024).toFixed(1) + ' MiB',
+    })),
+}
+const hasMacTrial = linkberryMacTrial.downloads.length > 0
 
 export const linkberryRelease = {
     ...release,
@@ -17,7 +30,7 @@ export const linkberryScreens = [
         title: '터미널과 파일 작업을 한 화면에서',
         description: '분할 터미널로 서비스 상태와 로그를 나란히 확인하고, SFTP 파일 탐색기로 원격 파일을 관리하세요.',
         image: '/images/solutions/linkberry/workspace.png',
-        alt: 'LinkBerry의 왼쪽 SFTP 파일 탐색기와 서비스 상태·로그를 나란히 표시한 두 개의 분할 터미널. 데모 데이터 화면.',
+        alt: 'BerryLinker의 왼쪽 SFTP 파일 탐색기와 서비스 상태·로그를 나란히 표시한 두 개의 분할 터미널. 데모 데이터 화면.',
     },
     {
         id: 'files',
@@ -25,7 +38,7 @@ export const linkberryScreens = [
         title: '원격 파일을 찾고, 전송하고',
         description: '원격 폴더를 탐색하며 파일을 업로드하고 다운로드하세요. 파일 목록과 전송 결과를 터미널 옆에서 확인할 수 있습니다.',
         image: '/images/solutions/linkberry/files.png',
-        alt: 'SFTP 탐색기에 업로드된 release-notes.md와 다운로드 메뉴, 업로드 완료 상태가 표시된 LinkBerry 데모 화면.',
+        alt: 'SFTP 탐색기에 업로드된 release-notes.md와 다운로드 메뉴, 업로드 완료 상태가 표시된 BerryLinker 데모 화면.',
     },
     {
         id: 'editor',
@@ -33,7 +46,7 @@ export const linkberryScreens = [
         title: '설정 파일을 열고, 바로 수정',
         description: '원격 텍스트 파일을 앱 안에서 열어 내용을 확인하고 수정하세요. 변경 내용을 확인한 뒤 원격 서버에 저장할 수 있습니다.',
         image: '/images/solutions/linkberry/editor.png',
-        alt: '가상 프로젝트의 nginx.conf를 연 LinkBerry 원격 텍스트 편집기와 저장하지 않은 변경 표시, 원격에 저장 버튼.',
+        alt: '가상 프로젝트의 nginx.conf를 연 BerryLinker 원격 텍스트 편집기와 저장하지 않은 변경 표시, 원격에 저장 버튼.',
     },
     {
         id: 'commands',
@@ -41,7 +54,7 @@ export const linkberryScreens = [
         title: '필요한 명령어를 찾아서 활용',
         description: '작업에 맞는 Linux·Docker 명령어를 검색하고 설명과 예제를 확인하세요. 예제를 복사해 경로와 이름을 환경에 맞게 바꿔 사용할 수 있습니다.',
         image: '/images/solutions/linkberry/commands.png',
-        alt: '로그를 검색한 LinkBerry 명령어 사전에서 docker logs의 설명과 기본·응용 예제를 터미널 옆에 표시한 화면.',
+        alt: '로그를 검색한 BerryLinker 명령어 사전에서 docker logs의 설명과 기본·응용 예제를 터미널 옆에 표시한 화면.',
     },
     {
         id: 'notes',
@@ -49,15 +62,15 @@ export const linkberryScreens = [
         title: '서버 작업에 필요한 정보를 함께 기록',
         description: '서버별 메모에 작업 경로, 확인할 내용과 작업 기록을 정리하세요. 색상과 태그로 구분하고 메모 보드에 자유롭게 배치할 수 있습니다.',
         image: '/images/solutions/linkberry/notes.png',
-        alt: '데모 서버의 배포 확인 목록, 작업 경로, 로그 명령어와 작업 기록을 색상과 태그로 구분한 LinkBerry 메모 보드.',
+        alt: '데모 서버의 배포 확인 목록, 작업 경로, 로그 명령어와 작업 기록을 색상과 태그로 구분한 BerryLinker 메모 보드.',
     },
 ]
 
 // 공통 브랜드 표시 형식만 재사용하며 솔루션 목록에는 등록하지 않습니다.
 export const linkberryTool: FbSolution = {
     slug: 'linkberry',
-    name: 'LinkBerry',
-    ko: '링크베리',
+    name: 'BerryLinker',
+    ko: '베리링커',
     tag: 'BETA · Windows · SSH / SFTP',
     image: '/images/solutions/linkberry/mark.svg',
     desc: '개발자와 서버 관리자를 위한 Windows 원격 접속 도구입니다. SSH 터미널과 SFTP 파일 탐색·전송을 한 앱에서 사용합니다. 현재 사내 사용과 피드백을 중심으로 검증 중인 베타 버전입니다.',
@@ -67,8 +80,8 @@ export const linkberryTool: FbSolution = {
         { t: '서버 관리', d: '접속 정보를 저장하고 폴더별로 분류합니다.' },
         { t: '인증 방식', d: '비밀번호와 SSH 개인 키 인증을 지원합니다.' },
     ],
-    seoTitle: 'LinkBerry 베타 — Windows SSH·SFTP 도구 다운로드',
-    seoDescription: '포베리 LinkBerry는 Windows용 SSH·SFTP 원격 접속 도구입니다. 사내 검증 중인 베타 버전의 기능과 제한, 설치 파일 정보, 이용 시 주의사항 및 책임 제한 안내를 확인하고 다운로드하세요.',
+    seoTitle: 'BerryLinker 베타 — Windows SSH·SFTP 도구 다운로드',
+    seoDescription: '포베리 BerryLinker는 Windows용 SSH·SFTP 원격 접속 도구입니다. 사내 검증 중인 베타 버전의 기능과 제한, 설치 파일 정보, 이용 시 주의사항 및 책임 제한 안내를 확인하고 다운로드하세요.',
     headline: '서버 접속부터 파일 작업까지,\n하나의 작업 공간에서.',
     category: 'DeveloperApplication',
     problems: ['여러 서버의 터미널과 파일 작업을 함께 확인하고 싶을 때', '자주 사용하는 서버 접속 정보를 폴더로 정리하고 싶을 때'],
@@ -93,11 +106,13 @@ export const linkberryTool: FbSolution = {
         },
         {
             q: '어떤 환경에서 설치할 수 있나요?',
-            a: '현재 제공 파일은 Windows x64용 설치 프로그램입니다. Node.js를 별도로 설치할 필요는 없습니다. macOS·Linux·Windows ARM용 설치 파일은 제공하지 않으며, 모든 Windows 버전과 기업 보안 정책에서의 호환성은 검증하지 않았습니다.',
+            a: hasMacTrial
+                ? 'Windows x64 베타와 Apple Silicon·Intel Mac용 시험 DMG를 제공합니다. Node.js는 별도로 설치하지 않습니다. Mac 시험본은 팀 검증용이며 Developer ID 서명·Apple 공증이 없어 실행이 차단될 수 있습니다. Linux·Windows ARM용 공개 설치 파일은 제공하지 않습니다.'
+                : '현재 제공 파일은 Windows x64용 설치 프로그램입니다. Node.js를 별도로 설치할 필요는 없습니다. macOS·Linux·Windows ARM용 설치 파일은 제공하지 않으며, 모든 Windows 버전과 기업 보안 정책에서의 호환성은 검증하지 않았습니다.',
         },
         {
             q: '업데이트는 자동으로 설치되나요?',
-            a: '0.1.1-beta.3부터 새 버전을 자동으로 확인하고 백그라운드에서 다운로드합니다. 작업을 마친 뒤 앱을 종료하거나 재시작하여 업데이트를 선택하면 설치합니다. 파일 작업이나 열린 편집기가 있으면 설치를 막습니다. 자동 업데이트가 없는 0.1.1-beta.1 이하 버전은 이번 설치 파일을 한 번 직접 설치해야 합니다.',
+            a: 'Windows는 0.1.1-beta.3부터 새 버전을 자동으로 확인하고 백그라운드에서 다운로드합니다. 작업을 마친 뒤 앱을 종료하거나 재시작하여 업데이트를 선택하면 설치합니다. 파일 작업이나 열린 편집기가 있으면 설치를 막습니다. 자동 업데이트가 없는 0.1.1-beta.1 이하 버전은 이번 설치 파일을 한 번 직접 설치해야 합니다. Mac 시험본은 수동 업데이트 방식입니다.',
         },
         {
             q: '업데이트하면 접속 설정이 유지되나요?',
@@ -131,7 +146,7 @@ export const linkberryTool: FbSolution = {
 export const linkberryTerms = [
     {
         title: '베타 제공과 보장 범위',
-        body: 'LinkBerry는 검증 중인 상태로 제공됩니다. 법령상 허용되는 범위에서 오류 없는 동작, 특정 목적에 대한 적합성, 모든 환경의 호환성·연속적인 이용을 보장하지 않습니다. 본 안내가 페이지에 명시한 기능이나 법령상 보장 의무를 배제하는 것은 아닙니다.',
+        body: 'BerryLinker는 검증 중인 상태로 제공됩니다. 법령상 허용되는 범위에서 오류 없는 동작, 특정 목적에 대한 적합성, 모든 환경의 호환성·연속적인 이용을 보장하지 않습니다. 본 안내가 페이지에 명시한 기능이나 법령상 보장 의무를 배제하는 것은 아닙니다.',
     },
     {
         title: '허가된 시스템에서 사용',

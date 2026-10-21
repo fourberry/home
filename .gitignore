@@ -1,5 +1,7 @@
 # 설치 파일은 GitHub Release에서 빌드 시 가져오며 Git에 넣지 않습니다.
 public/downloads/linkberry/*.exe
+public/downloads/linkberry/*.dmg
+public/downloads/linkberry/*.zip
 public/downloads/linkberry/beta.yml
 
 # Nuxt dev/build outputs

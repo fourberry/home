@@ -4,7 +4,7 @@
             <div class="section-head">
                 <span class="eyebrow">Workspace tour</span>
                 <h2 id="lb-gallery-title">실제 화면으로 만나는 BerryLinker.</h2>
-                <p class="lead">서버 연결부터 파일 관리와 작업 메모까지, 필요한 기능을 살펴보세요.</p>
+                <p class="lead">서버 연결·파일 관리와 beta.14의 메모·이미지·다이어그램을 실제 예시 화면으로 살펴보세요.</p>
             </div>
 
             <div v-if="enhanced" class="lb-gallery-select" role="group" aria-label="살펴볼 기능 선택" @keydown="onSelectionKey">
@@ -36,7 +36,7 @@
             </div>
 
             <div class="lb-gallery-footer">
-                <p class="lb-gallery-note">데모 데이터로 구성한 실제 BerryLinker 화면입니다. 터미널 출력과 업무 내용은 예시이며, 베타 버전에 따라 화면이 달라질 수 있습니다.</p>
+                <p class="lb-gallery-note">예시 데이터로 구성한 실제 BerryLinker 화면입니다. 메모 화면은 Windows beta.14 기준입니다. 터미널 출력과 업무 내용은 예시이며, 베타 버전에 따라 화면이 달라질 수 있습니다.</p>
                 <div v-if="enhanced" class="lb-gallery-pager" role="group" aria-label="화면 이동">
                     <button type="button" aria-label="이전 기능 화면" @click="move(-1)">←</button>
                     <span aria-live="polite" aria-atomic="true">
@@ -121,7 +121,7 @@ onBeforeUnmount(() => viewer.value?.close())
 <style scoped>
 .lb-gallery-select {
     display: grid;
-    grid-template-columns: repeat(5, minmax(0, 1fr));
+    grid-template-columns: repeat(4, minmax(0, 1fr));
     gap: 10px;
     margin: 32px 0 24px;
 }
@@ -296,7 +296,7 @@ onBeforeUnmount(() => viewer.value?.close())
 }
 @media (max-width: 920px) {
     .lb-gallery-select {
-        grid-template-columns: repeat(3, minmax(0, 1fr));
+        grid-template-columns: repeat(2, minmax(0, 1fr));
     }
     .lb-gallery-copy {
         padding: 22px;
@@ -313,9 +313,6 @@ onBeforeUnmount(() => viewer.value?.close())
     .lb-gallery-select button {
         justify-content: flex-start;
         font-size: 13px;
-    }
-    .lb-gallery-select button:last-child {
-        grid-column: 1 / -1;
     }
     .lb-gallery-copy {
         min-height: 164px;

@@ -36,7 +36,7 @@
                             </li>
                             <li>
                                 <span>03</span>
-                                터미널 · 파일 작업
+                                터미널 · 파일 · 작업 기록
                             </li>
                         </ul>
                     </div>
@@ -54,8 +54,8 @@
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">Workspace</span>
-                    <h2>원격 작업에 필요한 기본 기능.</h2>
-                    <p class="lead">서버 연결과 파일 작업을 한 앱에서 확인합니다.</p>
+                    <h2>접속부터 기록·공유까지.</h2>
+                    <p class="lead">Windows beta.14에서 서버 연결·파일 작업과 메모·이미지 기록을 함께 이어갑니다.</p>
                 </div>
                 <div class="lb-features">
                     <article v-for="(feature, i) in solution.feats" :key="feature.t">
@@ -194,7 +194,7 @@
             <div class="container">
                 <div class="section-head">
                     <span class="eyebrow">FAQ</span>
-                    <h2>설치 전에 궁금한 점.</h2>
+                    <h2>설치와 사용에 궁금한 점.</h2>
                 </div>
                 <div class="lb-faq">
                     <article v-for="item in solution.faq" :key="item.q">
@@ -328,7 +328,7 @@ useFbJsonLd([solutionJsonLd(solution, linkberryPath), faqJsonLd(solution.faq)])
 }
 .lb-guidance {
     display: grid;
-    grid-template-columns: repeat(3, minmax(0, 1fr));
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 32px;
     padding-top: 44px;
     margin-top: 44px;

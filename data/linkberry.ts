@@ -109,7 +109,7 @@ export const linkberryTool: FbSolution = {
         { t: '기록 보관과 복원', d: '메모·이미지를 묶어 백업·가져오기하고 앱 내부 메모의 휴지통·수정 이력에서 복원합니다.' },
     ],
     seoTitle: 'BerryLinker 베타 — Windows SSH·SFTP와 Markdown 메모',
-    seoDescription: 'BerryLinker Windows beta.14의 SSH·SFTP, Markdown 메모, 이미지 편집, Mermaid, PDF 저장과 메모 연결을 살펴보세요. 실제 예시 화면과 백업·복원 안내, 베타 제한을 확인하고 다운로드할 수 있습니다.',
+    seoDescription: `BerryLinker Windows ${release.version}의 SSH·SFTP, Markdown 메모, 이미지 편집, Mermaid, PDF 저장과 메모 연결을 살펴보세요. 실제 예시 화면과 백업·복원 안내, 베타 제한을 확인하고 다운로드할 수 있습니다.`,
     headline: '서버 접속부터 작업 기록까지,\n하나의 작업 공간에서.',
     category: 'DeveloperApplication',
     problems: ['여러 서버의 터미널과 파일 작업을 함께 확인하고 싶을 때', '자주 사용하는 서버 접속 정보를 폴더로 정리하고 싶을 때'],

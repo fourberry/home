@@ -55,7 +55,7 @@
                 <div class="section-head">
                     <span class="eyebrow">Workspace</span>
                     <h2>접속부터 기록·공유까지.</h2>
-                    <p class="lead">Windows beta.14에서 서버 연결·파일 작업과 메모·이미지 기록을 함께 이어갑니다.</p>
+                    <p class="lead">Windows {{ release.version }}에서 서버 연결·파일 작업과 메모·이미지 기록을 함께 이어갑니다.</p>
                 </div>
                 <div class="lb-features">
                     <article v-for="(feature, i) in solution.feats" :key="feature.t">

@@ -178,6 +178,39 @@ JS가 실패해도 콘텐츠가 보이도록 타임아웃 안전장치를 갖고
 프록시가 존재하는 이유는 두 가지입니다: 발송 API가 http라 브라우저 mixed content에 걸리는 것을 우회하고,
 `X-API-Key`와 수신자 주소를 클라이언트 번들 밖에 두기 위함입니다. 이 값들을 프론트로 옮기지 마세요.
 
+### 홈페이지 채팅 창 (plum 공개 채팅)
+
+방문자가 회사 소개를 묻는 AI 채팅입니다. 브라우저가 사내 plum의 키 없는 공개 입구 `/webchat/v1/<공개 ID>`를 바로 부릅니다(프록시 없음).
+요청·SSE 이벤트·오류 코드·대화 서명·방문자 한도의 **정본은 plum 저장소 `docs/plans/iteration-18-public-chat.md`** 입니다.
+모양을 바꾸려면 plum 쪽 계약이 먼저이고, 정적 사이트라 옛 창이 브라우저에 오래 남는다는 점을 함께 봅니다.
+
+| 파일 | 역할 |
+|---|---|
+| [plugins/chat.client.ts](plugins/chat.client.ts) | 켜는 조건, `#__nuxt` 밖 별도 Vue 앱으로 띄우기, GA·문의 폼 이동을 창에 넘김 |
+| [components/chat/ChatLauncher.vue](components/chat/ChatLauncher.vue) | 여는 버튼과 위치. 창 코드를 처음 누를 때 불러옴 |
+| [components/chat/ChatPanel.vue](components/chat/ChatPanel.vue) | 창. 대화(모듈 메모리), 오류 표의 "창이 할 일", 고지, 접근성 |
+| [utils/webchat.ts](utils/webchat.ts) | 한도 GET, `POST …/chat`, SSE 읽기, 오류 코드 |
+| [utils/chatHost.ts](utils/chatHost.ts) | 창이 바깥에서 받는 것(주소, Nuxt 문맥, 문의 이동, 브랜드 페이지 여부). 첫 화면 번들에 들어가므로 작게 |
+| [utils/chatTrack.ts](utils/chatTrack.ts) | 채팅 GA 이벤트 네 개(고정 값만) |
+| [server/dev/webchat-mock.ts](server/dev/webchat-mock.ts) | `npm run dev` 전용 가짜 plum. generate·build에 들어가지 않음 |
+| [docs/chat-system-prompt.md](docs/chat-system-prompt.md) | plum 설정에 넣을 시스템 프롬프트 원본과 갱신 절차 |
+
+- **주소:** `runtimeConfig.public.chatEndpoint` ← 빌드 변수 `NUXT_PUBLIC_CHAT_ENDPOINT` ← 배포 워크플로의 저장소 변수 `vars.CHAT_ENDPOINT`.
+  **비어 있으면 아무것도 그리지 않습니다.** 공개 ID는 비밀이 아니지만 키는 절대 넣지 않습니다.
+- **지금은 숨긴 판입니다.** 주소에 `chat_preview=1`이 있을 때만 버튼이 보이고, 한 번 보이면 그 탭에서는(메모리에만) 페이지를 옮겨도 켜진 채입니다.
+  모두에게 공개할 때는 `plugins/chat.client.ts`의 `isPreview` 조건만 빼는 작은 PR로 합니다.
+- **정적 HTML에 흔적을 남기지 않습니다(GEO·AEO).** 창을 레이아웃 컴포넌트로 옮기지 마세요 — SSR이 빈 주석이라도 남겨 생성 HTML이 바뀝니다.
+  창은 별도 Vue 앱이라 `useRoute`·`useTrackEvent`·`NuxtLink` 같은 Nuxt 기능을 쓸 수 없고, 필요한 것은 `ChatHost`로만 받습니다.
+  페이지를 열 때는 plum을 부르지 않고(한도 조회는 창을 처음 열 때), 일반 방문자는 창 코드를 내려받지 않습니다.
+- **개인정보:** 대화는 페이지 메모리에만 둡니다(`localStorage`·`sessionStorage`·쿠키 금지, 새로고침하면 사라짐). 답은 `{{ }}`(textContent)로 글만 그리고 `v-html`을 쓰지 않습니다.
+  "문의 폼으로"는 `/?inquiry_source=chat&inquiry_location=chat_panel#contact`로 가며 대화를 옮기지 않습니다. 첫 화면 고지 세 문장은 참이어야 하며 최종 문구는 개인정보 담당자가 정합니다.
+- **화면:** 920px 이하에서는 화면 전체를 쓰는 모달, 그 위에서는 오른쪽 아래 떠 있는 비모달 창입니다. 버튼은 '맨 위로' 버튼과 브랜드 페이지 하단 고정 바 위로 쌓습니다.
+  답은 `done` 뒤 한 번만 `aria-live`로 읽힙니다. 대화 목록에 `aria-live`·`role="log"`를 두지 마세요(조각마다 읽힙니다).
+- **로컬 확인:** `.env`에 `NUXT_PUBLIC_CHAT_ENDPOINT=/dev-webchat/v1/wc_dev00000000000000000`을 넣고 `npm run dev` → `http://localhost:4000/?chat_preview=1`.
+  가짜 응답의 오류 흉내 표시는 `server/dev/webchat-mock.ts` 머리에 있습니다. 실제 plum으로 볼 때는 plum 콘솔의 시험용 웹 채팅 설정(허용 origin `http://localhost:4000`) 주소를 넣습니다.
+- **시스템 프롬프트:** `data/`나 공개 페이지의 사실이 바뀌면 같은 PR에서 [docs/chat-system-prompt.md](docs/chat-system-prompt.md)를 고치고
+  `node scripts/check-chat-prompt.mjs`로 검사한 뒤, 사람이 plum 콘솔에 넣습니다(절차는 그 파일 머리).
+
 ### 검색 노출(SEO) — 건드리면 조용히 망가지는 것들
 
 **⚠️ canonical 을 [nuxt.config.ts](nuxt.config.ts)의 전역 `app.head` 에 넣지 마세요.**
@@ -275,6 +308,8 @@ AEO(Answer Engine Optimization, 답변형 검색 최적화)에 미치는 영향�
 - `ai_workflow_link_click` / `ai_workflow_navigation` — AI 소개 링크 및 목차·실적 링크 클릭.
   [useAiWorkflowTracking.ts](composables/useAiWorkflowTracking.ts)에서 고정된 구분 값으로 관리
 - `contact_cta_click` — AI 소개 페이지의 상단·하단 상담 버튼 클릭. 문의 성공과 구분
+- `chat_open` · `chat_message_sent` · `chat_answer_failed` · `chat_contact_click` — 채팅 창. 매개변수는 고정 값
+  (`link_location`, `turn`, `error_code`)만이고 질문·답 글·IP·공개 ID는 보내지 않습니다. 채팅에서 온 문의는 상담 출처 `chat`
 
 상담 링크의 출처는 [inquiryAnalytics.ts](utils/inquiryAnalytics.ts)에서 허용한 고정 값만 사용하며,
 제출 시도·성공·실패에 같은 출처를 기록합니다. 원문 URL이나 임의 쿼리 값을 이벤트 매개변수로 보내지 않습니다.

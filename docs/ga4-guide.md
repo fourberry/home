@@ -29,6 +29,26 @@ flowchart LR
 `contact_cta_click`은 이번 AI 소개 페이지의 상단·하단 상담 버튼에 추가했습니다. 다른 페이지의 모든 상담 버튼을 포괄하는 이벤트는 아닙니다.
 기존 솔루션의 `solution_inquiry_click` 이벤트와 문의 성공·실패 이벤트는 유지합니다.
 
+## 채팅 창 이벤트
+
+홈페이지 채팅 창(plum 공개 채팅)은 아래 네 이벤트를 보냅니다. 매개변수는 **고정 값만**이며 질문·답 글, IP, 채팅 공개 ID는 보내지 않습니다.
+지금은 주소에 `chat_preview=1`이 있을 때만 버튼이 보이므로 공개 전에는 직원 확인에서만 수집됩니다. 공개 전 수치를 방문자 행동으로 해석하지 않습니다.
+
+| 행동 | GA 이벤트 이름 | 매개변수 | 해석 |
+|---|---|---|---|
+| 채팅 창 열기 | `chat_open` | `link_location`: `launcher` | 버튼을 눌러 창을 연 횟수. 같은 탭에서 닫았다 다시 열면 다시 셉니다 |
+| 질문 보내기 | `chat_message_sent` | `turn`: 1~20 | 그 대화의 몇 번째 질문인지. "다시 보내기"도 한 번으로 셉니다 |
+| 답을 받지 못함 | `chat_answer_failed` | `error_code` | 아래 코드 표. 답 품질이 아니라 전송·한도·가드레일 문제를 봅니다 |
+| 문의 폼으로 이동 | `chat_contact_click` | `link_location`: `chat_panel` | 채팅 창의 "문의 폼으로" 버튼. 문의 성공과 구분 |
+
+`error_code` 값: plum 계약의 오류 코드(`webchat_not_found`, `origin_not_allowed`, `invalid_request`, `message_too_long`, `conversation_too_long`, `invalid_signature`, `guardrail_blocked`, `request_too_large`, `rate_limit_exceeded`, `budget_exceeded`, `busy`, `model_unavailable`, 스트림 중의 `model_error`, `timeout`)와
+창이 붙이는 세 값입니다. `network_error`는 요청 자체가 실패한 경우(네트워크, CORS 머리 없는 404 포함), `incomplete`는 답이 끝 표시 없이 끊긴 경우, `unknown`은 모르는 코드입니다.
+창을 열 때의 한도 조회가 실패하면 "지금은 채팅을 쓸 수 없습니다"만 보이고 이 이벤트는 보내지 않습니다(`chat_open`만 남습니다).
+
+채팅에서 문의 폼으로 가면 주소에 `inquiry_source=chat&inquiry_location=chat_panel`이 붙고, 문의 제출 시점의 `contact_submit_attempt`·`generate_lead`·`contact_submit_failed`에 같은 상담 출처가 들어갑니다.
+그래서 채팅에서 온 문의 성공은 `generate_lead`를 **상담 진입 콘텐츠 = `chat`**으로 나눠 봅니다. 대화 내용은 문의 폼으로 옮기지 않습니다.
+처음 수집되면 `turn`과 `error_code`를 이벤트 범위 맞춤 측정기준으로 등록합니다(아래 "처음 한 번 확인할 설정"의 3).
+
 상담 링크에 고정된 `inquiry_source`와 `inquiry_location`을 전달하고 제출 시점의 값을 기록합니다.
 임의 문자열·중복 파라미터는 허용하지 않으며, 이름·이메일·전화번호·문의 본문·첨부파일명은 새 GA 매개변수에 넣지 않습니다.
 표식이 없는 문의는 `unattributed` / `unknown`입니다. 이는 GA의 외부 유입 경로인 Direct를 뜻하지 않습니다.
@@ -53,10 +73,12 @@ GA에서 포베리 속성을 선택하고 **관리 → 데이터 스트림 → �
 
 | 표시 이름 예시 | 이벤트 매개변수 | 용도 |
 |---|---|---|
-| 상담 진입 콘텐츠 | `inquiry_source` | `how_we_work`를 통한 문의 구분 |
-| 상담 버튼 위치 | `inquiry_location` | 상단 `hero`와 하단 `cta_band` 비교 |
-| 링크 위치 | `link_location` | 홈·푸터 및 기존 연락 링크 구분 |
+| 상담 진입 콘텐츠 | `inquiry_source` | `how_we_work`·`chat`을 통한 문의 구분 |
+| 상담 버튼 위치 | `inquiry_location` | 상단 `hero`와 하단 `cta_band` 비교, 채팅 창 `chat_panel` |
+| 링크 위치 | `link_location` | 홈·푸터 및 기존 연락 링크, 채팅 버튼·창 구분 |
 | 소개 페이지 이동 대상 | `destination` | 목차와 실적 링크 비교 |
+| 채팅 질문 순서 | `turn` | 대화가 몇 번째 질문까지 이어지는지 |
+| 채팅 실패 코드 | `error_code` | 채팅 답을 받지 못한 까닭(고정 코드) |
 
 4. **수집 확인:** 배포 후 실시간 보고서에서 소개 링크와 상담 버튼 클릭을 확인합니다.
    문의 성공은 실제 고객 문의 또는 별도로 합의한 테스트 문의로 확인합니다. 수집 확인만을 위해 운영 문의를 반복 전송하지 않습니다.
@@ -75,6 +97,8 @@ GA에서 포베리 속성을 선택하고 **관리 → 데이터 스트림 → �
 | 어느 단계에서 멈추나? | **탐색 → 유입경로 탐색**: 아래 4단계의 사용자 수·이탈 | 이탈이 큰 단계부터 하나씩 개선 |
 | 모바일에서 특히 어렵나? | 같은 탐색을 **기기 카테고리**로 분류 | 모바일만 이탈이 높으면 입력·버튼·스크롤·속도를 재현 확인 |
 | 문의가 기술적으로 실패하나? | **이벤트**: `contact_submit_attempt`, `contact_submit_failed`, `generate_lead` | 실패가 나타나면 메일 프록시·첨부 처리·서버 로그 확인 |
+| 채팅이 문의로 이어지나? (공개 뒤) | **이벤트**: `chat_open`, `chat_message_sent`, `chat_contact_click`, 상담 진입 콘텐츠 `chat`의 `generate_lead` | 열기만 많고 질문이 적으면 버튼 위치·고지 문구를, 질문은 많은데 문의 이동이 적으면 답의 문의 안내를 점검 |
+| 채팅이 실패하나? (공개 뒤) | **이벤트**: `chat_answer_failed`를 `error_code`로 분류 | `rate_limit_exceeded`·`budget_exceeded`·`busy`가 늘면 plum 웹 채팅 설정의 한도·하루 예산을, `network_error`·`model_unavailable`이면 plum 서버를 확인 |
 
 트래픽 획득의 세션 소스/매체는 각 방문의 유입을, 사용자 획득은 최초 유입을 보는 지표이므로 혼용하지 않습니다.
 평균 참여 시간은 화면이 활성화된 시간이며 내용 이해도나 만족도 자체가 아닙니다.
@@ -122,3 +146,6 @@ GA의 유입 데이터만으로 AI 답변 노출·인용 수를 알 수는 없�
 - 격리된 Chrome에서 홈·푸터 진입, 목차·실적 링크, 상단·하단 상담 클릭, 390px 화면과 키보드 실행을 검증했습니다. 문의 API는 성공·실패 응답을 모의 처리하고 외부 요청은 차단했습니다.
 - 입력 검증 실패 시 제출 이벤트가 발생하지 않는 것, 유효한 제출 1회당 시도·결과 이벤트가 각각 1회인 것, 새로고침 후 출처 유지, 개인정보가 이벤트에 포함되지 않는 것을 확인했습니다.
 - URL 구분 값의 누락·변조·중복과 제출 시점 출처 보존을 별도 검사했습니다. 실제 GA 수신, 향상된 측정 설정, 운영 문의 전송은 미검증입니다.
+- 채팅 창(2026-11-03): 로컬 개발 서버와 가짜 plum 응답으로 Chromium에서 네 이벤트의 이름·매개변수와 글이 매개변수에 없는 것,
+  채팅에서 온 문의의 `contact_submit_attempt`·`generate_lead`에 `inquiry_source: chat`, `inquiry_location: chat_panel`이 들어가는 것을 `dataLayer`로 확인했습니다(GA 전송은 막음).
+  실제 GA 수신과 맞춤 측정기준 등록, 실제 plum 과의 주고받기는 미검증입니다.

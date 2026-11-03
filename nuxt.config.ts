@@ -54,7 +54,32 @@ export default defineNuxtConfig({
             'damon@fourberry.co.kr,briskly0415@fourberry.co.kr,dodam@fourberry.co.kr,hjyoon@fourberry.co.kr,hahahagh@fourberry.co.kr,jmchoi@fourberry.co.kr,won567567@fourberry.co.kr,lsj8376@fourberry.co.kr',
         public: {
             contactEndpoint: process.env.NUXT_PUBLIC_CONTACT_ENDPOINT || '/api/contact',
+            // ✅ 홈페이지 채팅 창(plum 공개 채팅) 주소: `<plum 공개 주소>/webchat/v1/<공개 ID>`
+            //  - 비어 있으면 창을 그리지 않습니다(기본값). 배포는 저장소 변수 CHAT_ENDPOINT 를 워크플로가 넣습니다.
+            //  - 공개 ID 는 비밀이 아닙니다. 키를 여기에 넣지 마세요(plum 공개 입구는 키를 받지 않습니다).
+            //  - 지금은 주소에 chat_preview=1 이 있을 때만 버튼이 보입니다(plugins/chat.client.ts).
+            chatEndpoint: process.env.NUXT_PUBLIC_CHAT_ENDPOINT || '',
         },
+    },
+
+    hooks: {
+        // 채팅 창 코드(components/chat/)는 chat_preview 로 버튼을 켠 방문자만 내려받습니다.
+        // Nuxt 는 entry 의 동적 import 와 그 의존 조각을 모든 페이지 HTML 에 <link rel="prefetch"> 로 넣으므로,
+        // Nuxt 가 페이지 조각에 하는 것처럼 entry 의 dynamicImports 에서 채팅만 뺍니다(힌트에만 쓰이는 값이라 동작은 같음).
+        // 일반 방문자에게는 아무것도 바뀌지 않고, 생성 HTML 도 채팅 전과 같게 둡니다.
+        // 채팅 조각은 src 가 components/chat/ 이거나, 공용 코드와 묶여 src 가 빠진 조각(이름 ChatLauncher·ChatPanel)입니다.
+        'build:manifest': manifest => {
+            const isChat = (key: string) => key.startsWith('components/chat/') || !!manifest[key]?.src?.startsWith('components/chat/') || /^Chat(Launcher|Panel)$/.test(manifest[key]?.name ?? '')
+            for (const chunk of Object.values(manifest)) {
+                if (chunk.isEntry) chunk.dynamicImports = chunk.dynamicImports?.filter(id => !isChat(id))
+            }
+        },
+    },
+
+    // 로컬 개발에서만 쓰는 plum /webchat/v1 가짜 응답. generate·build 결과에는 들어가지 않습니다.
+    // .env 에 NUXT_PUBLIC_CHAT_ENDPOINT=/dev-webchat/v1/wc_dev00000000000000000 을 넣으면 창이 이 가짜를 부릅니다.
+    $development: {
+        serverHandlers: [{ route: '/dev-webchat/v1/**', handler: '~~/server/dev/webchat-mock.ts' }],
     },
 
     // ✅ fb-design.css 는 반드시 tailwind.css / common.scss 뒤에 와야 합니다.

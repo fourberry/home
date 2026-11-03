@@ -12,13 +12,17 @@ import { defineEventHandler, getMethod, readRawBody, sendStream, setResponseHead
  *       http://localhost:4000/?chat_preview=1
  *
  * 질문에 아래 표시를 넣으면 그 경우를 흉내 냅니다.
- *   [mock:rate] 429 rate_limit_exceeded(Retry-After 10)   [mock:budget] 429 budget_exceeded
- *   [mock:busy] 503 busy(Retry-After 5)                    [mock:model] 503 model_unavailable
- *   [mock:guardrail] 400 guardrail_blocked                 [mock:signature] 400 invalid_signature
- *   [mock:origin] 403 origin_not_allowed                   [mock:notfound] 404 webchat_not_found
+ *   [mock:rate] 429 rate_limit_exceeded(Retry-After 10)   [mock:day] 429 IP 하루 한도(Retry-After 5시간)
+ *   [mock:budget] 429 budget_exceeded                      [mock:busy] 503 busy(Retry-After 5)
+ *   [mock:model] 503 model_unavailable                     [mock:guardrail] 400 guardrail_blocked
+ *   [mock:signature] 400 invalid_signature                 [mock:origin] 403 origin_not_allowed
+ *   [mock:notfound] 404 webchat_not_found                  [mock:masked] start 의 masked: true
  *   [mock:error] 답 도중 error 이벤트(model_error)          [mock:cut] 답 도중 done 없이 끊김
- *   [mock:long] finish: length                             [mock:masked] start 의 masked: true
- *   [mock:html] HTML·마크다운이 섞인 답(글로만 보이는지 확인)  [mock:slow] 첫 글자 전 20초(ping 확인)
+ *   [mock:long] finish: length                             [mock:html] HTML·마크다운이 섞인 답(글로만 보이는지 확인)
+ *   [mock:wait] 모델 자리 기다림 15초(응답 머리도 오지 않음)   [mock:slow] start 뒤 첫 글자 전 16초(ping 확인)
+ *
+ * plum 과 같게: start 는 모델 자리를 잡은 뒤에 오고 그 전에는 아무것도 오지 않습니다. ping 은 start 뒤 15초 넘게 비면 옵니다.
+ * 글자 수는 NFKC 로 바꾼 글로 셉니다(plum 은 보이지 않는 글자도 빼고 셉니다).
  */
 
 const LIMITS = { max_message_chars: 500, max_turns: 10, max_conversation_chars: 8000 }
@@ -54,7 +58,7 @@ const verify = (id: string, messages: Message[], signature: unknown) => {
     return sign(id, messages, issuedAt) === signature
 }
 
-const codePoints = (text: string) => [...text].length
+const chatLength = (text: string) => [...text.normalize('NFKC')].length
 
 const sleep = (ms: number) => new Promise(resolve => setTimeout(resolve, ms))
 
@@ -62,7 +66,7 @@ const answerFor = (question: string, turn: number) => {
     if (question.includes('[mock:html]')) return '<img src=x onerror="alert(1)"> **굵게** [링크](https://example.com)\n이 줄이 글자 그대로 보이면 정상입니다.'
     return [
         '로컬 개발용 가짜 답입니다. 실제 답은 plum 의 사내 모델이 만듭니다.',
-        `받은 질문은 ${codePoints(question)}자이고, 이 대화의 ${turn}번째 질문입니다.`,
+        `받은 질문은 ${chatLength(question)}자이고, 이 대화의 ${turn}번째 질문입니다.`,
         '문의가 필요하면 아래 "문의 폼으로" 버튼을 눌러 주세요.',
     ].join('\n')
 }
@@ -109,8 +113,9 @@ export default defineEventHandler(async event => {
     if (!shapeOk) return fail(event, 400, 'invalid_request', 'messages 모양이 맞지 않습니다.')
 
     const userMessages = messages.filter(m => m.role === 'user')
-    if (userMessages.some(m => codePoints(m.content) > LIMITS.max_message_chars)) return fail(event, 400, 'message_too_long', '메시지가 깁니다.')
-    if (userMessages.length > LIMITS.max_turns || messages.reduce((sum, m) => sum + codePoints(m.content), 0) > LIMITS.max_conversation_chars) {
+    // plum 처럼 메시지 하나의 길이는 새 질문만 봅니다(앞 질문은 그때 봤고 서명이 지킵니다).
+    if (chatLength(messages[messages.length - 1]!.content) > LIMITS.max_message_chars) return fail(event, 400, 'message_too_long', '메시지가 깁니다.')
+    if (userMessages.length > LIMITS.max_turns || messages.reduce((sum, m) => sum + chatLength(m.content), 0) > LIMITS.max_conversation_chars) {
         return fail(event, 400, 'conversation_too_long', '대화가 깁니다.')
     }
 
@@ -121,11 +126,14 @@ export default defineEventHandler(async event => {
     if (question.includes('[mock:notfound]')) return fail(event, 404, 'webchat_not_found', '없는 웹 채팅입니다.')
     if (question.includes('[mock:origin]')) return fail(event, 403, 'origin_not_allowed', '허용하지 않은 origin 입니다.')
     if (question.includes('[mock:rate]')) return fail(event, 429, 'rate_limit_exceeded', '잠시 뒤 다시 보내 주세요.', 10)
+    if (question.includes('[mock:day]')) return fail(event, 429, 'rate_limit_exceeded', '오늘 보낼 수 있는 질문을 다 보냈습니다.', 5 * 60 * 60)
     if (question.includes('[mock:budget]')) return fail(event, 429, 'budget_exceeded', '오늘 토큰을 다 썼습니다.', 3 * 60 * 60)
     if (question.includes('[mock:busy]')) return fail(event, 503, 'busy', '자리가 없습니다.', 5)
     if (question.includes('[mock:model]')) return fail(event, 503, 'model_unavailable', '모델 서버에 닿지 않습니다.', 5)
     if (question.includes('[mock:guardrail]')) return fail(event, 400, 'guardrail_blocked', '답할 수 없는 내용입니다.')
 
+    // plum 은 모델 자리를 잡을 때까지(최대 약 40초) 응답 머리도 보내지 않습니다. 자리가 끝내 없으면 503 busy 입니다.
+    if (question.includes('[mock:wait]')) await sleep(15_000)
     const answer = answerFor(question, userMessages.length)
     let cancelled = false
     const encoder = new TextEncoder()
@@ -134,15 +142,9 @@ export default defineEventHandler(async event => {
             const write = (text: string) => !cancelled && controller.enqueue(encoder.encode(text))
             const emit = (name: string, data: unknown) => write(`event: ${name}\ndata: ${JSON.stringify(data)}\n\n`)
             emit('start', { masked: question.includes('[mock:masked]') })
-            if (question.includes('[mock:slow]')) {
-                for (let i = 0; i < 2 && !cancelled; i++) {
-                    await sleep(10_000)
-                    write(': ping\n\n')
-                }
-            } else {
-                await sleep(400)
-                write(': ping\n\n')
-            }
+            // ping 은 start 뒤 15초 넘게 비면 옵니다(plum 계약).
+            await sleep(question.includes('[mock:slow]') ? 16_000 : 400)
+            if (question.includes('[mock:slow]')) write(': ping\n\n')
             const pieces = [...answer]
             let sent = ''
             for (let i = 0; i < pieces.length && !cancelled; i += 4) {

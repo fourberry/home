@@ -150,7 +150,7 @@ let inflight: AbortController | null = null
 import { computed, inject, nextTick, onBeforeUnmount, onMounted, ref, watch } from 'vue'
 import { CHAT_HOST, chatInquiryHref } from '~/utils/chatHost'
 import { trackChat } from '~/utils/chatTrack'
-import { ChatError, codePoints, fetchChatLimits, sendChatMessage, type ChatMessage } from '~/utils/webchat'
+import { ChatError, chatLength, fetchChatLimits, sendChatMessage, type ChatMessage } from '~/utils/webchat'
 
 const emit = defineEmits<{ close: []; unavailable: [] }>()
 const host = inject(CHAT_HOST)!
@@ -195,9 +195,9 @@ watch(
 )
 
 const question = computed(() => session.draft.trim())
-const draftLength = computed(() => codePoints(question.value))
+const draftLength = computed(() => chatLength(question.value))
 const userTurns = computed(() => session.turns.filter(t => t.role === 'user').length)
-const usedChars = computed(() => session.turns.reduce((sum, t) => sum + codePoints(t.content), 0))
+const usedChars = computed(() => session.turns.reduce((sum, t) => sum + chatLength(t.content), 0))
 const tooLong = computed(() => !!session.limits && draftLength.value > session.limits.max_message_chars)
 const turnsFull = computed(() => !!session.limits && userTurns.value >= session.limits.max_turns)
 const conversationFull = computed(() => !!session.limits && usedChars.value + draftLength.value > session.limits.max_conversation_chars)
@@ -289,6 +289,13 @@ const fail = (text: string, error: ChatError) => {
             session.notice = { text: '오늘 채팅 상담이 마감되었습니다. 문의 폼을 이용해 주세요.' }
             return
         case 'rate_limit_exceeded':
+            // IP 하루 한도(한국 날짜)는 Retry-After 가 자정까지라 길게 옵니다. 그날은 다시 보내도 소용없으므로 입력 칸으로 되돌립니다.
+            if (error.retryAfter > 600) {
+                restore(text)
+                blockFor(error.retryAfter)
+                session.notice = { text: '오늘 보낼 수 있는 질문을 다 보냈습니다. 문의 폼을 이용해 주세요.' }
+                return
+            }
             markFailed()
             blockFor(error.retryAfter || 60)
             session.notice = { text: '질문이 짧은 시간에 많이 왔습니다. 잠시 뒤 다시 보내 주세요.', retry: true }

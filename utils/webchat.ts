@@ -65,10 +65,16 @@ export class ChatError extends Error {
     }
 }
 
-/** 길이는 유니코드 코드 포인트로 셉니다(계약). 한글·이모지가 UTF-16 길이와 다르게 세지지 않도록. */
-export const codePoints = (text: string) => [...text].length
+/**
+ * 계약의 글자 수: `[...text.normalize('NFKC')].length`(코드 포인트).
+ * plum 은 NFKC 로 바꾸고 보이지 않는 글자를 뺀 글(모델이 읽는 글)로 셉니다. 휴대전화가 바꿔 넣는 "…"(NFKC 로 세 글자)처럼
+ * 늘어나는 글자가 있어 창도 NFKC 로 셉니다. 창은 보이지 않는 글자까지 세므로 창의 수는 plum 의 수보다 작지 않습니다.
+ */
+export const chatLength = (text: string) => [...text.normalize('NFKC')].length
 
-const IDLE_TIMEOUT_MS = 60_000 // ping 이 15초마다 오므로 60초 동안 아무것도 없으면 끊긴 것으로 봅니다.
+// 모델 자리를 기다리는 동안(plum 기준 최대 약 40초)은 응답 머리도 오지 않아 fetch 가 기다립니다(plum 이 시간을 묶습니다).
+// start 뒤에는 15초 넘게 비면 ping 이 오므로, 60초 동안 아무것도 없으면 끊긴 것으로 봅니다.
+const IDLE_TIMEOUT_MS = 60_000
 
 const isContractCode = (code: unknown): code is (typeof CONTRACT_CODES)[number] => typeof code === 'string' && (CONTRACT_CODES as readonly string[]).includes(code)
 
@@ -201,6 +207,7 @@ export const sendChatMessage = async (endpoint: string, messages: ChatMessage[],
             if (typeof data.signature !== 'string' || !data.signature) throw new ChatError('unknown')
             return { text, finish: data.finish === 'length' ? 'length' : 'stop', signature: data.signature }
         } else if (evt.event === 'error') {
+            // 계약의 error 이벤트는 model_error·timeout 입니다(busy 는 늘 시작 전 HTTP 503). 계획 초안의 busy 도 받아 둡니다.
             const code = data.code
             throw new ChatError(code === 'busy' || code === 'model_error' || code === 'timeout' ? code : 'unknown')
         }

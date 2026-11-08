@@ -73,7 +73,6 @@
                     <div>
                         <h3>{{ limeAdapter.title }}</h3>
                         <p>{{ limeAdapter.body }}</p>
-                        <p>{{ limeAdapter.note }}</p>
                     </div>
                 </aside>
             </div>

@@ -63,9 +63,8 @@ export const limeChannels = [
 ]
 
 export const limeAdapter = {
-    title: '새 발송사도, 어댑터로 유연하게.',
-    body: '공통 API·템플릿·큐·이력을 재사용하고, 업체별 인증·전송·결과 처리를 어댑터로 추가합니다.',
-    note: '연동할 업체의 API·인증 방식·결과 통보·속도 제한을 확인해 구현 범위와 일정을 정합니다.',
+    title: '기존 발송사도, 유연하게 연결하세요.',
+    body: '사용 중인 발송사에 맞춰 연동을 확장하고, 같은 API로 알림을 보낼 수 있습니다.',
 }
 
 export const limeFlow = [

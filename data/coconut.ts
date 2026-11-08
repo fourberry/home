@@ -14,6 +14,15 @@ const IMG = '/images/solutions/coconut'
  */
 export const coconutOgImage = `${IMG}/cover-202611.jpg`
 
+/** 제품설명서의 내용은 아래 데이터와 data/solutions.ts에서 함께 생성합니다. */
+export const coconutProductGuide = {
+    href: '/docs/coconut-product-guide.pdf?v=20261109',
+    fileName: 'COCONUT-product-guide-2026.11.pdf',
+    edition: '2026.11',
+    updatedAt: '2026-11-09',
+    pages: 10,
+}
+
 /**
  * 문제 상황 → 도입 후. 왼쪽 문제는 data/solutions.ts 의 problems 와 같은 문장이고,
  * 오른쪽은 README 에 있는 기능(SSO 토큰 검증 · 표준 흐름 · 클라이언트별 MFA · 관리자 콘솔)만 적습니다.

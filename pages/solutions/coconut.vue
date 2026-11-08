@@ -28,6 +28,7 @@
                                 <span aria-hidden="true">↓</span>
                             </a>
                         </div>
+                        <a :href="coconutProductGuide.href" :download="coconutProductGuide.fileName" class="bp-text-link coconut-guide-link">제품설명서 PDF 다운로드 ↓</a>
                         <div class="bp-facts">
                             <div v-for="f in coconutFacts" :key="f.k">
                                 <b>{{ f.k }}</b>
@@ -343,6 +344,24 @@
             </div>
         </section>
 
+        <section id="download" class="section">
+            <div class="container">
+                <div class="section-head">
+                    <span class="eyebrow">Product guide · 제품설명서</span>
+                    <h2>최신 제품설명서를 내려받으세요.</h2>
+                    <p class="lead">관리자 화면과 사용자·서버·AI 인증 흐름, 보안 기능과 도입 조건을 한 문서에서 확인할 수 있습니다.</p>
+                </div>
+                <div class="coconut-guide-card">
+                    <div>
+                        <h3>COCONUT 제품설명서</h3>
+                        <p class="coconut-guide-meta">{{ coconutProductGuide.edition }}판 · {{ coconutProductGuide.updatedAt }} 개정 · PDF {{ coconutProductGuide.pages }}쪽</p>
+                        <p>AI MCP 인증의 개발 검증 범위와 서비스 측 연동 조건을 함께 안내합니다.</p>
+                    </div>
+                    <a :href="coconutProductGuide.href" :download="coconutProductGuide.fileName" class="btn btn-primary">제품설명서 다운로드 <span aria-hidden="true">↓</span></a>
+                </div>
+            </div>
+        </section>
+
         <!-- 관련 실적 -->
         <section v-if="related.length" class="section">
             <div class="container">
@@ -394,10 +413,10 @@
 
         <FbCtaBand :inquiry-to="coconutInquiryHref" :title="`${solution.name} 도입을 검토 중이신가요?`" desc="현재 회원 구조와 연동할 서비스를 알려주시면 전환 방안과 일정을 제안드립니다." />
 
-        <!-- 모바일 하단 고정 바에서 AI 인증 설명과 문의로 이동합니다. -->
+        <!-- 모바일에서도 설명서 다운로드와 문의에 바로 접근할 수 있습니다. -->
         <div class="bp-mobile-bar" :hidden="!isMobile">
-            <a href="#ai-control" class="bp-mobile-bar-doc" aria-label="AI 인증 통제 보기">
-                <b aria-hidden="true">AI</b>
+            <a :href="coconutProductGuide.href" :download="coconutProductGuide.fileName" class="bp-mobile-bar-doc" aria-label="제품설명서 PDF 다운로드">
+                <b aria-hidden="true">PDF</b>
             </a>
             <NuxtLink :to="coconutInquiryHref" class="btn btn-primary" @click="trackInquiry('mobile_bar')">
                 도입 문의
@@ -416,6 +435,7 @@ import {
     coconutAuthFlows,
     coconutHero,
     coconutOgImage,
+    coconutProductGuide,
     coconutProblems,
     coconutFacts,
     coconutLoginSteps,
@@ -448,6 +468,7 @@ definePageMeta({
         { to: '#how', label: '인증 흐름' },
         { to: '#integration', label: '연동' },
         { to: '#adoption', label: '도입 절차' },
+        { to: '#download', label: '제품설명서' },
         { to: '#faq', label: 'FAQ' },
     ],
 })
@@ -491,6 +512,44 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
 </script>
 
 <style scoped>
+.coconut-guide-link {
+    display: inline-block;
+    margin-top: 18px;
+}
+.coconut-guide-card {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 28px;
+    padding: 28px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-l);
+    background: var(--surface);
+}
+.coconut-guide-card h3 {
+    font-size: 22px;
+}
+.coconut-guide-card p {
+    margin-top: 12px;
+    color: var(--ink-2);
+    line-height: 1.7;
+}
+.coconut-guide-card .coconut-guide-meta {
+    color: var(--accent);
+    font-size: 14px;
+}
+@media (max-width: 920px) {
+    .coconut-guide-card {
+        flex-direction: column;
+        align-items: stretch;
+        padding: 22px;
+    }
+    .coconut-guide-card .btn {
+        justify-content: center;
+        white-space: normal;
+        text-align: center;
+    }
+}
 .coconut-flow-tabs {
     display: grid;
     grid-template-columns: repeat(3, minmax(0, 1fr));

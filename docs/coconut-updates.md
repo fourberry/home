@@ -4,7 +4,25 @@
 
 COCONUT 브랜드 페이지의 기능·화면 설명에 대한 공개 기준과 검증 기록입니다.
 현재 데이터는 [data/coconut.ts](../data/coconut.ts)의 `coconutAi`·`coconutAuthFlows`와 [data/solutions.ts](../data/solutions.ts)입니다. 이전 업데이트 항목과 검증은 이 문서의 이력으로 보존합니다.
-기존 2026.09 PDF는 파일을 보존하되 현재 페이지의 다운로드 동선에서 제외했습니다. 최신 콘솔·MCP 검증 범위의 근거로 사용하지 않습니다.
+현재 제품설명서는 2026.11판(2026-11-09 개정)이며, 최신 공개 화면·인증 흐름·보안·도입 조건을 담습니다. 아래의 이전 PDF 제외 기록은 이력으로 보존합니다.
+
+## 2026-11-09 제품설명서 갱신과 다운로드 복원
+
+- 2026.09 PDF를 최신 공개 데이터와 화면으로 다시 제작했습니다. 10쪽 구성은 제품 개요, 사용자 로그인, 서버 간 API, AI MCP, 클라이언트 설정, 보안 설정, 브랜딩·약관, 보안·운영, 연동·실행 환경, 도입 절차·문의입니다.
+- 데이터는 `data/coconut.ts`·`data/solutions.ts`·`data/company.ts`, 화면은 이미 공개 검토한 `public/images/solutions/coconut/*-202611.webp`를 재사용합니다. MCP 개발 검증 중·서비스의 업무 권한 검사·웹훅 수신 개발·사전 검토 연동을 구분하고 성능·인증 취득 주장은 추가하지 않았습니다.
+- 기존 제작 스크립트가 현재 제품 저장소와 이전 경로에 없어, 재현 가능한 원본을 `scripts/build-coconut-product-guide.py`로 추가했습니다. 기존 파일을 확장할 수 없었던 이유입니다. 제품 저장소의 `output/pdf/product-guide-src/build_product_guide.py`에 같은 제작 사본을 두고 `output/pdf/coconut-product-guide.pdf` 공유 원본을 먼저 만든 뒤 홈페이지 웹용을 생성했습니다. 제품 쪽은 로컬 산출물이며 제품 코드·Git 커밋·서버 배포는 변경하지 않았습니다.
+- 이미 설치된 ReportLab·Pillow와 Node의 TypeScript 제거 기능을 사용합니다. 홈페이지의 NPM 의존성과 배포 워크플로는 변경하지 않습니다. 제작 도구는 Python 및 Node 22.13 이상이 필요하며, 이 PC에서는 Node 22.23.4로 검증했습니다.
+
+```powershell
+python scripts/build-coconut-product-guide.py --site-root . --out "<제품 저장소>/output/pdf/coconut-product-guide.pdf"
+python scripts/build-coconut-product-guide.py --site-root . --web --out public/docs/coconut-product-guide.pdf
+```
+
+공유 원본은 841,397 bytes, 웹용은 607,725 bytes로 두 파일의 텍스트는 같습니다. 웹용은 기존 921,202 bytes보다 313,477 bytes 작습니다. 이미지가 든 문서를 JPEG로 저장하고 글꼴을 부분 포함하여 글자 검색·복사를 유지했습니다. 10쪽 전체를 PNG로 렌더링해 줄바꿈·글자·표·그림·쪽 번호를 시각 검토했고 경계 이탈·대체 문자·겹침은 없습니다. 첫 생성에서 바닥글을 본문 경계 검사에 포함해 실패했으며 바닥글을 따로 배치한 뒤 생성·검증을 통과했습니다.
+
+브랜드 페이지에 `#download` 제품설명서 영역, 상단 다운로드 링크와 메뉴, 모바일 하단 PDF 링크를 추가했습니다. `coconutProductGuide` 한 곳에서 주소·저장 파일명·개정일·쪽 수를 관리합니다. 기존 PDF 경로를 유지하고 링크에 개정 버전 쿼리를 붙여 이전 사본의 캐시 재사용을 줄입니다.
+
+정적 생성, 생성 HTML의 h1·메타·canonical·FAQ JSON-LD 보존, PDF 배포 사본의 SHA-256 일치를 확인했습니다. 실제 브라우저의 320·390·768·1024·1280px에서 가로 넘침·다운로드 버튼 잘림·상단 메뉴 충돌이 없고 모바일 하단 PDF 링크가 표시됩니다. 실제 버튼 클릭으로 저장한 PDF도 동일한 SHA-256의 10쪽 문서입니다. 브라우저 오류와 최종 읽기 전용 검토의 새 실행 가능한 지적은 없습니다. GEO·AEO 관점에서 설명서와 다운로드 링크는 JS 실행 전 HTML에 포함되며 본문·문서의 기능 상태가 일치합니다.
 
 ## 2026-11-08 검토 후 반영
 

@@ -52,17 +52,13 @@
                         <br />
                         필요한 곳으로 알림을 보냅니다.
                     </h2>
-                    <p class="lead">공통 API로 연결하고, 채널에 맞는 발신 정보와 메시지 형식을 설정합니다.</p>
+                    <p class="lead">공통 API로 연결하고, 새 발송사는 어댑터로 유연하게 확장합니다.</p>
                 </div>
                 <div v-reveal class="lime-channel-grid fb-stagger">
                     <article v-for="channel in limeChannels" :key="channel.code" class="lime-channel">
                         <span class="lime-channel-code">{{ channel.code }}</span>
                         <h3>{{ channel.name }}</h3>
                         <p>{{ channel.body }}</p>
-                        <div class="lime-channel-condition">
-                            <b>{{ channel.via }}</b>
-                            <span>{{ channel.condition }}</span>
-                        </div>
                     </article>
                 </div>
                 <aside class="lime-inapp">
@@ -72,16 +68,14 @@
                         <p>인앱 채널은 제목·본문을 즉시 만들어 반환합니다. 외부 발송이나 알림함을 제공하는 방식이 아니며, 화면 표시는 고객 서비스에서 구현합니다.</p>
                     </div>
                 </aside>
-                <details class="bp-detail">
-                    <summary>
-                        추가 연동 전 확인할 범위
-                        <span class="bp-detail-icon" aria-hidden="true">+</span>
-                    </summary>
-                    <p>
-                        SendGrid, 알리고, NHN Cloud SMS, Apple APNS 직접 연동과 Google Chat 서비스 계정 방식 등은 준비 중입니다. 필요한 발송사와 현재 계약을 확인한 뒤 지원 여부와 추가 연동 범위를
-                        안내합니다.
-                    </p>
-                </details>
+                <aside class="lime-inapp">
+                    <span class="lime-channel-code">ADAPTER</span>
+                    <div>
+                        <h3>{{ limeAdapter.title }}</h3>
+                        <p>{{ limeAdapter.body }}</p>
+                        <p>{{ limeAdapter.note }}</p>
+                    </div>
+                </aside>
             </div>
         </section>
 
@@ -259,7 +253,7 @@
 
 <script setup lang="ts">
 import { findSolution } from '~/data/solutions'
-import { limeHero, limeConsole, limeFacts, limeChannels, limeFlow, limeStatuses, limeOperations, limeIntegration, limeAdoption } from '~/data/lime'
+import { limeHero, limeConsole, limeFacts, limeChannels, limeAdapter, limeFlow, limeStatuses, limeOperations, limeIntegration, limeAdoption } from '~/data/lime'
 
 // 기존 상세 주소와 검색 메타를 유지하며 브랜드 레이아웃을 적용합니다.
 definePageMeta({
@@ -321,8 +315,6 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     margin-top: 40px;
 }
 .lime-channel {
-    display: flex;
-    flex-direction: column;
     min-width: 0;
     padding: clamp(22px, 3vw, 32px);
     background: var(--surface);
@@ -343,24 +335,7 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     color: var(--ink-2);
     font-size: 15px;
     line-height: 1.8;
-}
-.lime-channel-condition {
-    margin-top: auto;
-    padding-top: 28px;
-}
-.lime-channel-condition b {
-    display: block;
-    padding-top: 16px;
-    border-top: 1px solid var(--line);
-    font-size: 12px;
-    color: var(--accent);
-}
-.lime-channel-condition span {
-    display: block;
-    margin-top: 6px;
-    font-size: 13px;
-    line-height: 1.7;
-    color: var(--ink-2);
+    word-break: keep-all;
 }
 .lime-inapp {
     display: grid;

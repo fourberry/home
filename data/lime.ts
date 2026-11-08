@@ -34,43 +34,39 @@ export const limeFacts = [
 ]
 
 export const limeChannels = [
-    { code: 'SMS', name: '문자', via: '뿌리오', body: '짧은 인증번호부터 이미지가 있는 안내까지. SMS·LMS·MMS를 연결합니다.', condition: '발송사 계정과 사전 등록된 발신번호가 필요합니다.' },
+    { code: 'SMS', name: '문자', body: 'SMS·LMS·MMS로 인증·안내를 보냅니다.' },
     {
         code: 'KAKAO',
         name: '카카오',
-        via: '뿌리오',
-        body: '알림톡·브랜드메시지를 연결하고, 설정한 경우 실패 시 문자로 대체 발송합니다.',
-        condition: '비즈니스 채널을 준비하고 알림톡은 승인 템플릿을 사용합니다.',
+        body: '알림톡·브랜드메시지와 문자 대체발송을 연결합니다.',
     },
     {
         code: 'EMAIL',
         name: '이메일',
-        via: 'SMTP',
-        body: 'HTML 본문과 첨부파일을 보내고, 공통 레이아웃으로 메일의 형식을 맞춥니다.',
-        condition: '사용할 메일 서버의 접속 정보와 발신 설정을 확인합니다.',
+        body: 'HTML 메일과 첨부파일을 함께 보냅니다.',
     },
     {
         code: 'PUSH',
         name: '앱 푸시',
-        via: 'Firebase Cloud Messaging',
-        body: '앱 알림과 데이터 메시지를 보냅니다. 기기 토큰별로 발송 결과를 관리합니다.',
-        condition: 'Firebase 설정과 고객 앱의 기기 토큰 관리가 필요합니다.',
+        body: '앱 알림과 데이터를 기기별로 전송합니다.',
     },
     {
         code: 'WEB PUSH',
         name: '웹 푸시',
-        via: '표준 Web Push',
-        body: '고객 웹사이트의 브라우저 구독으로 정보성 알림을 즉시 단건 발송합니다.',
-        condition: 'HTTPS·Service Worker·알림 동의와 구독 관리는 고객 서비스에서 구현합니다.',
+        body: '정보성 알림을 브라우저로 즉시 단건 발송합니다.',
     },
     {
         code: 'GOOGLE CHAT',
         name: '팀 알림',
-        via: 'Incoming Webhook',
-        body: '등록한 Google Chat 스페이스에 알림을 보내고, 같은 업무의 메시지를 스레드로 묶습니다.',
-        condition: '스페이스 웹훅을 등록합니다. 개인 DM은 지원하지 않습니다.',
+        body: '팀 스페이스로 알림을 보내고 스레드로 묶습니다.',
     },
 ]
+
+export const limeAdapter = {
+    title: '새 발송사도, 어댑터로 유연하게.',
+    body: '공통 API·템플릿·큐·이력을 재사용하고, 업체별 인증·전송·결과 처리를 어댑터로 추가합니다.',
+    note: '연동할 업체의 API·인증 방식·결과 통보·속도 제한을 확인해 구현 범위와 일정을 정합니다.',
+}
 
 export const limeFlow = [
     { t: '서비스에서 요청', d: '고객 서버가 프로젝트 API Key로 채널·수신자·본문 또는 템플릿과 변수를 보냅니다.' },

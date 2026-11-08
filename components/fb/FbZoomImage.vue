@@ -1,5 +1,5 @@
 <template>
-    <button type="button" class="fb-zoom" :aria-label="`크게 보기: ${alt}`" @click="open = true">
+    <a class="fb-zoom" :href="fullSrc || src" :aria-label="`크게 보기: ${alt}`" @click="openImage">
         <img :src="src" :alt="alt" :width="width" :height="height" :loading="loading" :fetchpriority="fetchpriority" />
         <span class="fb-zoom-badge" aria-hidden="true">
             <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
@@ -7,36 +7,30 @@
                 <path d="m20 20-3.5-3.5M11 8v6M8 11h6" />
             </svg>
         </span>
-    </button>
-    <!-- 확대 화면. 서버에서는 open 이 항상 false 라 아무것도 렌더링되지 않습니다. -->
+    </a>
     <Teleport to="body">
-        <Transition name="fb-fade">
-            <div v-if="open" class="fb-dialog-backdrop fb-lightbox" role="dialog" aria-modal="true" :aria-label="alt" @click.self="close">
-                <button type="button" class="fb-lightbox-close" aria-label="닫기" @click="close">
-                    <svg viewBox="0 0 24 24" width="22" height="22" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M6 6l12 12M18 6 6 18" /></svg>
-                </button>
-                <figure class="fb-lightbox-figure" @click.self="close">
-                    <!-- 확대 화면은 원본 해상도 파일(fullSrc)을 씁니다. 없으면 페이지용 이미지를 그대로 씁니다. -->
-                    <img :src="fullSrc || src" :alt="alt" />
-                    <figcaption v-if="alt">{{ alt }}</figcaption>
-                </figure>
+        <dialog ref="viewer" class="fb-image-viewer" :aria-label="alt" @close="restoreFocus" @click="onBackdrop">
+            <div class="fb-image-viewer-header">
+                <p>{{ alt }}</p>
+                <div class="fb-image-viewer-actions">
+                    <button type="button" :aria-pressed="zoomed" @click="zoomed = !zoomed">{{ zoomed ? '전체 보기' : '세부 확대' }}</button>
+                    <form method="dialog"><button type="submit" autofocus>닫기 ×</button></form>
+                </div>
             </div>
-        </Transition>
+            <p class="fb-image-viewer-hint">확대한 화면은 가로·세로로 스크롤하거나 방향키로 이동할 수 있습니다.</p>
+            <div ref="scrollArea" class="fb-image-viewer-scroll" :class="{ 'is-zoomed': zoomed }" tabindex="0" aria-label="확대된 화면 스크롤 영역">
+                <img v-if="viewerOpen" :src="fullSrc || src" :alt="alt" />
+            </div>
+        </dialog>
     </Teleport>
 </template>
 
 <script setup lang="ts">
-import { ref, watch, onUnmounted } from 'vue'
+import { nextTick, onBeforeUnmount, ref } from 'vue'
 
-/**
- * 클릭하면 원본 크기로 크게 보는 이미지. 마우스를 올리면 돋보기 커서와 배지가 보입니다.
- * 스크린샷처럼 글자가 작은 이미지에 씁니다(브랜드 페이지의 관리자 콘솔 화면 등).
- * 배경 클릭·닫기 버튼·ESC 로 닫히고, 열려 있는 동안 본문 스크롤을 막습니다(FbDialog 와 같은 방식).
- */
 withDefaults(
     defineProps<{
         src: string
-        /** 클릭 확대용 고해상도 파일. 페이지용 src 가 줄인 이미지일 때 지정합니다 */
         fullSrc?: string
         alt: string
         width?: number
@@ -47,32 +41,130 @@ withDefaults(
     { loading: 'lazy', fetchpriority: 'auto' }
 )
 
-const open = ref(false)
-const close = () => (open.value = false)
+// LinkberryGallery와 같은 기본 dialog 패턴을 사용합니다. 브라우저가 배경 접근과 키보드 초점을 관리합니다.
+const viewer = ref<HTMLDialogElement>()
+const scrollArea = ref<HTMLElement>()
+const viewerOpen = ref(false)
+const zoomed = ref(true)
+let returnTarget: HTMLElement | null = null
+let previousOverflow = ''
 
-watch(open, v => {
-    if (typeof document !== 'undefined') document.body.style.overflow = v ? 'hidden' : ''
-})
-onUnmounted(() => {
-    if (typeof document !== 'undefined') document.body.style.overflow = ''
-})
+async function openImage(event: MouseEvent) {
+    if (!viewer.value?.showModal || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+    event.preventDefault()
+    returnTarget = event.currentTarget as HTMLElement
+    previousOverflow = document.body.style.overflow
+    viewerOpen.value = true
+    zoomed.value = true
+    await nextTick()
+    document.body.style.overflow = 'hidden'
+    viewer.value.showModal()
+    scrollArea.value?.scrollTo(0, 0)
+}
 
-const onKey = (e: KeyboardEvent) => {
-    if (e.key === 'Escape' && open.value) close()
+function onBackdrop(event: MouseEvent) {
+    if (event.target !== viewer.value) return
+    const bounds = viewer.value.getBoundingClientRect()
+    if (event.clientX < bounds.left || event.clientX > bounds.right || event.clientY < bounds.top || event.clientY > bounds.bottom) viewer.value.close()
 }
-if (typeof document !== 'undefined') {
-    document.addEventListener('keydown', onKey)
-    onUnmounted(() => document.removeEventListener('keydown', onKey))
+
+function restoreFocus() {
+    viewerOpen.value = false
+    document.body.style.overflow = previousOverflow
+    returnTarget?.focus({ preventScroll: true })
+    returnTarget = null
 }
+onBeforeUnmount(() => {
+    if (viewer.value?.open) {
+        viewer.value.close()
+        document.body.style.overflow = previousOverflow
+    }
+})
 </script>
 
 <style scoped>
-.fb-fade-enter-active,
-.fb-fade-leave-active {
-    transition: opacity 0.22s ease;
+.fb-image-viewer {
+    width: min(1400px, calc(100vw - 32px));
+    max-width: none;
+    max-height: calc(100dvh - 32px);
+    margin: auto;
+    padding: 20px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius);
+    background: var(--surface);
+    color: var(--ink);
+    box-sizing: border-box;
 }
-.fb-fade-enter-from,
-.fb-fade-leave-to {
-    opacity: 0;
+.fb-image-viewer::backdrop {
+    background: rgb(15 20 28 / 75%);
+}
+.fb-image-viewer-header {
+    display: flex;
+    gap: 16px;
+    align-items: center;
+    justify-content: space-between;
+}
+.fb-image-viewer-header p {
+    min-width: 0;
+    font-size: 14px;
+    line-height: 1.5;
+}
+.fb-image-viewer-actions {
+    display: flex;
+    flex: none;
+    gap: 8px;
+}
+.fb-image-viewer-actions button {
+    min-height: 44px;
+    padding: 8px 12px;
+    border: 1px solid var(--line);
+    border-radius: var(--radius-s);
+    background: var(--bg);
+    color: var(--ink);
+    font: inherit;
+    font-size: 14px;
+    cursor: pointer;
+}
+.fb-image-viewer-hint {
+    margin: 12px 0;
+    font-size: 13px;
+    color: var(--ink-2);
+}
+.fb-image-viewer-scroll {
+    max-height: calc(100dvh - 180px);
+    overflow: auto;
+    background: var(--bg);
+    overscroll-behavior: contain;
+}
+.fb-image-viewer-scroll img {
+    display: block;
+    max-width: 100%;
+    height: auto;
+    margin: auto;
+}
+.fb-image-viewer-scroll.is-zoomed img {
+    width: auto;
+    max-width: none;
+    margin: 0;
+}
+.fb-image-viewer :focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 2px;
+}
+@media (max-width: 600px) {
+    .fb-image-viewer {
+        padding: 12px;
+    }
+    .fb-image-viewer-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: 12px;
+    }
+    .fb-image-viewer-actions {
+        justify-content: flex-end;
+    }
+    .fb-image-viewer-scroll {
+        max-height: calc(100dvh - 280px);
+    }
 }
 </style>

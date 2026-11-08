@@ -92,17 +92,17 @@ export const fbSolutions: FbSolution[] = [
         name: 'COCONUT',
         ko: '코코넛',
         tag: 'IAM · SSO · OAuth2 / OIDC',
-        // 홈·목록 카드용 사진. 브랜드 페이지의 OG 이미지는 data/coconut.ts 의 coconutOgImage 가 따로 담당합니다.
-        image: '/images/SSO.png',
-        desc: 'OAuth2·OIDC 기반으로 여러 서비스의 인증을 연결하고, 2단계 인증(MFA)·계정 정책·로그인 이력을 중앙에서 관리하는 통합 인증(SSO) 솔루션입니다.',
+        // 홈·목록에도 최신 공통 콘솔 화면을 사용합니다.
+        image: '/images/solutions/coconut/cover-202611.jpg',
+        desc: '사용자 로그인과 서버 간 API 인증을 연결하는 OAuth2·OIDC 기반 통합 인증 솔루션입니다. MFA·토큰·세션·감사 기록을 관리하며, AI 도구의 접근 인증과 권한 통제도 개발·검증하고 있습니다.',
         feats: [
             { t: '멀티테넌트', d: '여러 조직을 단일 시스템에서' },
-            { t: '표준 인증', d: 'OAuth2 · OIDC 기반 인가 서버' },
-            { t: '2단계 인증', d: 'SMS · 이메일 · OTP 앱(TOTP)' },
-            { t: '관리자 콘솔', d: '테넌트·클라이언트·이용자 관리' },
+            { t: '로그인·API 인증', d: 'OAuth2 · OIDC · Client Credentials' },
+            { t: '계정·토큰 보안', d: 'MFA · 토큰 갱신 · 세션 종료 · 감사 이력' },
+            { t: 'AI 인증 통제(검증 중)', d: 'MCP 연결의 사용자 동의 · 대상 · 권한 범위 제한' },
         ],
-        seoTitle: 'SSO 통합 인증 솔루션 COCONUT (코코넛)',
-        seoDescription: 'OAuth2·OIDC 기반 SSO 통합 인증 솔루션 코코넛. 계정 관리, MFA, 서비스별 로그인 화면과 감사 이력을 제공합니다. 연동 지원 범위와 기존 계정 전환·운영 조건을 확인하세요.',
+        seoTitle: 'SSO·계정 보안과 AI 접근 인증 | COCONUT (코코넛)',
+        seoDescription: '코코넛은 SSO 로그인과 서버 간 API 인증, MFA, 토큰·세션·감사 기록을 관리합니다. 최신 콘솔과 MCP 기반 AI 접근 인증·권한 통제의 개발 검증 범위를 확인하세요.',
         headline: '흩어진 계정을 하나로.\nSSO 통합 인증 솔루션 COCONUT',
         category: 'SecurityApplication',
         problems: [
@@ -112,6 +112,10 @@ export const fbSolutions: FbSolution[] = [
             '계정 상태와 로그인 이력을 서비스마다 따로 확인하고 있습니다.',
         ],
         sections: [
+            {
+                h: '사용자 없이 호출하는 서버 간 API 인증',
+                body: 'Client Credentials 방식으로 호출 서버의 신원을 확인하고 토큰을 발급합니다. 대상 API는 토큰과 허용된 업무·데이터 권한을 검증합니다. 자동 처리나 시스템 간 조회에 적용하며, 실제 대상 API의 검증 방식과 연동 범위를 함께 구성합니다.',
+            },
             {
                 h: '서비스에 맞는 표준 인증 연동',
                 body: 'COCONUT은 OAuth2·OIDC 기반 인가 서버입니다. 웹·앱 사용자 로그인과 서버 간 API 인증을 구분해 구성합니다. 연동 서비스는 로그인 응답과 토큰을 검증하고 자체 세션, 업무·데이터 권한을 적용합니다.',
@@ -128,8 +132,20 @@ export const fbSolutions: FbSolution[] = [
                 h: '계정 상태와 인증 세션 관리',
                 body: '코코넛의 계정 상태·인증 세션과 로그인 이력을 관리합니다. 외부 서비스의 기존 로그인 세션까지 종료하려면 해당 서비스가 웹훅 이벤트를 받아 자체 세션에 반영해야 합니다. 차단 시점과 이벤트 누락 시 동작은 연동 시 검증합니다.',
             },
+            {
+                h: 'AI 도구의 접근 인증과 권한 통제 — 개발 검증 중',
+                body: 'MCP 기반 AI 연결에서 사용자 인증·명시적 동의, 대상 자원과 권한 범위 제한, 토큰 갱신·인가 철회를 개발·검증하고 있습니다. ChatGPT 연결과 가상 데이터 조회를 개발 환경에서 확인했으며, 실제 업무 데이터 연동·다른 AI 호환성·운영 검수는 별도로 확인합니다. 실제 업무·데이터 권한은 자원 서버가 확인합니다.',
+            },
         ],
         faq: [
+            {
+                q: '사용자 로그인 없이 서버끼리 API를 호출할 때도 사용할 수 있나요?',
+                a: 'Client Credentials 방식으로 서버의 자격을 확인하고 토큰을 발급할 수 있습니다. 호출 서버는 토큰을 담아 API를 요청하고, 대상 API는 토큰과 호출 권한을 검증합니다. 사용자 로그인이나 사용자 동의를 대신하는 토큰과 구분하며, 대상 API별 검증 방식·허용 범위·연동 작업을 함께 확인합니다.',
+            },
+            {
+                q: 'AI 도구가 사내 서비스에 접근할 때도 인증을 통제할 수 있나요?',
+                a: 'MCP 기반 AI 연결에 사용자 인증과 명시적 동의, 대상 자원·권한 범위 제한, 토큰 갱신과 인가 철회를 적용하는 기능을 개발·검증하고 있습니다. ChatGPT 연결과 가상 데이터 조회는 개발 환경에서 확인했습니다. 실제 업무 데이터 연동, 다른 AI 도구의 호환성과 운영 검수는 별도로 확인하며, 자원 서버의 토큰 검증과 업무·데이터 권한 검사도 함께 연결해야 합니다.',
+            },
             {
                 q: '기존 회원과 비밀번호를 그대로 옮길 수 있나요?',
                 a: '기존 회원 식별자, 중복 계정, 업무 데이터 연결과 비밀번호 저장 방식을 먼저 확인합니다. 이전 가능 여부와 비밀번호 재설정 필요성을 검토한 뒤 시범 연동, 단계적 전환과 원복 조건을 정합니다. 모든 계정의 자동 이전을 전제로 하지는 않습니다.',
@@ -168,19 +184,19 @@ export const fbSolutions: FbSolution[] = [
             },
         ],
         // 출처: C:\project\fourberry\coconut (Spring Authorization Server 기반 인가 서버)
-        stack: ['Java 21', 'Spring Boot 3.5', 'Spring Authorization Server', 'Spring Security 6', 'MySQL 8', 'JPA · Hibernate', 'Flyway', 'Thymeleaf', 'Docker', 'Swagger (OpenAPI)'],
+        stack: ['Java 21', 'Spring Boot', 'Spring Authorization Server', 'Spring Security', 'MySQL 8', 'JPA · Hibernate', 'Flyway', 'Thymeleaf', 'Docker', 'Swagger (OpenAPI)'],
         relatedProjects: ['withfresh'],
         nameOrigin: '단단한 껍질 안에 알맹이를 지키는 코코넛처럼, 계정과 인증을 안에서 지킵니다.',
-        // 관리자 콘솔·심볼(보라 계열)에 맞춘 브랜드 색. pages/solutions/coconut.vue 가 이 값으로 그려집니다.
+        // 최신 코코넛 콘솔의 코코아·앰버 팔레트. 기존 브랜드 변수 계약을 유지합니다.
         brand: {
-            accent: '#6d28d9',
-            accentHover: '#5b21b6',
-            accentLite: '#8b5cf6',
-            inkBg: '#150b2e',
-            inkSurface: '#221242',
-            inkAccent: '#b79cff',
-            inkFg2: '#b5a8d9',
-            mark: '/images/solutions/coconut/mark.svg',
+            accent: '#74543b',
+            accentHover: '#55483f',
+            accentLite: '#c2a588',
+            inkBg: '#302a25',
+            inkSurface: '#3d352e',
+            inkAccent: '#ffbc73',
+            inkFg2: '#d6c8ba',
+            mark: '/images/solutions/coconut/mark-202611.svg',
         },
     },
     {

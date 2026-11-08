@@ -16,7 +16,7 @@ export const coconutOgImage = `${IMG}/cover-202611.jpg`
 
 /** 제품설명서의 내용은 아래 데이터와 data/solutions.ts에서 함께 생성합니다. */
 export const coconutProductGuide = {
-    href: '/docs/coconut-product-guide.pdf?v=20261109',
+    href: '/docs/coconut-product-guide.pdf?v=20261109-2',
     fileName: 'COCONUT-product-guide-2026.11.pdf',
     edition: '2026.11',
     updatedAt: '2026-11-09',

@@ -354,7 +354,11 @@
                 <div class="coconut-guide-card">
                     <div>
                         <h3>COCONUT 제품설명서</h3>
-                        <p class="coconut-guide-meta">{{ coconutProductGuide.edition }}판 · {{ coconutProductGuide.updatedAt }} 개정 · PDF {{ coconutProductGuide.pages }}쪽</p>
+                        <p class="coconut-guide-meta">
+                            <span>{{ coconutProductGuide.edition }}판</span>
+                            <span>{{ coconutProductGuide.updatedAt }} 개정</span>
+                            <span>PDF {{ coconutProductGuide.pages }}쪽</span>
+                        </p>
                         <p>AI MCP 인증의 개발 검증 범위와 서비스 측 연동 조건을 함께 안내합니다.</p>
                     </div>
                     <a :href="coconutProductGuide.href" :download="coconutProductGuide.fileName" class="btn btn-primary">제품설명서 다운로드 <span aria-hidden="true">↓</span></a>
@@ -416,7 +420,7 @@
         <!-- 모바일에서도 설명서 다운로드와 문의에 바로 접근할 수 있습니다. -->
         <div class="bp-mobile-bar" :hidden="!isMobile">
             <a :href="coconutProductGuide.href" :download="coconutProductGuide.fileName" class="bp-mobile-bar-doc" aria-label="제품설명서 PDF 다운로드">
-                <b aria-hidden="true">PDF</b>
+                <b aria-hidden="true">설명서</b>
             </a>
             <NuxtLink :to="coconutInquiryHref" class="btn btn-primary" @click="trackInquiry('mobile_bar')">
                 도입 문의
@@ -535,10 +539,20 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     line-height: 1.7;
 }
 .coconut-guide-card .coconut-guide-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 4px 12px;
     color: var(--accent);
     font-size: 14px;
 }
+.coconut-guide-meta span {
+    white-space: nowrap;
+}
 @media (max-width: 920px) {
+    .bp-mobile-bar-doc {
+        width: 68px;
+        font-size: 14px;
+    }
     .coconut-guide-card {
         flex-direction: column;
         align-items: stretch;

@@ -141,7 +141,7 @@ class Guide:
         flow = next(f for f in self.coco['flows'] if f['id'] == kind)
         intro = flow['intro']
         if kind == 'ai':
-            intro = '개발 검증 중 | ' + intro
+            intro = flow['status'] + ' | ' + self.coco['ai']['validation']
         self.begin({'user': '01  사용자 로그인', 'api': '02  서버 간 API', 'ai': '03  AI 도구 연결'}[kind], flow['title'], intro)
         if kind == 'user':
             nodes = [('사용자', '서비스에서 로그인 시작'), ('서비스 A·B', '코드 교환·토큰 검증·세션'), ('COCONUT', '계정 확인과 필요한 추가 단계')]
@@ -168,7 +168,7 @@ class Guide:
             self.arrow(left_end, 402, middle_start, 402, '01', 429)
             self.arrow(middle_start + width, 402, middle_start + width + gap, 402, '02', 429)
             self.arrow(middle_start + width + gap, 365, middle_start + width, 365, '03', 386)
-            self.text('04 서비스 B도 유효한 인증 세션 확인 후 토큰 검증·자체 세션 생성', self.margin, 333, 10, color=self.accent)
+            self.text('04 COCONUT 인증 세션 재사용 / 서비스 B도 코드 교환·토큰 검증·자체 세션 생성', self.margin, 333, 10, color=self.accent)
         else:
             self.arrow(left_end, 402, middle_start, 402, '01', 429)
             self.arrow(middle_start, 365, left_end, 365, '03' if kind == 'ai' else '02', 386)
@@ -184,7 +184,7 @@ class Guide:
         self.end()
 
     def build(self):
-        self.begin('PRODUCT OVERVIEW  |  2026.11', '사람·서버·AI의 인증을 한곳에서.', 'COCONUT 제품설명서 - 최신 공개 기능과 관리자 화면')
+        self.begin(f"PRODUCT OVERVIEW  |  {self.meta['edition']}", '사람·서버·AI의 인증을 한곳에서.', 'COCONUT 제품설명서 - 최신 공개 기능과 관리자 화면')
         self.text(self.solution['desc'], self.margin, 430, 12, 330)
         self.text('인증은 COCONUT이,\n업무 권한은 서비스가.', self.margin, 310, 23, 330, True, self.accent)
         self.screenshot(self.coco['hero']['image'], 408, 250, self.width - 450, 200)
@@ -199,8 +199,8 @@ class Guide:
         for index in [0, 1]:
             screen = self.coco['tour'][index]
             self.begin(f'0{index+4}  관리자 콘솔', screen['h2'], screen['p'])
-            self.screenshot(screen['image'], self.margin, 150, self.body_width, 295)
-            self.cards([{'t': f'0{i+1}', 'd': p} for i, p in enumerate(screen['points'])], 132, height=80)
+            self.screenshot(screen['full'], self.margin, 95, self.body_width, 350)
+            self.text(' / '.join(screen['points']), self.margin, 77, 10, color=self.accent)
             self.end()
 
         self.begin('06  화면과 약관', '서비스 브랜드와 동의 절차를 구분합니다.', '브랜딩과 약관 관리는 서로 다른 설정입니다. 약관 동의와 API 접근 권한 동의를 혼동하지 않습니다.')

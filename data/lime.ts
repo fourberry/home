@@ -3,24 +3,24 @@
 export const limeHero = {
     image: '/images/solutions/lime/dashboard-202611.jpg',
     alt: '라임 대시보드의 발송 현황 카드, 발송 추이와 채널별 비중 차트',
-    w: 1310,
-    h: 912,
+    w: 1920,
+    h: 1200,
 }
 
 export const limeConsole = [
     {
         image: '/images/solutions/lime/template-editor-202611.jpg',
         alt: '라임 이메일 템플릿 생성 화면의 제목·본문 편집과 미리보기',
-        w: 1310,
-        h: 1120,
+        w: 1910,
+        h: 1100,
         title: '문구를 편집하고 결과를 미리 확인',
         body: '메일 종류·제목·본문과 레이아웃을 설정하고 미리보기로 확인합니다. 화면의 예약 안내는 저장하지 않은 작성 예시입니다.',
     },
     {
         image: '/images/solutions/lime/message-compose-202611.jpg',
         alt: '라임 메시지 발송 화면의 채널·수신자·메일 종류·제목·본문과 첨부파일 입력 항목',
-        w: 1310,
-        h: 1120,
+        w: 1430,
+        h: 1100,
         title: '채널과 발송 내용을 한 화면에서',
         body: '직접 작성과 템플릿 발송을 구분하고 채널에 필요한 항목을 입력합니다. 수신자를 입력하지 않은 미발송 예시입니다.',
     },

@@ -294,7 +294,7 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
 }
 .lime-console-gallery {
     display: grid;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: minmax(0, 1fr);
     gap: 28px;
     margin-top: 40px;
 }
@@ -507,9 +507,6 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     margin: 20px 0 28px;
 }
 @media (max-width: 920px) {
-    .lime-console-gallery {
-        grid-template-columns: minmax(0, 1fr);
-    }
     .lime-channel-grid,
     .lime-flow,
     .lime-adoption {

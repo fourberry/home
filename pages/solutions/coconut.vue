@@ -137,22 +137,15 @@
                     <span v-if="flow.status" class="bp-status dev">{{ flow.status }}</span>
                     <h3>{{ flow.title }}</h3>
                     <p>{{ flow.intro }}</p>
-                    <BrandCoconutFlow v-if="flow.id === 'user'" />
-                    <ol v-else class="coconut-auth-flow" :aria-label="`${flow.label} 인증 흐름`">
-                        <li v-for="(step, i) in flow.steps" :key="step.t">
-                            <span class="coconut-ai-number">0{{ i + 1 }}</span>
-                            <h4>{{ step.t }}</h4>
-                            <p>{{ step.d }}</p>
-                        </li>
-                    </ol>
+                    <BrandCoconutFlow :flow="flow" />
                     <p v-if="flow.note" class="bp-note">{{ flow.note }}</p>
-                    <details v-if="flow.id === 'user'" class="bp-detail bp-technical-flow">
+                    <details class="bp-detail bp-technical-flow">
                         <summary>
                             개발 담당자를 위한 인증 처리 순서
                             <span class="bp-detail-icon" aria-hidden="true">+</span>
                         </summary>
                         <ol class="bp-steps">
-                            <li v-for="(step, i) in coconutLoginSteps" :key="step.t" class="bp-step">
+                            <li v-for="(step, i) in flow.id === 'user' ? coconutLoginSteps : flow.steps" :key="step.t" class="bp-step">
                                 <span class="idx">STEP 0{{ i + 1 }}</span>
                                 <h4>{{ step.t }}</h4>
                                 <p>{{ step.d }}</p>
@@ -535,9 +528,6 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     color: var(--ink-2);
     line-height: 1.75;
 }
-.coconut-auth-flow .coconut-ai-number {
-    color: var(--accent);
-}
 .coconut-detail-list {
     display: grid;
     gap: 20px;
@@ -574,32 +564,10 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     color: var(--ink-accent);
     border-color: var(--ink-fg2);
 }
-.coconut-auth-flow {
-    display: grid;
-    grid-template-columns: repeat(4, minmax(0, 1fr));
-    margin-top: 36px;
-    padding: 0;
-    list-style: none;
-    border-top: 1px solid var(--line);
-}
-.coconut-auth-flow li {
-    padding: 24px 24px 24px 0;
-    border-bottom: 1px solid var(--line);
-}
 .coconut-ai-number {
     color: var(--ink-accent);
     font-family: var(--font-mono);
     font-size: 13px;
-}
-.coconut-auth-flow h4 {
-    margin-top: 12px;
-    font-size: 20px;
-}
-.coconut-auth-flow p {
-    margin-top: 10px;
-    color: var(--ink-2);
-    font-size: 14px;
-    line-height: 1.7;
 }
 .coconut-ai-controls {
     margin-top: 28px;
@@ -624,23 +592,8 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     object-fit: contain;
 }
 @media (max-width: 920px) {
-    .coconut-auth-flow {
-        grid-template-columns: repeat(2, minmax(0, 1fr));
-        gap: 0 16px;
-    }
-    .coconut-auth-flow li {
-        padding-right: 0;
-    }
-    .coconut-auth-flow h4 {
-        font-size: 17px;
-    }
     .coconut-ai-validation {
         padding: 18px;
-    }
-}
-@media (max-width: 380px) {
-    .coconut-auth-flow {
-        grid-template-columns: 1fr;
     }
 }
 </style>

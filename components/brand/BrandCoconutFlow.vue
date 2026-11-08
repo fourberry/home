@@ -1,6 +1,7 @@
 <template>
     <div ref="root" class="cf-flow" :class="{ 'is-hold': hold }">
         <div class="cf-stage">
+            <template v-if="!flow?.diagram">
             <!-- 같은 장면을 가로(PC)·세로(모바일) 두 벌로 두고 CSS 로 하나만 보여줍니다. 내용·타이밍은 같습니다. -->
             <svg class="cf-svg cf-svg--d" viewBox="0 0 1100 400" focusable="false" role="img" aria-labelledby="cf-title-d">
                 <title id="cf-title-d">로그인 한 번으로 서비스 A와 B를 이용하는 흐름</title>
@@ -378,6 +379,72 @@
                     <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;0;1;1;0;0" keyTimes="0;0.7571;0.7679;0.8071;0.8143;1"></animate>
                 </text>
             </svg>
+            </template>
+            <template v-else>
+                <svg
+                    v-for="layout in delegatedLayouts"
+                    :key="layout.id"
+                    class="cf-svg"
+                    :class="`cf-svg--${layout.id}`"
+                    :viewBox="layout.viewBox"
+                    focusable="false"
+                    role="img"
+                    :aria-labelledby="`${flow.id}-${layout.id}-title`"
+                >
+                    <title :id="`${flow.id}-${layout.id}-title`">{{ flow.label }} 인증 흐름: {{ flow.diagram.requester }} · COCONUT · {{ flow.diagram.resource }}</title>
+                    <defs>
+                        <linearGradient :id="`${flow.id}-${layout.id}-issuer`" x1="0" y1="0" x2="1" y2="1">
+                            <stop offset="0" style="stop-color: var(--accent-hover)"></stop>
+                            <stop offset="1" style="stop-color: var(--accent)"></stop>
+                        </linearGradient>
+                        <marker :id="`${flow.id}-${layout.id}-arrow`" markerWidth="8" markerHeight="8" refX="7" refY="4" orient="auto">
+                            <path d="M1 1 L7 4 L1 7" fill="none" stroke="var(--accent)" stroke-width="1.4"></path>
+                        </marker>
+                    </defs>
+                    <g v-for="edge in layout.edges" :key="edge.step">
+                        <path class="cf-connection" :d="edge.path" :marker-end="`url(#${flow.id}-${layout.id}-arrow)`"></path>
+                        <text :x="edge.x" :y="edge.y" :text-anchor="edge.anchor" class="cf-edge-label">0{{ edge.step + 1 }} {{ flow.steps[edge.step].t }}</text>
+                        <circle r="5" style="fill: var(--accent)" opacity="0">
+                            <animateMotion :path="edge.path" dur="14s" repeatCount="indefinite" calcMode="linear" keyPoints="0;0;1;1" :keyTimes="`0;${edge.start};${edge.end};1`"></animateMotion>
+                            <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;0;1;1;0;0" :keyTimes="`0;${edge.start};${edge.start + 0.01};${edge.end};${edge.end + 0.01};1`"></animate>
+                        </circle>
+                    </g>
+                    <g v-for="node in layout.nodes" :key="node.kind" :class="['cf-node', { 'cf-node--issuer': node.kind === 'issuer' }]">
+                        <rect
+                            :x="node.x"
+                            :y="node.y"
+                            :width="node.w"
+                            :height="node.h"
+                            rx="18"
+                            :fill="node.kind === 'issuer' ? `url(#${flow.id}-${layout.id}-issuer)` : 'var(--surface)'"
+                            :stroke="node.kind === 'issuer' ? 'var(--accent)' : 'var(--line)'"
+                        ></rect>
+                        <g :transform="`translate(${node.x + node.w / 2 - 12} ${node.y + 17})`" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linecap="round" stroke-linejoin="round">
+                            <template v-if="node.kind === 'requester'">
+                                <rect x="2" y="3" width="20" height="14" rx="2"></rect>
+                                <path d="M8 21h8M12 17v4"></path>
+                            </template>
+                            <template v-else-if="node.kind === 'issuer'">
+                                <rect x="4" y="10" width="16" height="12" rx="3"></rect>
+                                <path d="M8 10V6a4 4 0 0 1 8 0v4M12 15v3"></path>
+                            </template>
+                            <template v-else>
+                                <path d="M12 2l9 4v6c0 5-5 9-9 10-4-1-9-5-9-10V6zM8 12l3 3 5-6"></path>
+                            </template>
+                        </g>
+                        <text :x="node.x + node.w / 2" :y="node.y + 65" text-anchor="middle" class="cf-node-title">{{ node.title }}</text>
+                        <text :x="node.x + node.w / 2" :y="node.y + 88" text-anchor="middle" class="cf-node-detail">{{ node.detail }}</text>
+                        <template v-if="node.kind === 'issuer'">
+                            <rect :x="node.x + 18" :y="node.y + node.h - 45" :width="node.w - 36" height="28" rx="14" fill="#ffffff" fill-opacity="0.14"></rect>
+                            <text :x="node.x + node.w / 2" :y="node.y + node.h - 26" text-anchor="middle" class="cf-node-action">02 {{ flow.steps[1].t }}</text>
+                        </template>
+                        <text v-if="node.kind === 'resource'" :x="node.x + node.w / 2" :y="node.y + 110" text-anchor="middle" class="cf-node-detail">{{ flow.id === 'api' ? `04 ${flow.steps[3].t}` : '업무 권한 확인' }}</text>
+                        <rect v-if="node.kind === 'resource'" :x="node.x - 4" :y="node.y - 4" :width="node.w + 8" :height="node.h + 8" rx="22" fill="none" stroke="var(--accent)" stroke-width="2" opacity="0">
+                            <animate attributeName="opacity" dur="14s" repeatCount="indefinite" values="0;0;1;1;0" keyTimes="0;0.64;0.66;0.97;1"></animate>
+                        </rect>
+                    </g>
+                </svg>
+            </template>
             <button type="button" class="cf-replay" aria-label="동작 흐름 애니메이션 처음부터 다시 보기" title="다시 보기" @click="play">
                 <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
                     <path d="M3 12a9 9 0 1 0 3-6.7" />
@@ -385,7 +452,7 @@
                 </svg>
             </button>
         </div>
-        <ol class="cf-steps" aria-label="동작 흐름 4단계">
+        <ol v-if="!flow?.diagram" class="cf-steps" aria-label="동작 흐름 4단계">
             <li class="cf-pill cf-pill--1">
                 <span class="idx">01</span>
                 로그인 요청
@@ -403,15 +470,67 @@
                 서비스 B는 세션 확인만
             </li>
         </ol>
-        <p class="bp-note">같은 테넌트에 연결된 서비스 A·B를 한 번의 로그인으로 이용하는 흐름 예시입니다. 실제 재인증·동의 절차는 세션 상태와 서비스 설정에 따라 달라집니다.</p>
+        <ol v-else class="cf-steps" :aria-label="`${flow.label} 동작 흐름 4단계`">
+            <li v-for="(step, i) in flow.steps" :key="step.t" class="cf-pill" :class="`cf-pill--${i + 1}`">
+                <span class="idx">0{{ i + 1 }}</span>
+                {{ step.t }}
+            </li>
+        </ol>
+        <p v-if="!flow?.diagram" class="bp-note">같은 테넌트에 연결된 서비스 A·B를 한 번의 로그인으로 이용하는 흐름 예시입니다. 실제 재인증·동의 절차는 세션 상태와 서비스 설정에 따라 달라집니다.</p>
     </div>
 </template>
 
 <script setup lang="ts">
-import { onBeforeUnmount, onMounted, ref } from 'vue'
+import { computed, onBeforeUnmount, onMounted, ref } from 'vue'
+import type { CoconutAuthFlow } from '~/data/coconut'
+
+const props = defineProps<{ flow?: CoconutAuthFlow }>()
+// 두 연동 흐름은 같은 그림 구조를 쓰되, 토큰을 돌려받는 시점과 호출 대상을 구분합니다.
+const delegatedLayouts = computed(() => {
+    const flow = props.flow
+    if (!flow?.diagram) return []
+    const diagram = flow.diagram
+    const isAi = flow.id === 'ai'
+    const requester = { kind: 'requester', title: diagram.requester, detail: diagram.requesterDetail }
+    const issuer = { kind: 'issuer', title: 'COCONUT', detail: diagram.issuerDetail }
+    const resource = { kind: 'resource', title: diagram.resource, detail: diagram.resourceDetail }
+    const request = { step: 0, start: 0.04, end: 0.26 }
+    const token = { step: isAi ? 2 : 1, start: isAi ? 0.48 : 0.29, end: isAi ? 0.59 : 0.46 }
+    const call = { step: isAi ? 3 : 2, start: isAi ? 0.64 : 0.48, end: isAi ? 0.8 : 0.59 }
+    return [
+        {
+            id: 'd',
+            viewBox: '0 0 1100 400',
+            nodes: [
+                { ...requester, x: 32, y: 138, w: 230, h: 132 },
+                { ...issuer, x: 435, y: 110, w: 260, h: 188 },
+                { ...resource, x: 848, y: 138, w: 220, h: 132 },
+            ],
+            edges: [
+                { ...request, path: 'M262 170 H435', x: 348, y: 152, anchor: 'middle' },
+                { ...token, path: 'M435 242 H262', x: 348, y: 268, anchor: 'middle' },
+                { ...call, path: 'M147 270 V350 H958 V270', x: 550, y: 378, anchor: 'middle' },
+            ],
+        },
+        {
+            id: 'm',
+            viewBox: '0 0 350 650',
+            nodes: [
+                { ...requester, x: 40, y: 20, w: 270, h: 112 },
+                { ...issuer, x: 40, y: 245, w: 270, h: 156 },
+                { ...resource, x: 40, y: 495, w: 270, h: 132 },
+            ],
+            edges: [
+                { ...request, path: 'M68 132 V245', x: 85, y: 177, anchor: 'start' },
+                { ...token, path: 'M282 245 V132', x: 265, y: 210, anchor: 'end' },
+                { ...call, path: 'M310 76 H332 V465 H175 V495', x: 175, y: 450, anchor: 'middle' },
+            ],
+        },
+    ]
+})
 
 /**
- * COCONUT "동작 방식" 애니메이션 — 로그인 한 번으로 서비스 A·B를 이용하는 흐름(14초 순환).
+ * COCONUT "동작 방식" 애니메이션 — 사용자 로그인·서버 간 API·AI MCP 흐름(14초 순환).
  *
  *  - 인라인 SVG + SMIL(animateMotion/animate) + CSS 키프레임만 씁니다. 외부 라이브러리 없음.
  *  - 단계 텍스트는 HTML(ol.cf-steps)과 SVG <text> 에 그대로 있어 JS 없이도 읽히고 색인됩니다.
@@ -419,7 +538,8 @@ import { onBeforeUnmount, onMounted, ref } from 'vue'
  *  - 동작 줄이기(prefers-reduced-motion): SVG 를 12.5초 지점(모든 단계가 켜진 장면)에 정지하고 알약은 CSS 가 정적으로 보여줍니다.
  *  - JS 가 실패하면 SVG 는 문서 로드 시점부터 자동 재생됩니다(동기화만 안 될 뿐 내용은 보입니다).
  *
- * 시안 원본: 디자인 캔버스 "COCONUT 동작 흐름 애니메이션 시안". 장면·타이밍을 바꾸면 그쪽도 함께 갱신하세요.
+ * 사용자 로그인 시안: 디자인 캔버스 "COCONUT 동작 흐름 애니메이션 시안".
+ * API·MCP 그림과 사용자 시안 이후의 공개 내용은 data/coconut.ts·docs/coconut-updates.md를 기준으로 합니다.
  */
 const root = ref<HTMLElement | null>(null)
 // 마운트 직후 ~ 화면 진입 전에는 알약 애니메이션을 멈춰 SVG 와 같은 시점에 시작하게 합니다.
@@ -502,6 +622,44 @@ onBeforeUnmount(() => io?.disconnect())
 }
 .cf-svg--m {
     display: none;
+}
+.cf-connection {
+    fill: none;
+    stroke: color-mix(in srgb, var(--accent) 40%, var(--line));
+    stroke-width: 2;
+}
+.cf-edge-label {
+    fill: var(--ink-2);
+    font-size: 13px;
+    font-weight: 600;
+    paint-order: stroke;
+    stroke: var(--surface);
+    stroke-width: 6px;
+    stroke-linejoin: round;
+}
+.cf-node {
+    color: var(--accent);
+}
+.cf-node-title {
+    fill: var(--ink);
+    font-size: 19px;
+    font-weight: 700;
+}
+.cf-node-detail {
+    fill: var(--ink-2);
+    font-size: 12px;
+}
+.cf-node--issuer {
+    color: var(--on-accent);
+}
+.cf-node--issuer .cf-node-title,
+.cf-node--issuer .cf-node-detail,
+.cf-node-action {
+    fill: var(--on-accent);
+}
+.cf-node-action {
+    font-size: 13px;
+    font-weight: 600;
 }
 .cf-replay {
     position: absolute;
@@ -674,12 +832,14 @@ onBeforeUnmount(() => io?.disconnect())
         font-size: 13px;
     }
 }
-@media (max-width: 640px) {
+@media (max-width: 920px) {
     .cf-svg--d {
         display: none;
     }
     .cf-svg--m {
         display: block;
+        max-width: 430px;
+        margin-inline: auto;
     }
 }
 /* 동작 줄이기: SVG 는 JS 가 마지막 장면에 정지시키고, 알약은 전부 켜진 정적 상태로 보여줍니다(fb-brand.css 가 animation 을 끕니다). */

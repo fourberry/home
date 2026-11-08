@@ -102,10 +102,10 @@ export const coconutAuthFlows: CoconutAuthFlow[] = [
         intro: '서버가 자신의 자격으로 토큰을 받아 API를 호출하는 Client Credentials 방식을 지원합니다. 자동 처리·시스템 간 조회처럼 사람이 로그인하지 않는 연동에 사용합니다.',
         diagram: {
             requester: '호출 서버',
-            requesterDetail: '등록된 클라이언트 자격',
-            issuerDetail: '클라이언트와 요청 범위 확인',
+            requesterDetail: '등록된 서버 자격',
+            issuerDetail: '클라이언트·허용 범위 확인',
             resource: '대상 API',
-            resourceDetail: '토큰과 호출 권한 검증',
+            resourceDetail: '토큰·호출 권한 확인',
         },
         steps: [
             { t: '서버 인증', d: '호출 서버가 등록된 클라이언트 자격으로 코코넛에 토큰을 요청합니다.' },
@@ -123,18 +123,18 @@ export const coconutAuthFlows: CoconutAuthFlow[] = [
         status: '개발 검증 중',
         diagram: {
             requester: 'AI 도구',
-            requesterDetail: '사용자를 대신해 서비스 요청',
-            issuerDetail: '사용자가 인증하고 접근에 동의',
+            requesterDetail: '사용자를 대신해 요청',
+            issuerDetail: '사용자 인증·접근 동의',
             resource: 'MCP 서버',
-            resourceDetail: '토큰과 접근 상태 검증',
+            resourceDetail: '토큰·접근 상태 확인',
         },
         steps: [
             { t: 'AI 연결 요청', d: '등록된 AI 도구가 접근할 서비스와 권한 범위를 요청합니다.' },
             { t: '사용자 인증·동의', d: '사용자가 코코넛에서 인증하고 요청된 접근 범위를 확인합니다.' },
-            { t: '접근 토큰 발급', d: '코코넛이 지정한 서비스와 허용된 권한 범위에 맞는 토큰을 발급합니다.' },
+            { t: '접근 토큰 발급', d: 'AI 도구가 인가 코드를 교환하면 코코넛이 지정한 서비스와 허용된 권한 범위에 맞는 토큰을 발급합니다.' },
             { t: 'MCP 서버 검증', d: 'MCP 서버가 토큰·접근 상태·업무 권한을 확인하고 도구 요청을 처리합니다.' },
         ],
-        note: '연결 권한을 철회한 뒤의 차단은 MCP 서버의 토큰 상태 확인·이벤트 반영과 함께 검증합니다.',
+        note: '서비스 탐색과 인가 코드 교환의 세부 요청은 생략한 개념도입니다. 연결 권한을 철회한 뒤의 차단은 MCP 서버의 토큰 상태 확인·이벤트 반영과 함께 검증합니다.',
     },
 ]
 

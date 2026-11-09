@@ -10,11 +10,11 @@ export const limeHero = {
 export const limeConsole = [
     {
         image: '/images/solutions/lime/template-editor-202611.jpg',
-        alt: '라임 이메일 템플릿 생성 화면의 제목·본문 편집과 미리보기',
+        alt: '라임 이메일 템플릿의 HTML 편집 화면과 방문 일정·예약번호를 담은 예약 확정 메일 미리보기',
         w: 1910,
         h: 1100,
-        title: '문구를 편집하고 결과를 미리 확인',
-        body: '메일 종류·제목·본문과 레이아웃을 설정하고 미리보기로 확인합니다. 화면의 예약 안내는 저장하지 않은 작성 예시입니다.',
+        title: '예약 메일을 꾸미고 미리 확인',
+        body: '예약 상태와 방문 일정을 담은 HTML 메일을 편집 화면에서 미리 확인합니다. 가상 예약 정보로 만든 작성 예시입니다.',
     },
     {
         image: '/images/solutions/lime/message-compose-202611.jpg',

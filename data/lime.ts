@@ -18,20 +18,20 @@ export const limeConsole = [
         body: [{ text: '예약 확정 메일의 HTML을 작성하고 방문 일정과 예약번호가 어떻게 표시되는지 미리 확인합니다. 가상 예약 정보로 만든 예시입니다.' }],
     },
     {
+        image: '/images/solutions/lime/bulk-preview-202611.jpg',
+        alt: '라임 대량 발송 미리보기에서 가상 수신자 10명의 방문 일정과 예약번호를 검증하고 첫 번째 수신자의 맞춤 메일을 확인하는 모습',
+        w: 1440,
+        h: 1280,
+        title: '수신자별 대량 발송 미리보기',
+        body: [{ text: 'CSV·엑셀의 예약 정보를 수신자별로 반영', emphasis: true }, { text: '하고, 발송 전 목록과 첫 번째 수신자의 맞춤 메일을 확인합니다. 화면은 가상 데이터 예시입니다.' }],
+    },
+    {
         image: '/images/solutions/lime/message-compose-202611.jpg',
         alt: '라임 메시지 관리 화면의 검색 필터와 이메일·문자·Google Chat의 발송 상태 목록. 가상 데이터 예시',
         w: 1740,
         h: 920,
         title: '발송 이력과 처리 상태 확인',
         body: [{ text: '채널·상태별로 발송 이력', emphasis: true }, { text: '을 찾아보고 대기·발송완료·수신완료·실패 상태를 비교합니다. 화면은 가상 데이터 예시입니다.' }],
-    },
-    {
-        image: '/images/solutions/lime/message-failure-202611.jpg',
-        alt: '라임 메시지 상세 화면에서 가상 이메일의 실패 상태, 실패 시각, 수신 메일 서버의 주소 오류를 확인하는 모습',
-        w: 1040,
-        h: 820,
-        title: '실패 사유 확인',
-        body: [{ text: '실패한 메시지의 상세 화면에서 ' }, { text: '실패 시각과 오류 메시지', emphasis: true }, { text: '를 확인합니다. 화면은 가상 데이터 예시입니다.' }],
     },
 ]
 

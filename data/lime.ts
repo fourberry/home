@@ -18,7 +18,7 @@ export const limeConsole = [
     },
     {
         image: '/images/solutions/lime/message-compose-202611.jpg',
-        alt: '라임 템플릿 발송 화면에서 스튜디오 예약 확인 예시를 선택해 예약 확정 배지와 방문 일정을 메일 형태로 미리 보는 모습',
+        alt: '라임 템플릿 발송 화면에 선택된 스튜디오 예약 확인 예시와 예약번호 LIME-1203이 표시된 예약 확정 메일 미리보기',
         w: 1430,
         h: 1100,
         title: '2. 템플릿을 선택해 발송 전 확인',

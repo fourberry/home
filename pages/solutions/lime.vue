@@ -117,7 +117,7 @@
                     <p class="lead">서비스가 늘어도 프로젝트·문구·결과를 같은 관리 흐름에서 다룹니다.</p>
                 </div>
                 <div class="lime-console-gallery">
-                    <figure v-for="shot in limeConsole" :key="shot.image">
+                    <figure v-for="shot in limeConsole" :key="shot.image" :style="{ maxWidth: `${shot.w}px` }">
                         <div class="bp-frame"><FbZoomImage :src="shot.image" :alt="shot.alt" :width="shot.w" :height="shot.h" /></div>
                         <figcaption>
                             <h3>{{ shot.title }}</h3>
@@ -294,6 +294,8 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
 .lime-console-gallery figure {
     margin: 0;
     min-width: 0;
+    width: 100%;
+    justify-self: center;
 }
 .lime-console-gallery figcaption {
     margin-top: 20px;

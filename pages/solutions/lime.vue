@@ -114,7 +114,7 @@
                 <div class="section-head">
                     <span class="eyebrow">Operations · 운영 관리</span>
                     <h2>연동 이후의 알림 운영까지.</h2>
-                    <p class="lead">서비스가 늘어도 프로젝트·문구·결과를 같은 관리 흐름에서 다룹니다.</p>
+                    <p class="lead">템플릿으로 문구를 관리하고, 발송 후에는 채널별 결과를 확인합니다.</p>
                 </div>
                 <div class="lime-console-gallery">
                     <figure v-for="shot in limeConsole" :key="shot.image" :style="{ maxWidth: `${shot.w}px` }">

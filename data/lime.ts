@@ -14,7 +14,7 @@ export const limeConsole = [
         w: 1910,
         h: 1100,
         title: '1. 예약 확정 메일 작성',
-        body: '예약 확정 메일의 HTML을 작성하고 방문 일정과 예약번호가 어떻게 표시되는지 미리 확인합니다. 가상 예약 정보로 만든 예시입니다.',
+        body: [{ text: '예약 확정 메일의 HTML을 작성하고 방문 일정과 예약번호가 어떻게 표시되는지 미리 확인합니다. 가상 예약 정보로 만든 예시입니다.' }],
     },
     {
         image: '/images/solutions/lime/message-compose-202611.jpg',
@@ -22,7 +22,13 @@ export const limeConsole = [
         w: 672,
         h: 944,
         title: '2. 템플릿을 선택해 발송 전 확인',
-        body: '템플릿 발송에서 ‘스튜디오 예약 확인 예시’를 선택하면 완성된 메일에서 예약번호 LIME-1203을 확인할 수 있습니다. 수신자 입력 전 화면입니다.',
+        body: [
+            { text: '템플릿 발송에서 ' },
+            { text: '‘스튜디오 예약 확인 예시’', emphasis: true },
+            { text: '를 선택하면 완성된 메일에서 ' },
+            { text: '예약번호 LIME-1203', emphasis: true },
+            { text: '을 확인할 수 있습니다. 수신자 입력 전 화면입니다.' },
+        ],
     },
 ]
 

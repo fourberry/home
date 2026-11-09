@@ -121,7 +121,12 @@
                         <div class="bp-frame"><FbZoomImage :src="shot.image" :alt="shot.alt" :width="shot.w" :height="shot.h" /></div>
                         <figcaption>
                             <h3>{{ shot.title }}</h3>
-                            <p>{{ shot.body }}</p>
+                            <p>
+                                <template v-for="(part, index) in shot.body" :key="index">
+                                    <strong v-if="part.emphasis">{{ part.text }}</strong>
+                                    <template v-else>{{ part.text }}</template>
+                                </template>
+                            </p>
                         </figcaption>
                     </figure>
                 </div>
@@ -483,6 +488,10 @@ useFbJsonLd([solutionJsonLd(solution), faqJsonLd(solution.faq)])
     margin: 20px 0 28px;
 }
 @media (max-width: 920px) {
+    .lime-console-gallery figcaption {
+        /* 오른쪽에 고정된 맨 위로 버튼과 설명이 겹치지 않도록 공간을 둡니다. */
+        padding-inline-end: 52px;
+    }
     .lime-channel-grid,
     .lime-flow,
     .lime-adoption {

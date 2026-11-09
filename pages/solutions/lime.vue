@@ -31,7 +31,15 @@
                     </div>
                     <div class="bp-hero-visual">
                         <div class="bp-frame bp-frame--hero">
-                            <FbZoomImage :src="limeHero.image" :alt="limeHero.alt" :width="limeHero.w" :height="limeHero.h" loading="eager" fetchpriority="high" />
+                            <FbZoomImage
+                                :src="limeHero.image"
+                                :alt="limeHero.alt"
+                                :width="limeHero.w"
+                                :height="limeHero.h"
+                                loading="eager"
+                                fetchpriority="high"
+                                :open-preview="event => galleryViewer?.open(event, 0)"
+                            />
                         </div>
                         <p class="bp-note">
                             실제 대시보드 화면 · 눌러서 세부 내용을 확인하세요.
@@ -117,10 +125,12 @@
                     <p class="lead">템플릿으로 문구를 관리하고, 발송 후에는 채널별 결과를 확인합니다.</p>
                 </div>
                 <div class="lime-console-gallery">
-                    <figure v-for="shot in limeConsole" :key="shot.image" :style="{ maxWidth: `${shot.w}px` }">
-                        <div class="bp-frame"><FbZoomImage :src="shot.image" :alt="shot.alt" :width="shot.w" :height="shot.h" /></div>
+                    <figure v-for="(shot, index) in limeConsole" :key="shot.image" :style="{ maxWidth: `${shot.w}px` }">
+                        <div class="bp-frame">
+                            <FbZoomImage :src="shot.image" :alt="shot.alt" :width="shot.w" :height="shot.h" :open-preview="event => galleryViewer?.open(event, index + 1)" />
+                        </div>
                         <figcaption>
-                            <h3>{{ shot.title }}</h3>
+                            <h3>{{ index + 1 }}. {{ shot.title }}</h3>
                             <p>
                                 <template v-for="(part, index) in shot.body" :key="index">
                                     <strong v-if="part.emphasis">{{ part.text }}</strong>
@@ -252,10 +262,13 @@
                 <span aria-hidden="true">→</span>
             </NuxtLink>
         </div>
+        <FbImageGalleryViewer ref="galleryViewer" label="라임 화면 갤러리" :shots="galleryShots" />
     </div>
 </template>
 
 <script setup lang="ts">
+import { ref } from 'vue'
+import type FbImageGalleryViewer from '~/components/fb/FbImageGalleryViewer.vue'
 import { findSolution } from '~/data/solutions'
 import { limeHero, limeConsole, limeFacts, limeChannels, limeAdapter, limeFlow, limeStatuses, limeOperations, limeIntegration, limeAdoption } from '~/data/lime'
 
@@ -274,6 +287,8 @@ definePageMeta({
 
 const solution = findSolution('lime')!
 const isMobile = useIsMobile()
+const galleryViewer = ref<InstanceType<typeof FbImageGalleryViewer>>()
+const galleryShots = [limeHero, ...limeConsole]
 const crumbs = [
     { name: '홈', path: '/' },
     { name: '솔루션', path: '/solutions' },

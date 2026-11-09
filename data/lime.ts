@@ -2,6 +2,7 @@
 // 소스 확인 근거와 운영 검증 한계: docs/lime-brand.md
 export const limeHero = {
     image: '/images/solutions/lime/dashboard-202611.jpg',
+    title: '발송 현황 대시보드',
     alt: '라임 대시보드의 발송 현황 카드, 발송 추이와 채널별 비중 차트',
     w: 1920,
     h: 1200,
@@ -13,7 +14,7 @@ export const limeConsole = [
         alt: '라임 이메일 템플릿의 HTML 편집 화면과 방문 일정·예약번호를 담은 예약 확정 메일 미리보기',
         w: 1910,
         h: 1100,
-        title: '1. 예약 확정 메일 작성',
+        title: '예약 확정 메일 작성',
         body: [{ text: '예약 확정 메일의 HTML을 작성하고 방문 일정과 예약번호가 어떻게 표시되는지 미리 확인합니다. 가상 예약 정보로 만든 예시입니다.' }],
     },
     {
@@ -21,13 +22,16 @@ export const limeConsole = [
         alt: '라임 메시지 관리 화면의 검색 필터와 이메일·문자·Google Chat의 발송 상태 목록. 가상 데이터 예시',
         w: 1740,
         h: 920,
-        title: '2. 발송 이력과 처리 상태 확인',
-        body: [
-            { text: '채널·상태별로 발송 이력', emphasis: true },
-            { text: '을 좁혀 보고, 실패한 건은 상세 화면에서 ' },
-            { text: '실패 사유', emphasis: true },
-            { text: '를 확인합니다. 화면은 가상 데이터 예시입니다.' },
-        ],
+        title: '발송 이력과 처리 상태 확인',
+        body: [{ text: '채널·상태별로 발송 이력', emphasis: true }, { text: '을 찾아보고 대기·발송완료·수신완료·실패 상태를 비교합니다. 화면은 가상 데이터 예시입니다.' }],
+    },
+    {
+        image: '/images/solutions/lime/message-failure-202611.jpg',
+        alt: '라임 메시지 상세 화면에서 가상 이메일의 실패 상태, 실패 시각, 수신 메일 서버의 주소 오류를 확인하는 모습',
+        w: 1040,
+        h: 820,
+        title: '실패 사유 확인',
+        body: [{ text: '실패한 메시지의 상세 화면에서 ' }, { text: '실패 시각과 오류 메시지', emphasis: true }, { text: '를 확인합니다. 화면은 가상 데이터 예시입니다.' }],
     },
 ]
 

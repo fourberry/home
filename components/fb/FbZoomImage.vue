@@ -8,7 +8,7 @@
             </svg>
         </span>
     </a>
-    <Teleport to="body">
+    <Teleport v-if="!openPreview" to="body">
         <dialog ref="viewer" class="fb-image-viewer" :aria-label="alt" @close="restoreFocus" @click="onBackdrop">
             <div class="fb-image-viewer-header">
                 <p>{{ alt }}</p>
@@ -28,7 +28,7 @@
 <script setup lang="ts">
 import { nextTick, onBeforeUnmount, ref } from 'vue'
 
-withDefaults(
+const props = withDefaults(
     defineProps<{
         src: string
         fullSrc?: string
@@ -37,6 +37,7 @@ withDefaults(
         height?: number
         loading?: 'lazy' | 'eager'
         fetchpriority?: 'high' | 'low' | 'auto'
+        openPreview?: (event: MouseEvent) => void
     }>(),
     { loading: 'lazy', fetchpriority: 'auto' }
 )
@@ -50,7 +51,12 @@ let returnTarget: HTMLElement | null = null
 let previousOverflow = ''
 
 async function openImage(event: MouseEvent) {
-    if (!viewer.value?.showModal || event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+    if (event.ctrlKey || event.metaKey || event.shiftKey || event.altKey) return
+    if (props.openPreview) {
+        props.openPreview(event)
+        return
+    }
+    if (!viewer.value?.showModal) return
     event.preventDefault()
     returnTarget = event.currentTarget as HTMLElement
     previousOverflow = document.body.style.overflow

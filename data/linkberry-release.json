@@ -1,15 +1,15 @@
 {
-    "version": "0.1.1-beta.22",
+    "version": "0.1.1-beta.23",
     "stage": "베타",
-    "date": "2026-11-09",
-    "fileName": "BerryLinker-Setup-0.1.1-beta.22-x64.exe",
-    "releaseTag": "linkberry-v0.1.1-beta.22",
-    "bytes": 154563469,
-    "sha256": "d152c91aa7a49164bab56f6dd810860c0c61d6bce839f4e4713e387b3758a255",
+    "date": "2026-11-18",
+    "fileName": "BerryLinker-Setup-0.1.1-beta.23-x64.exe",
+    "releaseTag": "linkberry-v0.1.1-beta.23",
+    "bytes": 153968918,
+    "sha256": "fa92116fdfe67b4696cb1725b0c768300388c01aed19b9c857969f27b7119801",
     "updateManifest": {
         "fileName": "beta.yml",
         "bytes": 565,
-        "sha256": "ba59de2243794c7a5b1b9bf1c2e63e03e183d96e9da9e81df2f16b4db6dbc34b"
+        "sha256": "6af589e9d6e2a02c0d56c3312e5a3f34aa78707f8e70ef0bb0ed47e4b13dc212"
     },
     "retainedDownloads": [
         {
@@ -142,7 +142,14 @@
             "bytes": 154559915,
             "sha256": "f319ddff08f3c1e6d9cb8d9cb99dabae2df9fdd97a0bf45bf9f0b8567287e386",
             "downloadUrl": "https://github.com/fourberry/home/releases/download/linkberry-v0.1.1-beta.21/BerryLinker-Setup-0.1.1-beta.21-x64.exe"
+        },
+        {
+            "fileName": "BerryLinker-Setup-0.1.1-beta.22-x64.exe",
+            "releaseTag": "linkberry-v0.1.1-beta.22",
+            "bytes": 154563469,
+            "sha256": "d152c91aa7a49164bab56f6dd810860c0c61d6bce839f4e4713e387b3758a255",
+            "downloadUrl": "https://github.com/fourberry/home/releases/download/linkberry-v0.1.1-beta.22/BerryLinker-Setup-0.1.1-beta.22-x64.exe"
         }
     ],
-    "downloadUrl": "https://github.com/fourberry/home/releases/download/linkberry-v0.1.1-beta.22/BerryLinker-Setup-0.1.1-beta.22-x64.exe"
+    "downloadUrl": "https://github.com/fourberry/home/releases/download/linkberry-v0.1.1-beta.23/BerryLinker-Setup-0.1.1-beta.23-x64.exe"
 }
